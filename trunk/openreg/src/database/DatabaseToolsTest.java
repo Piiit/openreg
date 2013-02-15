@@ -1,11 +1,11 @@
 package database;
 
 import static org.junit.Assert.*;
-import java.util.ArrayList;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+//TODO create a test database
 public class DatabaseToolsTest {
 
 	@Before
@@ -18,15 +18,10 @@ public class DatabaseToolsTest {
 
 	@Test
 	public void testQueryWithoutSetup() throws Exception {
-		ArrayList<Row> rows;
 		try {
-			//TODO create a test database
-			rows = DatabaseTools.getQueryResult(
-					"SELECT * FROM student WHERE class_id=? AND ability_description_id=?", 1, 20);
-			assertEquals(0, rows.size());
+			DatabaseTools.getQueryResult("SELECT * FROM student WHERE class_id=? AND ability_description_id=?", 1, 20);
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw e;
+			fail("Initialization of database connection failed!");
 		}
 	}
 

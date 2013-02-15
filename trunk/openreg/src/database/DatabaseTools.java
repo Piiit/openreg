@@ -34,6 +34,9 @@ public class DatabaseTools {
 			result.add(row);
 		}
 		
+		rs.close();
+		prepStatement.close();
+		
 		return result;
 	}
 	
