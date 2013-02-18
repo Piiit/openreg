@@ -5,6 +5,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 
+import log.Log;
+
 //import testing.TestingTools;
 import openreg.Openreg;
 
@@ -29,13 +31,13 @@ public class SWTTools {
 			else if (!o.contains("mac"))
 				architecturePart = "-x86";
 
-//			TestingTools.inform("Loading swt-3.7.1" + osPart + architecturePart + ".jar...");
-
 			URL swtFileUrl = new URL("rsrc:" + "swt-4.2.1" + osPart + architecturePart + ".jar");
+			Log.info("Loading SWT library: " + swtFileUrl.toString());
 			URLClassLoader c = (URLClassLoader) Openreg.class.getClassLoader();
 			Method m = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
 			m.setAccessible(true);
 			m.invoke(c, swtFileUrl);
+			
 		} catch (MalformedURLException e) {
 			// This fails only within Eclipse, not when executed with java -jar
 			// ..., because it adds a jar in a jar to the classpath.
