@@ -45,12 +45,20 @@ public class DatabaseTools {
 		return getQueryResult(query, new Object[0]);
 	}
 	
-	public static int executeUpdate(final String query) throws Exception {
+	public static int executeUpdate(final String query, final Object... parameters) throws Exception {
 		Connection con = DatabaseConnection.getConnection();
 		PreparedStatement prepStatement = con.prepareStatement(query);
+		
+		for(int i = 0; i < parameters.length; i++) {
+			prepStatement.setObject(i + 1, parameters[i]);
+		}
 		
 		Log.info("Executing update: " + prepStatement.toString());
 		
 		return prepStatement.executeUpdate();
+	}
+	
+	public static int executeUpdate(final String query) throws Exception {
+		return executeUpdate(query, new Object[0]);
 	}
 }
