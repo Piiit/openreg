@@ -3,6 +3,8 @@ package openreg;
 import gui.MainWindow;
 import gui.SWTTools;
 import java.util.ArrayList;
+
+import database.DatabaseConnection;
 import database.DatabaseTools;
 import database.Row;
 
@@ -21,6 +23,8 @@ public class Openreg {
 		SWTTools.initSWT();
 		MainWindow window = new MainWindow();
 		window.open();
+		
+		DatabaseConnection.close();
 	}
 
 }

@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.util.ArrayList;
 
+import log.Log;
+
 /**
  * Returns an iterable ArrayList of Rows that can be easily accessed.
  * Some ideas taken from prom/database written by A. Janes
@@ -34,6 +36,8 @@ public class DatabaseTools {
 			result.add(row);
 		}
 		
+		Log.info("Getting query result: " + prepStatement.toString());
+		
 		rs.close();
 		prepStatement.close();
 		
@@ -43,6 +47,9 @@ public class DatabaseTools {
 	public static int executeUpdate(final String query) throws Exception {
 		Connection con = DatabaseConnection.getConnection();
 		PreparedStatement prepStatement = con.prepareStatement(query);
+		
+		Log.info("Executing update: " + prepStatement.toString());
+		
 		return prepStatement.executeUpdate();
 	}
 }
