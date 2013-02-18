@@ -3,6 +3,8 @@ package database;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+import log.Log;
+
 public final class DatabaseConnection {
 	
 	private final static String USER = "ds_group2";
@@ -19,6 +21,7 @@ public final class DatabaseConnection {
 		Class.forName("org.postgresql.Driver");
 		close();
 		connection = DriverManager.getConnection(connectionURL);
+		Log.info("New database connection established: " + connectionURL.substring(0, connectionURL.indexOf("?")));
 	}
 	
 	public static void setup() throws Exception {
@@ -33,7 +36,7 @@ public final class DatabaseConnection {
 	}
 	
 	public static void close() throws Exception {
-		if(! connection.isClosed()) {
+		if(connection != null && !connection.isClosed()) {
 			connection.close();
 		}
 	}
