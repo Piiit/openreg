@@ -10,6 +10,7 @@ public class DatabaseToolsTest {
 
 	@Before
 	public void setUp() throws Exception {
+		DatabaseConnection.setup(DatabaseConnection.TESTURL);
 	}
 
 	@After
