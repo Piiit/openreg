@@ -7,23 +7,38 @@ import database.Row;
 
 public class Class {
 	
-	private Long id;
-	private String level;
-	private String stream;
-	private String notes;
+	private Long id = null;
+	private String level; //NOT NULL
+	private String stream = null; 
+	private String notes = null;
 	
-	public Class(String level, String stream) {
+	public Class(String level, String stream, String notes) {
+		if(level == null) {
+			throw new NullPointerException("Class: level must be set!");
+		}
 		this.level = level;
 		this.stream = stream;
+		this.notes = notes;
+	}
+	
+	public Class(String level, String stream) {
+		this(level, stream, null);
+	}
+	
+	public Class(String level) {
+		this(level, null, null);
 	}
 
 	public static ArrayList<Class> getAllClasses() throws Exception {
 		ArrayList<Class> classes = new ArrayList<Class>();
 		ArrayList<Row> rows = DatabaseTools.getQueryResult("SELECT * FROM class");
 		for(Row row : rows) {
-			Class newClass = new Class(row.getValue("level").toString(), row.getValue("stream").toString());
-			newClass.setID(Long.parseLong(row.getValue("id").toString()));
-			newClass.setNotes(row.getValue("notes").toString());
+			Class newClass = new Class(
+					row.getValueAsString("level"), 
+					row.getValueAsString("stream"),
+					row.getValueAsString("notes")
+					);
+			newClass.setID((Long)row.getValue("id"));
 			classes.add(newClass);
 		}
 		return classes;
@@ -42,6 +57,9 @@ public class Class {
 		DatabaseTools.executeUpdate("DELETE FROM class");
 	}
 
+	public int size() throws Exception {
+		return DatabaseTools.getQueryResult("SELECT * FROM student WHERE class_id = ?",id).size();
+	}
 	
 	public String getLevel() {
 		return level;
@@ -71,15 +89,13 @@ public class Class {
 		return id;
 	}
 
-	public void setID(Long id) {
+	//IDs can be set by the database system only!
+	private void setID(Long id) {
 		this.id = id;
 	}
 
 	@Override
 	public String toString() {
-		return level + stream;
+		return level + (stream == null ? "" : stream);
 	}
-	
-	
-	
 }
