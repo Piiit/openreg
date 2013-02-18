@@ -35,13 +35,14 @@ public class DatabaseTools {
 			}
 			result.add(row);
 		}
-		
+
 		Log.info("Getting query result: " + prepStatement.toString());
-		
-		rs.close();
-		prepStatement.close();
-		
+
 		return result;
+	}
+	
+	public static ArrayList<Row> getQueryResult(final String query) throws Exception {
+		return getQueryResult(query, new Object[0]);
 	}
 	
 	public static int executeUpdate(final String query) throws Exception {
