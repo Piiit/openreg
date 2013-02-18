@@ -1,6 +1,7 @@
 package openreg;
 
 import gui.MainWindow;
+import gui.SWTTools;
 //import java.util.ArrayList;
 //import database.DatabaseTools;
 //import database.Row;
@@ -23,13 +24,9 @@ public class Openreg {
 //			e.printStackTrace();
 //		}
 
+		SWTTools.initSWT();
 		MainWindow window = new MainWindow();
-		try {
-			window.open();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
+		window.open();
 	}
 
 }
