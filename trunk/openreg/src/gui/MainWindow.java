@@ -1,43 +1,24 @@
 package gui;
 
 import java.util.ArrayList;
-
-import log.Log;
-
+import data.Class;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Menu;
-import swing2swt.layout.BorderLayout;
-import org.eclipse.swt.custom.CLabel;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.MenuItem;
-import org.eclipse.swt.widgets.ExpandBar;
-import org.eclipse.swt.widgets.ExpandItem;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormAttachment;
-import org.eclipse.swt.widgets.Link;
-import org.eclipse.swt.custom.CTabFolder;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.widgets.Combo;
-
 import database.DatabaseTools;
 import database.Row;
-import org.eclipse.swt.custom.StyledText;
 
 public class MainWindow {
 
@@ -135,11 +116,10 @@ public class MainWindow {
 		
 		final Combo comboClasses = new Combo(grpStudents, SWT.READ_ONLY);
 		try {
-			ArrayList<Row> rows = DatabaseTools.getQueryResult("SELECT id, level, stream FROM class");
-			for(Row row : rows) {
-				String item = row.getValue("level").toString() + row.getValue("stream").toString();
-				comboClasses.add(item);
-				comboClasses.setData(item, row.getValue("id").toString());
+			ArrayList<Class> classes = Class.getAllClasses(); 
+			for(Class cl : classes) {
+				comboClasses.add(cl.toString());
+				comboClasses.setData(cl.toString(), cl.getID());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -154,7 +134,9 @@ public class MainWindow {
 					int i = 0;
 					for(Row row : rows) {
 						i++;
-						comboStudents.add("(" + i + ") " + row.getValue("name") + " " + row.getValue("surname"));
+						String student = "(" + i + ") " + row.getValue("name") + " " + row.getValue("surname");
+						comboStudents.add(student);
+						comboStudents.setData(student, row.getValue("id"));
 						comboStudents.setEnabled(true);
 					}
 				} catch (Exception e) {
