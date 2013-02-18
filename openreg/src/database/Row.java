@@ -19,9 +19,16 @@ public class Row {
 		return data.get(key);
 	}
 
+	public String getValueAsString(String key) {
+		if(data.get(key) == null) {
+			return null;
+		}
+		return data.get(key).toString();
+	}
+
 	@Override
 	public String toString() {
-		return "Row [" + data + "]";
+		return "Row=" + data + ";";
 	}
 	
 	
