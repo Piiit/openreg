@@ -89,8 +89,10 @@ public class Class {
 		return id;
 	}
 
-	//IDs can be set by the database system only!
-	private void setID(Long id) {
+	public void setID(Long id) {
+		if(id == null) {
+			throw new NullPointerException("Class ID can't be null!");
+		}
 		this.id = id;
 	}
 
