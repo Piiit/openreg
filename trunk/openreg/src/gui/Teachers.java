@@ -6,15 +6,15 @@ import org.eclipse.swt.widgets.Group;
 
 public class Teachers extends GuiModule {
 
-	public Teachers(String name, GroupType groupType) throws Exception {
-		super(name, groupType);
+	public Teachers() throws Exception {
+		super("Teachers");
 	}
 
 	/**
 	 * @wbp.parser.entryPoint
 	 */
 	@Override
-	public void show(Composite parent) {
+	public void createContent(Composite parent) {
 		container = new Group(parent, SWT.NONE);
 	}
 

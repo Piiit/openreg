@@ -3,6 +3,7 @@ package openreg;
 import log.Log;
 import gui.Classes;
 import gui.GroupType;
+import gui.GuiModuleList;
 import gui.MainWindow;
 import gui.SWTTools;
 import gui.Students;
@@ -16,15 +17,26 @@ public class Openreg {
 		try {
 			DatabaseConnection.setup();
 		} catch (Exception e) {
-			Log.warn("Can't connect to default database, trying to connect with testing db!");
-			DatabaseConnection.setup(DatabaseConnection.TESTURL);
+			Log.warn("Can't connect to default database, trying to connect to testing db!");
+			try {
+				DatabaseConnection.setup(DatabaseConnection.TESTURL);
+			} catch (Exception e2) {
+				Log.error("Unable to connect to specified databases!");
+				System.exit(1);
+			}
 		}
+		
+		GuiModuleList gmListAdmin = new GuiModuleList(GroupType.Administration);
+		gmListAdmin.add(new Students());
+		gmListAdmin.add(new Classes());
+		gmListAdmin.add(new Teachers());
+		
+		GuiModuleList gmListReport = new GuiModuleList(GroupType.Reports);
 		
 		SWTTools.initSWT();
 		MainWindow window = new MainWindow();
-		window.addModule(new Students("Students", GroupType.Administration));
-		window.addModule(new Classes("Classes", GroupType.Administration));
-		window.addModule(new Teachers("Teachers", GroupType.Reports));
+		window.addModuleList(gmListAdmin);
+		window.addModuleList(gmListReport);
 		window.open();
 		
 		DatabaseConnection.close();

@@ -11,16 +11,19 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.TableColumn;
 
 public class Classes extends GuiModule {
+
 	private Table table;
 	private ToolBar toolBar;
-
 	
-	public Classes(String name, GroupType groupType) throws Exception {
-		super(name, groupType);
+	public Classes() throws Exception {
+		super("Classes");
 	}
 
+	/**
+	 * @wbp.parser.entryPoint
+	 */
 	@Override
-	public void show(Composite parent) {
+	public void createContent(Composite parent) {
 		container = new Group(parent, SWT.NONE);
 		container.setText("Classes");
 		container.setLayout(new GridLayout(1, false));
