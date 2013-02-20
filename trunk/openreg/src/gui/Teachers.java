@@ -1,8 +1,14 @@
 package gui;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
 
 public class Teachers extends GuiModule {
 
@@ -15,7 +21,24 @@ public class Teachers extends GuiModule {
 	 */
 	@Override
 	public void createContent(Composite parent) {
-		container = new Group(parent, SWT.NONE);
+		final Group group = new Group(parent, SWT.NONE);
+		group.setText(this.getName());
+		group.setLayout(new GridLayout(1, false));
+
+		container = group;
+		
+		ToolBar toolBar = new ToolBar(group, SWT.FLAT | SWT.RIGHT);
+		toolBar.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		
+		ToolItem tltmAdd = new ToolItem(toolBar, SWT.NONE);
+		tltmAdd.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				TeachersAdd addDialog = new TeachersAdd(container.getShell(), SWT.NONE);
+				addDialog.open();
+			}
+		});
+		tltmAdd.setText("Add");
 	}
 
 	@Override

@@ -17,10 +17,10 @@ public class GuiModuleList {
 	
 	public void setVisibleModule(GuiModule module) {
 		GuiModule visibleModule = module;
-		module.setVisible(true);
+		module.container.setVisible(true);
 		for(GuiModule mod : modules) {
 			if(! mod.equals(visibleModule)) {
-				mod.setVisible(false);
+				mod.container.setVisible(false);
 			}
 		}
 	}

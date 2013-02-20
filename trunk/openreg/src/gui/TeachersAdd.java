@@ -6,7 +6,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 
-public class StudentsAdd extends Dialog {
+public class TeachersAdd extends Dialog {
 
 	protected Object result;
 	protected Shell shlAddStudent;
@@ -16,9 +16,9 @@ public class StudentsAdd extends Dialog {
 	 * @param parent
 	 * @param style
 	 */
-	public StudentsAdd(Shell parent, int style) {
+	public TeachersAdd(Shell parent, int style) {
 		super(parent, style);
-		setText("Add a new student");
+		setText("Add a new teacher");
 	}
 
 	/**
@@ -44,7 +44,7 @@ public class StudentsAdd extends Dialog {
 	private void createContents() {
 		shlAddStudent = new Shell(getParent(), SWT.DIALOG_TRIM | SWT.MAX | SWT.RESIZE | SWT.APPLICATION_MODAL);
 		shlAddStudent.setSize(450, 300);
-		shlAddStudent.setText("Add student");
+		shlAddStudent.setText("Add teacher");
 		shlAddStudent.setLayout(new GridLayout(1, false));
 
 	}

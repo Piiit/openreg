@@ -36,6 +36,7 @@ public class GuiModuleTest {
 		
 	}
 	
+	
 	GuiModuleList gmList1 = new GuiModuleList(GroupType.Administration);
 	GuiModuleList gmList2 = new GuiModuleList(GroupType.Reports);
 	
@@ -55,18 +56,15 @@ public class GuiModuleTest {
 	}
 
 	@Test
-	public void testGetGroups() {
-		ArrayList<GroupType> groups = GuiModule.getGroups();
-		assertEquals(2, groups.size());
-		assertEquals("Administration", groups.get(0).toString());
-		assertEquals("Reports", groups.get(1).toString());
-	}
-	
-	@Test
 	public void testGetModules() {
-		ArrayList<GuiModule> modules = GuiModule.getModules();
-		assertEquals(3, modules.size());
-		assertEquals(gm1, modules.get(0));
+		ArrayList<GuiModule> modules = gmList1.getModules();
+		assertEquals(2, modules.size());
+		assertEquals("Test1", modules.get(0).getName());
+		assertEquals("Test2", modules.get(1).getName());
+		
+		modules = gmList2.getModules();
+		assertEquals(1, modules.size());
+		assertEquals("Test3", modules.get(0).getName());
 	}
 
 }

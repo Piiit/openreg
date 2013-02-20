@@ -29,11 +29,14 @@ public class Students extends GuiModule {
 	 */
 	@Override
 	public void createContent(Composite parent) {
-		container = new Group(parent, SWT.NONE);
-		container.setText("Students");
-		container.setLayout(new GridLayout(1, false));
 		
-		ToolBar toolBar = new ToolBar(container, SWT.FLAT | SWT.RIGHT);
+		final Group group = new Group(parent, SWT.NONE);
+		group.setText(this.getName());
+		group.setLayout(new GridLayout(1, false));
+
+		container = group;
+		
+		ToolBar toolBar = new ToolBar(group, SWT.FLAT | SWT.RIGHT);
 		toolBar.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		
 		ToolItem tltmAdd = new ToolItem(toolBar, SWT.NONE);
@@ -52,7 +55,7 @@ public class Students extends GuiModule {
 		ToolItem tltmFilter = new ToolItem(toolBar, SWT.DROP_DOWN);
 		tltmFilter.setText("All classes");
 		
-		table = new Table(container, SWT.BORDER | SWT.FULL_SELECTION);
+		table = new Table(group, SWT.BORDER | SWT.FULL_SELECTION);
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);

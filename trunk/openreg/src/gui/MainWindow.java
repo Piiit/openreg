@@ -1,9 +1,6 @@
 package gui;
 
 import java.util.ArrayList;
-
-import log.Log;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -97,7 +94,6 @@ public class MainWindow {
 		
 			int i = 0;
 			for(final GuiModule module : gmList.getModules()) {
-				Log.info(module.getName());
 				Link li = new Link(composite, SWT.NONE);
 				li.setBounds(10, 5+20*i, 55, 15);
 				li.setText("<a>" + module.getName() + "</a>");
@@ -105,13 +101,12 @@ public class MainWindow {
 				li.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent arg0) {
-						Log.info(arg0.toString());
 						gmList.setVisibleModule(module);
 					}
 				});
 				i++;
 			}
-			item.setHeight(item.getControl().computeSize(SWT.DEFAULT, SWT.DEFAULT).y+10);
+			item.setHeight(item.getControl().computeSize(SWT.DEFAULT, SWT.DEFAULT).y + 10);
 		}
 			
 		
