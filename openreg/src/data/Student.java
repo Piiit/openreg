@@ -104,6 +104,4 @@ public class Student {
 	public void setStudentsClass(Class studentsClass) {
 		this.studentsClass = studentsClass;
 	}
-	
-	
 }

@@ -8,6 +8,7 @@ import log.Log;
 public final class DatabaseConnection {
 	
 	private static final int LOGINTIMEOUT = 10;  //in seconds
+	
 	private final static String USER = "ds_group2";
 	private final static String PASSWORD = "Iezedoo6";
 	public final static String URL = "jdbc:postgresql://alcor.inf.unibz.it:5432/ds_group2?user=" + USER + "&password=" + PASSWORD;
