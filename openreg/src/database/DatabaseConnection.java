@@ -7,7 +7,7 @@ import log.Log;
 
 public final class DatabaseConnection {
 	
-	private static final int LOGINTIMEOUT = 10;  //in seconds
+	private static final int LOGINTIMEOUT = 1;  //in seconds
 	
 	private final static String USER = "ds_group2";
 	private final static String PASSWORD = "Iezedoo6";

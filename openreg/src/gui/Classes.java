@@ -13,7 +13,6 @@ import org.eclipse.swt.widgets.TableColumn;
 public class Classes extends GuiModule {
 
 	private Table table;
-	private ToolBar toolBar;
 	
 	public Classes() throws Exception {
 		super("Classes");
@@ -24,11 +23,14 @@ public class Classes extends GuiModule {
 	 */
 	@Override
 	public void createContent(Composite parent) {
-		container = new Group(parent, SWT.NONE);
-		container.setText("Classes");
-		container.setLayout(new GridLayout(1, false));
+
+		final Group group = new Group(parent, SWT.NONE);
+		group.setText(this.getName());
+		group.setLayout(new GridLayout(1, false));
+
+		container = group;
 		
-		toolBar = new ToolBar(container, SWT.FLAT | SWT.RIGHT);
+		ToolBar toolBar = new ToolBar(group, SWT.FLAT | SWT.RIGHT);
 		toolBar.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		
 		ToolItem tltmAdd = new ToolItem(toolBar, SWT.NONE);
