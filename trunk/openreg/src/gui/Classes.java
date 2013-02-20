@@ -10,21 +10,22 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.TableColumn;
 
-public class Classes extends Group {
+public class Classes extends GuiModule {
 	private Table table;
 	private ToolBar toolBar;
 
-	/**
-	 * Create the composite.
-	 * @param parent
-	 * @param style
-	 */
-	public Classes(Composite parent, int style) {
-		super(parent, style);
-		setText("Classes");
-		setLayout(new GridLayout(1, false));
+	
+	public Classes(String name, GroupType groupType) throws Exception {
+		super(name, groupType);
+	}
+
+	@Override
+	public void show(Composite parent) {
+		container = new Group(parent, SWT.NONE);
+		container.setText("Classes");
+		container.setLayout(new GridLayout(1, false));
 		
-		toolBar = new ToolBar(this, SWT.FLAT | SWT.RIGHT);
+		toolBar = new ToolBar(container, SWT.FLAT | SWT.RIGHT);
 		toolBar.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		
 		ToolItem tltmAdd = new ToolItem(toolBar, SWT.NONE);
@@ -33,7 +34,7 @@ public class Classes extends Group {
 		ToolItem tltmRemove = new ToolItem(toolBar, SWT.NONE);
 		tltmRemove.setText("Remove");
 		
-		table = new Table(this, SWT.BORDER | SWT.CHECK | SWT.FULL_SELECTION | SWT.MULTI);
+		table = new Table(container, SWT.BORDER | SWT.CHECK | SWT.FULL_SELECTION | SWT.MULTI);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -49,7 +50,8 @@ public class Classes extends Group {
 	}
 
 	@Override
-	protected void checkSubclass() {
-		// Disable the check that prevents subclassing of SWT components
+	public void update(Object... parameters) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -1,13 +1,12 @@
 package gui;
 
 import java.util.ArrayList;
-
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.TableColumn;
@@ -17,27 +16,31 @@ import org.eclipse.swt.events.SelectionEvent;
 import data.Student;
 import org.eclipse.swt.widgets.TableItem;
 
-public class Students extends Group {
+public class Students extends GuiModule {
+	
+	public Students(String name, GroupType groupType) throws Exception {
+		super(name, groupType);
+	}
+
 	private Table table;
 
 	/**
-	 * Create the composite.
-	 * @param parent
-	 * @param style
+	 * @wbp.parser.entryPoint
 	 */
-	public Students(Composite parent, int style) {
-		super(parent, style);
-		setText("Students");
-		setLayout(new GridLayout(1, false));
+	@Override
+	public void show(Composite parent) {
+		container = new Group(parent, SWT.NONE);
+		container.setText("Students");
+		container.setLayout(new GridLayout(1, false));
 		
-		ToolBar toolBar = new ToolBar(this, SWT.FLAT | SWT.RIGHT);
+		ToolBar toolBar = new ToolBar(container, SWT.FLAT | SWT.RIGHT);
 		toolBar.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		
 		ToolItem tltmAdd = new ToolItem(toolBar, SWT.NONE);
 		tltmAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				StudentsAdd addDialog = new StudentsAdd(getShell(), SWT.NONE);
+				StudentsAdd addDialog = new StudentsAdd(container.getShell(), SWT.NONE);
 				addDialog.open();
 			}
 		});
@@ -49,7 +52,7 @@ public class Students extends Group {
 		ToolItem tltmFilter = new ToolItem(toolBar, SWT.DROP_DOWN);
 		tltmFilter.setText("All classes");
 		
-		table = new Table(this, SWT.BORDER | SWT.FULL_SELECTION);
+		table = new Table(container, SWT.BORDER | SWT.FULL_SELECTION);
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
@@ -75,16 +78,15 @@ public class Students extends Group {
 		tblclmnClass.setText("Class");
 		
 		try {
-			fillTable(null);
+			update(Student.getAllStudents());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
-	
-	public void fillTable(ArrayList<Student> students) throws Exception {
-		ArrayList<Student> students2 = Student.getAllStudents();
-		for(Student student : students2) {
+
+	@Override
+	public void update(Object... parameters) {
+		ArrayList<Student> students = (ArrayList<Student>) parameters[0];
+		for(Student student : students) {
 			TableItem tableItem = new TableItem(table, SWT.NONE);
 			tableItem.setText(new String[] {
 					"", student.getName()+" "+student.getSurname(), 
@@ -92,11 +94,6 @@ public class Students extends Group {
 					student.getBirthday().toString(),
 					student.getStudentsClass().toString()
 					});
-		}
-	}
-
-	@Override
-	protected void checkSubclass() {
-		// Disable the check that prevents subclassing of SWT components
+		}	
 	}
 }

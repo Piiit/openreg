@@ -1,5 +1,6 @@
 package gui;
 
+import java.util.ArrayList;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -21,6 +22,15 @@ import org.eclipse.swt.custom.StackLayout;
 public class MainWindow {
 
 	protected Shell shlRegisterForTeachers;
+	private ArrayList<GuiModule> modules = new ArrayList<GuiModule>();
+	
+	public void addModule(GuiModule module) {
+		modules.add(module);
+	}
+	
+	public void removeAllModules() {
+		modules.clear();
+	}
 
 	/**
 	 * Open the window.
@@ -82,49 +92,46 @@ public class MainWindow {
 		xpndtmAdministration.setExpanded(true);
 		xpndtmAdministration.setText("Administration");
 		
-		Composite composite = new Composite(expandBar, SWT.NONE);
-		xpndtmAdministration.setControl(composite);
+		Composite compositeAdministration = new Composite(expandBar, SWT.NONE);
+		xpndtmAdministration.setControl(compositeAdministration);
 		xpndtmAdministration.setHeight(xpndtmAdministration.getControl().computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
-		composite.setLayout(new FormLayout());
+		compositeAdministration.setLayout(new FormLayout());
+		
+		ExpandItem xpndtmReports = new ExpandItem(expandBar, SWT.NONE);
+		xpndtmReports.setExpanded(true);
+		xpndtmReports.setText("Reports");
+		
+		Composite compositeReports = new Composite(expandBar, SWT.NONE);
+		xpndtmReports.setControl(compositeReports);
+		xpndtmReports.setHeight(xpndtmReports.getControl().computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 		
 		Composite compositeCenter = new Composite(shlRegisterForTeachers, SWT.NONE);
 		compositeCenter.setLayoutData(BorderLayout.CENTER);
 		compositeCenter.setLayout(new StackLayout());
 		
-		final Classes widgetClasses = new Classes(compositeCenter, SWT.NONE);
-		widgetClasses.setVisible(false);
+//		final Classes widgetClasses = new Classes(compositeCenter, SWT.NONE);
+//		widgetClasses.setVisible(false);
 		
-		final Students widgetStudent = new Students(compositeCenter, SWT.NONE);
-		widgetStudent.setVisible(false);
+//		final Students widgetStudent = new Students(compositeCenter, SWT.NONE);
+//		widgetStudent.setVisible(false);
 		
-
-
-		Link link = new Link(composite, SWT.NONE);
-		link.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-				widgetClasses.setVisible(false);
-				widgetStudent.setVisible(true);
+		final GuiModule widgetStudent = modules.get(0);
+		widgetStudent.setVisible(true);
+		
+		int i = 0;
+		int j = 0;
+		for(GuiModule module : modules) {
+			Composite currentComposite = compositeAdministration;
+			if(module.getGroupType() == GroupType.Reports) {
+				currentComposite = compositeReports;
 			}
-		});
-		FormData fd_link = new FormData();
-		fd_link.top = new FormAttachment(0, 10);
-		fd_link.left = new FormAttachment(0, 10);
-		link.setLayoutData(fd_link);
-		link.setText("<a>Students</a>");
-		
-		Link link_1 = new Link(composite, SWT.NONE);
-		link_1.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-				widgetStudent.setVisible(false);
-				widgetClasses.setVisible(true);
-			}
-		});
-		FormData fd_link_1 = new FormData();
-		fd_link_1.bottom = new FormAttachment(100, -10);
-		fd_link_1.left = new FormAttachment(0, 10);
-		link_1.setLayoutData(fd_link_1);
-		link_1.setText("<a>Classes</a>");
+			Link li = new Link(currentComposite, SWT.NONE);
+			FormData fd = new FormData();
+			fd.top = new FormAttachment(0, 10+25*i);
+			fd.left = new FormAttachment(0, 10);
+			li.setLayoutData(fd);
+			li.setText("<a>" + module.getName() + "</a>");
+			i++;
+		}
 	}
 }
