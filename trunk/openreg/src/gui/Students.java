@@ -55,10 +55,14 @@ public class Students extends GuiModule {
 		ToolItem tltmFilter = new ToolItem(toolBar, SWT.DROP_DOWN);
 		tltmFilter.setText("All classes");
 		
-		table = new Table(group, SWT.BORDER | SWT.FULL_SELECTION);
+		table = new Table(group, SWT.BORDER | SWT.CHECK | SWT.FULL_SELECTION | SWT.MULTI);
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
+		
+		TableColumn tblclmnControl = new TableColumn(table, SWT.NONE);
+		tblclmnControl.setResizable(false);
+		tblclmnControl.setWidth(30);
 		
 		TableColumn tableColumn = new TableColumn(table, SWT.NONE);
 		tableColumn.setWidth(30);
@@ -79,7 +83,6 @@ public class Students extends GuiModule {
 		TableColumn tblclmnClass = new TableColumn(table, SWT.NONE);
 		tblclmnClass.setWidth(100);
 		tblclmnClass.setText("Class");
-		
 	}
 
 	@Override
@@ -88,11 +91,12 @@ public class Students extends GuiModule {
 		if(parameters.length != 1 || !(parameters[0] instanceof ArrayList)) {
 			throw new IllegalArgumentException("Parameter #1: ArrayList of students!");
 		}
-		ArrayList<Student> students = (ArrayList<Student>)parameters[0];;
+		ArrayList<Student> students = (ArrayList<Student>)parameters[0];
+		int i = 1;
 		for(Student student : students) {
 			TableItem tableItem = new TableItem(table, SWT.NONE);
 			tableItem.setText(new String[] {
-					"", student.getName()+" "+student.getSurname(), 
+					"", Integer.toString(i++), student.getName()+" "+student.getSurname(), 
 					Integer.toString(student.getEnrolmentYear()), 
 					student.getBirthday().toString(),
 					student.getStudentsClass().toString()

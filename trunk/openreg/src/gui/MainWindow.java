@@ -16,6 +16,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.custom.StackLayout;
 
+import data.Student;
+
 public class MainWindow {
 
 	protected Shell shlRegisterForTeachers;
@@ -102,6 +104,12 @@ public class MainWindow {
 					@Override
 					public void widgetSelected(SelectionEvent arg0) {
 						gmList.setVisibleModule(module);
+						try {
+							module.update(Student.getAllStudents());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 				});
 				i++;
