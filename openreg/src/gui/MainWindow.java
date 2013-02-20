@@ -10,9 +10,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.MenuItem;
-import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.layout.FormData;
-import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import swing2swt.layout.BorderLayout;
@@ -25,16 +22,12 @@ import org.eclipse.swt.custom.StackLayout;
 public class MainWindow {
 
 	protected Shell shlRegisterForTeachers;
-	private ArrayList<GuiModule> modules = new ArrayList<GuiModule>();
+	protected ArrayList<GuiModuleList> gmLists = new ArrayList<GuiModuleList>();
 	
-	public void addModule(GuiModule module) {
-		modules.add(module);
+	public void addModuleList(GuiModuleList gmList) {
+		gmLists.add(gmList);
 	}
 	
-	public void removeAllModules() {
-		modules.clear();
-	}
-
 	/**
 	 * Open the window.
 	 * @wbp.parser.entryPoint
@@ -91,60 +84,36 @@ public class MainWindow {
 		ExpandBar expandBar = new ExpandBar(shlRegisterForTeachers, SWT.NONE);
 		expandBar.setLayoutData(BorderLayout.WEST);
 		
-		ExpandItem xpndtmAdministration = new ExpandItem(expandBar, SWT.NONE);
-		xpndtmAdministration.setExpanded(true);
-		xpndtmAdministration.setText("Administration");
-		
-		Composite compositeAdministration = new Composite(expandBar, SWT.NONE);
-		xpndtmAdministration.setControl(compositeAdministration);
-		xpndtmAdministration.setHeight(xpndtmAdministration.getControl().computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
-		compositeAdministration.setLayout(new FormLayout());
-		
-		ExpandItem xpndtmReports = new ExpandItem(expandBar, SWT.NONE);
-		xpndtmReports.setExpanded(true);
-		xpndtmReports.setText("Reports");
-		
-		Composite compositeReports = new Composite(expandBar, SWT.NONE);
-		xpndtmReports.setControl(compositeReports);
-		xpndtmReports.setHeight(xpndtmReports.getControl().computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
-		
 		Composite compositeCenter = new Composite(shlRegisterForTeachers, SWT.NONE);
 		compositeCenter.setLayoutData(BorderLayout.CENTER);
 		compositeCenter.setLayout(new StackLayout());
 		
-//		final Classes widgetClasses = new Classes(compositeCenter, SWT.NONE);
-//		widgetClasses.setVisible(false);
+		for(final GuiModuleList gmList : gmLists) {
+			ExpandItem item = new ExpandItem(expandBar, SWT.NONE);
+			item.setExpanded(true);
+			item.setText(gmList.getGroupType().toString());
+			Composite composite = new Composite(expandBar, SWT.NONE);
+			item.setControl(composite);
 		
-//		final Students widgetStudent = new Students(compositeCenter, SWT.NONE);
-//		widgetStudent.setVisible(false);
-		
-//		final GuiModule widgetStudent = modules.get(0);
-//		widgetStudent.setVisible(false);
-		
-		int i = 0;
-		int j = 0;
-		for(final GuiModule module : modules) {
-			final Composite currentComposite;
-			if(module.getGroupType() == GroupType.Reports) {
-				currentComposite = compositeReports;
-			} else {
-				currentComposite = compositeAdministration;
+			int i = 0;
+			for(final GuiModule module : gmList.getModules()) {
+				Log.info(module.getName());
+				Link li = new Link(composite, SWT.NONE);
+				li.setBounds(10, 5+20*i, 55, 15);
+				li.setText("<a>" + module.getName() + "</a>");
+				module.createContent(compositeCenter);
+				li.addSelectionListener(new SelectionAdapter() {
+					@Override
+					public void widgetSelected(SelectionEvent arg0) {
+						Log.info(arg0.toString());
+						gmList.setVisibleModule(module);
+					}
+				});
+				i++;
 			}
-			Link li = new Link(currentComposite, SWT.NONE);
-			FormData fd = new FormData();
-			fd.top = new FormAttachment(0, 10+25*i);
-			fd.left = new FormAttachment(0, 10);
-			li.setLayoutData(fd);
-			li.setText("<a>" + module.getName() + "</a>");
-			module.show(compositeCenter);
-			li.addSelectionListener(new SelectionAdapter() {
-				@Override
-				public void widgetSelected(SelectionEvent arg0) {
-					Log.info(arg0.toString());
-					module.getContainer().setVisible(true);
-				}
-			});
-			i++;
+			item.setHeight(item.getControl().computeSize(SWT.DEFAULT, SWT.DEFAULT).y+10);
 		}
+			
+		
 	}
 }

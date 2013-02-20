@@ -18,8 +18,8 @@ import org.eclipse.swt.widgets.TableItem;
 
 public class Students extends GuiModule {
 	
-	public Students(String name, GroupType groupType) throws Exception {
-		super(name, groupType);
+	public Students() throws Exception {
+		super("Students");
 	}
 
 	private Table table;
@@ -28,7 +28,7 @@ public class Students extends GuiModule {
 	 * @wbp.parser.entryPoint
 	 */
 	@Override
-	public void show(Composite parent) {
+	public void createContent(Composite parent) {
 		container = new Group(parent, SWT.NONE);
 		container.setText("Students");
 		container.setLayout(new GridLayout(1, false));
@@ -77,15 +77,15 @@ public class Students extends GuiModule {
 		tblclmnClass.setWidth(100);
 		tblclmnClass.setText("Class");
 		
-		try {
-			update(Student.getAllStudents());
-		} catch (Exception e) {
-		}
 	}
 
 	@Override
-	public void update(Object... parameters) {
-		ArrayList<Student> students = (ArrayList<Student>) parameters[0];
+	@SuppressWarnings("unchecked")
+	public void update(Object... parameters) throws IllegalArgumentException {
+		if(parameters.length != 1 || !(parameters[0] instanceof ArrayList)) {
+			throw new IllegalArgumentException("Parameter #1: ArrayList of students!");
+		}
+		ArrayList<Student> students = (ArrayList<Student>)parameters[0];;
 		for(Student student : students) {
 			TableItem tableItem = new TableItem(table, SWT.NONE);
 			tableItem.setText(new String[] {

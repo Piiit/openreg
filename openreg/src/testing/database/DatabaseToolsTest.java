@@ -1,9 +1,12 @@
-package database;
+package testing.database;
 
 import static org.junit.Assert.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import database.DatabaseConnection;
+import database.DatabaseTools;
 
 //TODO create a test database
 public class DatabaseToolsTest {
