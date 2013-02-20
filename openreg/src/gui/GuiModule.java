@@ -64,7 +64,10 @@ public abstract class GuiModule {
 	public static GuiModule getVisibleModule() {
 		return visibleModule;
 	}
-	
-	
-	
+
+
+	public Group getContainer() {
+		return container;
+	}
+
 }

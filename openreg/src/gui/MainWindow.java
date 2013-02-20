@@ -1,6 +1,9 @@
 package gui;
 
 import java.util.ArrayList;
+
+import log.Log;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -115,15 +118,17 @@ public class MainWindow {
 //		final Students widgetStudent = new Students(compositeCenter, SWT.NONE);
 //		widgetStudent.setVisible(false);
 		
-		final GuiModule widgetStudent = modules.get(0);
-		widgetStudent.setVisible(true);
+//		final GuiModule widgetStudent = modules.get(0);
+//		widgetStudent.setVisible(false);
 		
 		int i = 0;
 		int j = 0;
-		for(GuiModule module : modules) {
-			Composite currentComposite = compositeAdministration;
+		for(final GuiModule module : modules) {
+			final Composite currentComposite;
 			if(module.getGroupType() == GroupType.Reports) {
 				currentComposite = compositeReports;
+			} else {
+				currentComposite = compositeAdministration;
 			}
 			Link li = new Link(currentComposite, SWT.NONE);
 			FormData fd = new FormData();
@@ -131,6 +136,14 @@ public class MainWindow {
 			fd.left = new FormAttachment(0, 10);
 			li.setLayoutData(fd);
 			li.setText("<a>" + module.getName() + "</a>");
+			module.show(compositeCenter);
+			li.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent arg0) {
+					Log.info(arg0.toString());
+					module.getContainer().setVisible(true);
+				}
+			});
 			i++;
 		}
 	}
