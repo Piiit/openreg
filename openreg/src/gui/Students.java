@@ -87,16 +87,19 @@ public class Students extends GuiModule {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public void update(Object... parameters) throws IllegalArgumentException {
+	public void update(final Object... parameters) throws IllegalArgumentException {
 		if(parameters.length != 1 || !(parameters[0] instanceof ArrayList)) {
 			throw new IllegalArgumentException("Parameter #1: ArrayList of students!");
 		}
 		ArrayList<Student> students = (ArrayList<Student>)parameters[0];
+		table.removeAll();
 		int i = 1;
 		for(Student student : students) {
 			TableItem tableItem = new TableItem(table, SWT.NONE);
 			tableItem.setText(new String[] {
-					"", Integer.toString(i++), student.getName()+" "+student.getSurname(), 
+					"", 
+					Integer.toString(i++), 
+					student.getName() + " " + student.getSurname(), 
 					Integer.toString(student.getEnrolmentYear()), 
 					student.getBirthday().toString(),
 					student.getStudentsClass().toString()

@@ -49,7 +49,7 @@ public class MainWindow {
 	protected void createContents() {
 		shlRegisterForTeachers = new Shell();
 		shlRegisterForTeachers.setMinimumSize(new Point(640, 480));
-		shlRegisterForTeachers.setSize(600, 500);
+		shlRegisterForTeachers.setSize(640, 480);
 		shlRegisterForTeachers.setText("Register for teachers");
 		shlRegisterForTeachers.setLayout(new BorderLayout(0, 0));
 		
