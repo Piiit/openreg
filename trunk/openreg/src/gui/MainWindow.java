@@ -78,6 +78,13 @@ public class MainWindow {
 		mntmNewSubmenu.setMenu(menu_2);
 		
 		MenuItem mntmAddStudent = new MenuItem(menu_2, SWT.NONE);
+		mntmAddStudent.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				StudentsAdd addDialog = new StudentsAdd(shlRegisterForTeachers, SWT.NONE);
+				addDialog.open();
+			}
+		});
 		mntmAddStudent.setText("Add Student");
 		
 		ExpandBar expandBar = new ExpandBar(shlRegisterForTeachers, SWT.NONE);
