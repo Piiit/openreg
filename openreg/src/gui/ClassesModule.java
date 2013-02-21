@@ -10,11 +10,11 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.TableColumn;
 
-public class Classes extends GuiModule {
+public class ClassesModule extends GuiModule {
 
 	private Table table;
 	
-	public Classes() throws Exception {
+	public ClassesModule() throws Exception {
 		super("Classes");
 	}
 
