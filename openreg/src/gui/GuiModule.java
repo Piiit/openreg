@@ -19,7 +19,7 @@ public abstract class GuiModule {
 	}
 	
 	public void setName(String name) throws Exception {
-		if(name.length() == 0) {
+		if(name == null || name.length() == 0) {
 			throw new Exception("GuiModules must have a name!");
 		}
 		this.name = name;
