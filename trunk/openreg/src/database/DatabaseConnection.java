@@ -20,11 +20,12 @@ public final class DatabaseConnection {
 	private static Connection connection = null;
 	
 	public static void setup(final String connectionURL) throws Exception {
+		Log.info("Connecting to " + safeConnectionURL(connectionURL) + "...");
 		Class.forName("org.postgresql.Driver");
 		close();
 		DriverManager.setLoginTimeout(LOGINTIMEOUT);
 		connection = DriverManager.getConnection(connectionURL);
-		Log.info("New database connection established: " + connectionURL.substring(0, connectionURL.indexOf("?")));
+		Log.info("New database connection established: " + safeConnectionURL(connectionURL));
 	}
 	
 	public static void setup() throws Exception {
@@ -42,6 +43,10 @@ public final class DatabaseConnection {
 		if(connection != null && !connection.isClosed()) {
 			connection.close();
 		}
+	}
+	
+	protected static String safeConnectionURL(String url) {
+		return url.substring(0, url.indexOf("?"));
 	}
 	
 
