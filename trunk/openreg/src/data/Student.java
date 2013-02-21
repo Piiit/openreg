@@ -11,12 +11,12 @@ public class Student {
 	private Long id;
 	private String name;
 	private String surname;
-	private Date birthday;
-	private int addressID;
-	private Class studentsClass;
+	private Birthday birthday;
+	private Long classID;
+	private Long addressID;
 	private int enrolmentYear;
 	
-	public Student(String name, String surname, Date birthday, int enrolmentYear) {
+	public Student(String name, String surname, Birthday birthday, int enrolmentYear) {
 		super();
 		this.name = name;
 		this.surname = surname;
@@ -26,29 +26,40 @@ public class Student {
 	
 	public static ArrayList<Student> getAllStudents() throws Exception {
 		ArrayList<Student> students = new ArrayList<Student>();
-		ArrayList<Row> rows = DatabaseTools.getQueryResult(
-				"SELECT * FROM student INNER JOIN class cl ON class_id=cl.id"
-				);
+		ArrayList<Row> rows = DatabaseTools.getQueryResult("SELECT * FROM student");
 		for(Row row : rows) {
 			Student newStudent = new Student(
 					row.getValueAsString("name"), 
 					row.getValueAsString("surname"),
-					(Date)row.getValue("birthday"),
+					Birthday.fromDate((Date)row.getValue("birthday")),
 					(int)row.getValue("enrolment_year")
 					);
-			Class thisClass = new Class(
-					row.getValueAsString("level"), 
-					row.getValueAsString("stream"),
-					row.getValueAsString("notes")
-					);
-			thisClass.setID(Long.valueOf(row.getValueAsString("class_id")));
 			newStudent.setID((Long)row.getValue("id"));
-			newStudent.setStudentsClass(thisClass);
 			students.add(newStudent);
 		}
 		return students;
 	}
 	
+	public static void addNewStudent(Student student) throws Exception {
+		DatabaseTools.executeUpdate(
+				"INSERT INTO student (name, surname, birthday, enrolment_year, class_id, address_id) VALUES (?, ?, ?, ?, ?, ?)",
+				student.getName(),
+				student.getSurname(),
+				student.getBirthday(),
+				student.getEnrolmentYear(),
+				student.getClassID(),
+				student.getAddressID()
+				);
+	}
+	
+	public Long getAddressID() {
+		return addressID;
+	}
+
+	public void setAddressID(Long addressID) {
+		this.addressID = addressID;
+	}
+
 	public void setID(Long id) {
 		this.id = id;
 	}
@@ -69,20 +80,12 @@ public class Student {
 		this.surname = surname;
 	}
 
-	public Date getBirthday() {
+	public Birthday getBirthday() {
 		return birthday;
 	}
 
-	public void setBirthday(Date birthday) {
+	public void setBirthday(Birthday birthday) {
 		this.birthday = birthday;
-	}
-
-	public int getAddressID() {
-		return addressID;
-	}
-
-	public void setAddressID(int addressID) {
-		this.addressID = addressID;
 	}
 
 	public int getEnrolmentYear() {
@@ -93,15 +96,15 @@ public class Student {
 		this.enrolmentYear = enrolmentYear;
 	}
 
-	public Long getId() {
+	public Long getID() {
 		return id;
 	}
 
-	public Class getStudentsClass() {
-		return studentsClass;
+	public Long getClassID() {
+		return classID;
 	}
 
-	public void setStudentsClass(Class studentsClass) {
-		this.studentsClass = studentsClass;
+	public void setStudentsClass(Long classID) {
+		this.classID = classID;
 	}
 }

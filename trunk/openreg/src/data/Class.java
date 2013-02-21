@@ -44,6 +44,16 @@ public class Class {
 		return classes;
 	}
 	
+	public static Class getClassByID(Long id) throws Exception {
+		ArrayList<Row> rows = DatabaseTools.getQueryResult("SELECT * FROM class WHERE id = ? LIMIT 1", id);
+		Row row = rows.get(0);
+		return new Class(
+				row.getValueAsString("level"), 
+				row.getValueAsString("stream"),
+				row.getValueAsString("notes")
+				);
+	}
+	
 	public static void addNewClass(Class cl) throws Exception {
 		DatabaseTools.executeUpdate(
 				"INSERT INTO class (level, stream, notes) VALUES (?, ?, ?)", 

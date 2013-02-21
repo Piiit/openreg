@@ -9,7 +9,7 @@ public abstract class GuiModule {
 	protected Composite container;
 	
 	public abstract void createContent(Composite parent);
-	public abstract void update(Object... parameters);
+	public abstract void update(Object... parameters) throws Exception;
 	
 	public GuiModule() {
 	}
