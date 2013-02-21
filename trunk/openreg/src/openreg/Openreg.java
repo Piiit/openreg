@@ -1,13 +1,13 @@
 package openreg;
 
 import log.Log;
-import gui.Classes;
+import gui.ClassesModule;
 import gui.GroupType;
 import gui.GuiModuleList;
 import gui.MainWindow;
 import gui.SWTTools;
-import gui.Students;
-import gui.Teachers;
+import gui.StudentsModule;
+import gui.TeachersModule;
 import database.DatabaseConnection;
 
 public class Openreg {
@@ -27,9 +27,9 @@ public class Openreg {
 		}
 		
 		GuiModuleList gmListAdmin = new GuiModuleList(GroupType.Administration);
-		gmListAdmin.add(new Students());
-		gmListAdmin.add(new Classes());
-		gmListAdmin.add(new Teachers());
+		gmListAdmin.add(new StudentsModule());
+		gmListAdmin.add(new ClassesModule());
+		gmListAdmin.add(new TeachersModule());
 		
 		GuiModuleList gmListReport = new GuiModuleList(GroupType.Reports);
 		

@@ -10,9 +10,9 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
-public class Teachers extends GuiModule {
+public class TeachersModule extends GuiModule {
 
-	public Teachers() throws Exception {
+	public TeachersModule() throws Exception {
 		super("Teachers");
 	}
 
@@ -34,7 +34,7 @@ public class Teachers extends GuiModule {
 		tltmAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				TeachersAdd addDialog = new TeachersAdd(container.getShell(), SWT.NONE);
+				TeachersAddDialog addDialog = new TeachersAddDialog(container.getShell(), SWT.NONE);
 				addDialog.open();
 			}
 		});

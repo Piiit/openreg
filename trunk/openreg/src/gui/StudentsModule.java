@@ -16,9 +16,9 @@ import org.eclipse.swt.events.SelectionEvent;
 import data.Student;
 import org.eclipse.swt.widgets.TableItem;
 
-public class Students extends GuiModule {
+public class StudentsModule extends GuiModule {
 	
-	public Students() throws Exception {
+	public StudentsModule() throws Exception {
 		super("Students");
 	}
 
@@ -43,7 +43,7 @@ public class Students extends GuiModule {
 		tltmAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				StudentsAdd addDialog = new StudentsAdd(container.getShell(), SWT.NONE);
+				StudentsAddDialog addDialog = new StudentsAddDialog(container.getShell(), SWT.NONE);
 				addDialog.open();
 			}
 		});

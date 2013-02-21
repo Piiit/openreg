@@ -22,7 +22,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import data.Class;
 import org.eclipse.swt.widgets.Link;
 
-public class StudentsAdd extends Dialog {
+public class StudentsAddDialog extends Dialog {
 
 	protected Object result;
 	protected Shell shlAddStudent;
@@ -40,7 +40,7 @@ public class StudentsAdd extends Dialog {
 	 * @param parent
 	 * @param style
 	 */
-	public StudentsAdd(Shell parent, int style) {
+	public StudentsAddDialog(Shell parent, int style) {
 		super(parent, style);
 		setText("Add a new student");
 	}

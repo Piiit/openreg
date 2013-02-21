@@ -81,7 +81,7 @@ public class MainWindow {
 		mntmAddStudent.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				StudentsAdd addDialog = new StudentsAdd(shlRegisterForTeachers, SWT.NONE);
+				StudentsAddDialog addDialog = new StudentsAddDialog(shlRegisterForTeachers, SWT.NONE);
 				addDialog.open();
 			}
 		});

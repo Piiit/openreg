@@ -6,7 +6,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 
-public class TeachersAdd extends Dialog {
+public class TeachersAddDialog extends Dialog {
 
 	protected Object result;
 	protected Shell shlAddStudent;
@@ -16,7 +16,7 @@ public class TeachersAdd extends Dialog {
 	 * @param parent
 	 * @param style
 	 */
-	public TeachersAdd(Shell parent, int style) {
+	public TeachersAddDialog(Shell parent, int style) {
 		super(parent, style);
 		setText("Add a new teacher");
 	}
