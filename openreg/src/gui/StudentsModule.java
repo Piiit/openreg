@@ -12,7 +12,7 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-
+import data.Class;
 import data.Student;
 import org.eclipse.swt.widgets.TableItem;
 
@@ -87,7 +87,7 @@ public class StudentsModule extends GuiModule {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public void update(final Object... parameters) throws IllegalArgumentException {
+	public void update(final Object... parameters) throws Exception {
 		if(parameters.length != 1 || !(parameters[0] instanceof ArrayList)) {
 			throw new IllegalArgumentException("Parameter #1: ArrayList of students!");
 		}
@@ -102,7 +102,7 @@ public class StudentsModule extends GuiModule {
 					student.getName() + " " + student.getSurname(), 
 					Integer.toString(student.getEnrolmentYear()), 
 					student.getBirthday().toString(),
-					student.getStudentsClass().toString()
+					Class.getClassByID(student.getClassID()).toString()
 					});
 		}	
 	}

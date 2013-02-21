@@ -149,7 +149,7 @@ public class StudentsAddDialog extends Dialog {
 		lblClass.setLayoutData(fd_lblClass);
 		lblClass.setText("Class");
 		
-		Combo comboClasses = new Combo(shlAddStudent, SWT.NONE);
+		Combo comboClasses = new Combo(shlAddStudent, SWT.READ_ONLY);
 		FormData fd_comboClasses = new FormData();
 		fd_comboClasses.right = new FormAttachment(text, 0, SWT.RIGHT);
 		fd_comboClasses.left = new FormAttachment(spinner, 38);
@@ -236,7 +236,7 @@ public class StudentsAddDialog extends Dialog {
 		lblAbilityDescription.setBounds(268, 25, 124, 15);
 		lblAbilityDescription.setText("Ability Description");
 		
-		Combo combo_1 = new Combo(grpAdditionalInformation, SWT.NONE);
+		Combo combo_1 = new Combo(grpAdditionalInformation, SWT.READ_ONLY);
 		combo_1.setBounds(268, 46, 336, 23);
 		
 		Label lblNotes = new Label(grpAdditionalInformation, SWT.NONE);
