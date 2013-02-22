@@ -27,10 +27,10 @@ public class ClassTest {
 	@Test
 	public void test() throws Exception {
 		
-		Class.addNewClass(new Class("1st"));
-		Class.addNewClass(new Class("2", "B", "Some information"));
-		Class.addNewClass(new Class("3", "C"));
-		Class.addNewClass(new Class("1", "B"));
+		(new Class(new Long(13), "1st")).store();
+		(new Class("2", "B", "Some information")).store();
+		(new Class("3", "C")).store();
+		(new Class("1", "B")).store();
 		
 		ArrayList<Class> classes = Class.getAllClasses();
 		
