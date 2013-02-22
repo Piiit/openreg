@@ -39,10 +39,14 @@ public class ClassesModule extends GuiModule {
 		ToolItem tltmRemove = new ToolItem(toolBar, SWT.NONE);
 		tltmRemove.setText("Remove");
 		
-		table = new Table(container, SWT.BORDER | SWT.CHECK | SWT.FULL_SELECTION | SWT.MULTI);
+		table = new Table(group, SWT.BORDER | SWT.CHECK | SWT.FULL_SELECTION);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		
+		TableColumn tblclmnControl = new TableColumn(table, SWT.NONE);
+		tblclmnControl.setResizable(false);
+		tblclmnControl.setWidth(30);
 		
 		TableColumn tblclmnLevel = new TableColumn(table, SWT.NONE);
 		tblclmnLevel.setWidth(100);

@@ -11,14 +11,14 @@ import log.Log;
 
 public final class DatabaseConnection {
 	
-	private static final int LOGINTIMEOUT = 1;  //in seconds
-	private static Connection connection = null;
+	public final static int LOGINTIMEOUT = 1;  //in seconds
 	public final static String URL = "jdbc:postgresql://alcor.inf.unibz.it:5432/ds_group2?user=ds_group2&password=Iezedoo6";
+
+	private static Connection connection = null;
 	
 	public static void setup(final String connectionURL) throws Exception {
-		Log.info("Connecting to " + safeConnectionURL(connectionURL) + "...");
+		Log.info("Connecting to " + safeConnectionURL(connectionURL));
 		Class.forName("org.postgresql.Driver");
-		close();
 		DriverManager.setLoginTimeout(LOGINTIMEOUT);
 		connection = DriverManager.getConnection(connectionURL);
 		Log.info("New database connection established: " + safeConnectionURL(connectionURL));
@@ -44,6 +44,7 @@ public final class DatabaseConnection {
 	public static void close() throws Exception {
 		if(connection != null && !connection.isClosed()) {
 			connection.close();
+			Log.info("Database connection closed!");
 		}
 	}
 	
