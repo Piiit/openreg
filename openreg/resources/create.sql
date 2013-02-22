@@ -1,4 +1,4 @@
-﻿
+
 /*
 Peter Moser peter.moser@stud-inf.unibz.it
 Valentin Huber valentin.huber@stud-inf.unibz.it
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS teacher
   login character varying NOT NULL,
   password character varying NOT NULL,
   birthday date NOT NULL,
-  address_id int NOT NULL REFERENCES address,
+  address_id bigint NOT NULL REFERENCES address,
   phone_number character varying,
   picture bit varying,
   notes text
@@ -52,11 +52,11 @@ CREATE TABLE IF NOT EXISTS student
   name character varying NOT NULL,
   surname character varying NOT NULL,
   birthday date NOT NULL,
-  address_id int NOT NULL REFERENCES address,
-  class_id int NOT NULL REFERENCES class,
+  address_id bigint NOT NULL REFERENCES address,
+  class_id bigint NOT NULL REFERENCES class,
   phonenumber character varying,
   enrolment_year int NOT NULL,
-  ability_description_id int REFERENCES ability_description,  
+  ability_description_id bigint REFERENCES ability_description,  
   picture bit varying,
   notes character varying 
 );
@@ -70,9 +70,9 @@ CREATE TABLE IF NOT EXISTS course
 
 CREATE TABLE IF NOT EXISTS teacher_class_course
 (
-  teacher_id int NOT NULL REFERENCES teacher,
-  class_id int NOT NULL REFERENCES class,
-  course_id int NOT NULL REFERENCES course,
+  teacher_id bigint NOT NULL REFERENCES teacher,
+  class_id bigint NOT NULL REFERENCES class,
+  course_id bigint NOT NULL REFERENCES course,
   PRIMARY KEY (teacher_id, class_id, course_id)
 );
 
@@ -86,24 +86,24 @@ CREATE TABLE IF NOT EXISTS topic
 (
   id bigserial PRIMARY KEY,
   description character varying NOT NULL,
-  course_id int NOT NULL REFERENCES course,
-  topic_id int REFERENCES topic,
+  course_id bigint NOT NULL REFERENCES course,
+  topic_id bigint REFERENCES topic,
   CONSTRAINT unique_per_course UNIQUE (description, course_id, topic_id)
 );
 
 CREATE TABLE IF NOT EXISTS assessment
 (
   id bigserial PRIMARY KEY,
-  assessment_type_id int NOT NULL REFERENCES assessment_type,
-  topic_id int REFERENCES topic, 
+  assessment_type_id bigint NOT NULL REFERENCES assessment_type,
+  topic_id bigint REFERENCES topic, 
   description character varying,
   notes character varying
 );
 
 CREATE TABLE IF NOT EXISTS weighted_assessment
 (
-  main_assessment_id int NOT NULL REFERENCES assessment,
-  sub_assessment_id int NOT NULL REFERENCES assessment,
+  main_assessment_id bigint NOT NULL REFERENCES assessment,
+  sub_assessment_id bigint NOT NULL REFERENCES assessment,
   weight float NOT NULL CHECK (weight > 0 AND weight <= 100),
   PRIMARY KEY (main_assessment_id, sub_assessment_id)
 );
@@ -120,18 +120,18 @@ CREATE TABLE IF NOT EXISTS mark
   representation character varying NOT NULL,
   bound float NOT NULL,
   CHECK (bound >= 0 AND bound <= 100),  -- We calculate everything in percentages...
-  mark_type_id int NOT NULL REFERENCES mark_type,
+  mark_type_id bigint NOT NULL REFERENCES mark_type,
   CONSTRAINT unique_bound_per_type UNIQUE(bound, mark_type_id, representation)
 );
 
 CREATE TABLE IF NOT EXISTS assessment_student
 (
   id bigserial PRIMARY KEY,
-  student_id int NOT NULL REFERENCES student,
-  weighted_assessment_main_id int NOT NULL,
-  weighted_assessment_sub_id int NOT NULL,
+  student_id bigint NOT NULL REFERENCES student,
+  weighted_assessment_main_id bigint NOT NULL,
+  weighted_assessment_sub_id bigint NOT NULL,
   FOREIGN KEY (weighted_assessment_main_id,weighted_assessment_sub_id) REFERENCES weighted_assessment (main_assessment_id, sub_assessment_id),
-  mark_id int REFERENCES mark,
+  mark_id bigint REFERENCES mark,
   mark float CHECK (mark >= 0 AND mark <= 100),
   date date NOT NULL,
   differentiated_evaluation boolean,
