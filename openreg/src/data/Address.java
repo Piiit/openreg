@@ -1,5 +1,7 @@
 package data;
 
+import database.DatabaseTools;
+
 public class Address {
 	private Long id = null;
 	private String street;
@@ -8,13 +10,17 @@ public class Address {
 	private String city;
 	private String country;
 	
-	public Address(String street, String number, String zipCode, String city, String country) {
+	public Address(Long id, String street, String number, String zipCode, String city, String country) {
 		super();
+		this.id = id;
 		this.street = street;
 		this.number = number;
 		this.zipCode = zipCode;
 		this.city = city;
 		this.country = country;
+	}
+	public Address(String street, String number, String zipCode, String city, String country) {
+		this(null, street, number, zipCode, city, country);
 	}
 	public Long getID() {
 		return id;
@@ -53,5 +59,24 @@ public class Address {
 		this.country = country;
 	}
 	
+	public void store() throws Exception {
+		DatabaseTools.executeUpdate(
+				"INSERT INTO address (id, street, no, zip_code, city, country) VALUES (?, ?, ?, ?, ?, ?)",  
+				id,
+				getStreet(),
+				getNumber(),
+				getZipCode(),
+				getCity(),
+				getCountry()
+				);
+	}
+	
+	public void delete() throws Exception {
+		Class.delete(id);
+	}
+	
+	public static void delete(long id) throws Exception {
+		DatabaseTools.executeUpdate("DELETE FROM address WHERE id = ?", id);
+	}
 	
 }

@@ -11,6 +11,14 @@ public class Class {
 	private String level; //NOT NULL
 	private String stream = null; 
 	private String notes = null;
+
+	public Class(Long id, String level) {
+		if(level == null || id == null) {
+			throw new NullPointerException("Class: id and level must be set!");
+		}
+		this.level = level;
+		this.id = id;
+	}
 	
 	public Class(String level, String stream, String notes) {
 		if(level == null) {
@@ -54,13 +62,32 @@ public class Class {
 				);
 	}
 	
-	public static void addNewClass(Class cl) throws Exception {
-		DatabaseTools.executeUpdate(
-				"INSERT INTO class (level, stream, notes) VALUES (?, ?, ?)", 
-				cl.getLevel(),
-				cl.getStream(),
-				cl.getNotes()
-				);
+	public void store() throws Exception {
+		if(id == null) {
+			DatabaseTools.executeUpdate( 
+					"INSERT INTO class (level, stream, notes) VALUES (?, ?, ?)",
+					getLevel(),
+					getStream(),
+					getNotes()
+					);
+		} else {
+			DatabaseTools.executeUpdate(
+					"INSERT INTO class (id, level, stream, notes) VALUES (?, ?, ?, ?)", 
+					id,
+					getLevel(),
+					getStream(),
+					getNotes()
+					);
+		}
+		
+	}
+	
+	public void delete() throws Exception {
+		Class.delete(id);
+	}
+	
+	public static void delete(long id) throws Exception {
+		DatabaseTools.executeUpdate("DELETE FROM class WHERE id = ?", id);
 	}
 
 	public static void removeAllClasses() throws Exception {
