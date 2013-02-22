@@ -38,6 +38,7 @@ public class ClassTest {
 		
 		assertEquals(4, classes.size());
 		assertEquals("1st", classes.get(0).toString());
+		assertEquals(new Long(13), classes.get(0).getID());
 		assertEquals("2B", classes.get(1).toString());
 		assertEquals("Some information", classes.get(1).getNotes());
 		assertEquals("3C", classes.get(2).toString());
