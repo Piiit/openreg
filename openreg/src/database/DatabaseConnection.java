@@ -1,23 +1,19 @@
 package database;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.util.Properties;
 
 import log.Log;
 
 public final class DatabaseConnection {
 	
 	private static final int LOGINTIMEOUT = 1;  //in seconds
-	
-	private final static String USER = "ds_group2";
-	private final static String PASSWORD = "Iezedoo6";
-	public final static String URL = "jdbc:postgresql://alcor.inf.unibz.it:5432/ds_group2?user=" + USER + "&password=" + PASSWORD;
-
-	private final static String TESTUSER = "user";
-	private final static String TESTPASSWORD = "qwertz";
-	public final static String TESTURL = "jdbc:postgresql://localhost/openreg?user=" + TESTUSER + "&password=" + TESTPASSWORD;
-	
 	private static Connection connection = null;
+	public final static String URL = "jdbc:postgresql://alcor.inf.unibz.it:5432/ds_group2?user=ds_group2&password=Iezedoo6";
 	
 	public static void setup(final String connectionURL) throws Exception {
 		Log.info("Connecting to " + safeConnectionURL(connectionURL) + "...");
@@ -30,6 +26,12 @@ public final class DatabaseConnection {
 	
 	public static void setup() throws Exception {
 		setup(URL);
+	}
+	
+	public static String getConnectionURL() throws FileNotFoundException, IOException {
+		Properties config = new Properties();
+		config.load(new FileInputStream("resources/dbconfig.txt"));
+		return config.getProperty("URL");
 	}
 
 	public static Connection getConnection() throws Exception {
@@ -49,5 +51,4 @@ public final class DatabaseConnection {
 		return url.substring(0, url.indexOf("?"));
 	}
 	
-
 }

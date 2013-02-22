@@ -8,16 +8,16 @@ import org.junit.Test;
 import database.DatabaseConnection;
 import database.DatabaseTools;
 
-//TODO create a test database
 public class DatabaseToolsTest {
 
 	@Before
 	public void setUp() throws Exception {
-		DatabaseConnection.setup(DatabaseConnection.TESTURL);
+		DatabaseConnection.setup(DatabaseConnection.getConnectionURL());
 	}
 
 	@After
 	public void tearDown() throws Exception {
+		DatabaseConnection.close();
 	}
 
 	@Test
