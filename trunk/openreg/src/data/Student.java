@@ -2,7 +2,6 @@ package data;
 
 import java.sql.Date;
 import java.util.ArrayList;
-
 import database.DatabaseTools;
 import database.Row;
 
@@ -50,16 +49,28 @@ public class Student {
 	}
 	
 	public void store() throws Exception {
-		DatabaseTools.executeUpdate(
-				"INSERT INTO student (id, name, surname, birthday, enrolment_year, class_id, address_id) VALUES (?, ?, ?, ?, ?, ?, ?)",
-				id,
-				getName(),
-				getSurname(),
-				getBirthday().getSqlDate(),
-				getEnrolmentYear(),
-				getClassID(),
-				getAddressID()
-				);
+		if(id == null) {
+			DatabaseTools.executeUpdate(
+					"INSERT INTO student (name, surname, birthday, enrolment_year, class_id, address_id) VALUES (?, ?, ?, ?, ?, ?)",
+					getName(),
+					getSurname(),
+					getBirthday().getSqlDate(),
+					getEnrolmentYear(),
+					getClassID(),
+					getAddressID()
+					);
+		} else {
+			DatabaseTools.executeUpdate(
+					"INSERT INTO student (id, name, surname, birthday, enrolment_year, class_id, address_id) VALUES (?, ?, ?, ?, ?, ?, ?)",
+					id,
+					getName(),
+					getSurname(),
+					getBirthday().getSqlDate(),
+					getEnrolmentYear(),
+					getClassID(),
+					getAddressID()
+					);
+		}
 	}
 	
 	public void delete() throws Exception {

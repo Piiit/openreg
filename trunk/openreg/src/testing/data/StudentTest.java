@@ -18,7 +18,7 @@ public class StudentTest {
 
 	@Before
 	public void setUp() throws Exception {
-		DatabaseConnection.setup(DatabaseConnection.TESTURL);
+		DatabaseConnection.setup(DatabaseConnection.getConnectionURL());
 	}
 
 	@After

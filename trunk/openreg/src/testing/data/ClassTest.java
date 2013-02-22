@@ -14,7 +14,7 @@ public class ClassTest {
 
 	@Before
 	public void setupTest() throws Exception {
-		DatabaseConnection.setup(DatabaseConnection.TESTURL);
+		DatabaseConnection.setup(DatabaseConnection.getConnectionURL());
 		Class.removeAllClasses();
 	}
 	
