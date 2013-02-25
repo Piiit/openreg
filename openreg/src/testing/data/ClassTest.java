@@ -32,7 +32,7 @@ public class ClassTest {
 		(new Class("3", "C")).store();
 		(new Class("1", "B")).store();
 		
-		ArrayList<Class> classes = Class.getAllClasses();
+		ArrayList<Class> classes = Class.getAll();
 		
 		assertEquals(0, classes.get(0).size());
 		
@@ -45,7 +45,7 @@ public class ClassTest {
 		assertEquals("1B", classes.get(3).toString());
 		
 		Class.removeAllClasses();
-		classes = Class.getAllClasses();
+		classes = Class.getAll();
 		assertEquals(0, classes.size());
 	}
 

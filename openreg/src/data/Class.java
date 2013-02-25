@@ -22,7 +22,7 @@ public class Class {
 	
 	public Class(String level, String stream, String notes) {
 		if(level == null) {
-			throw new NullPointerException("Class: level must be set!");
+			throw new NullPointerException("The level of a class must be set!");
 		}
 		this.level = level;
 		this.stream = stream;
@@ -37,7 +37,7 @@ public class Class {
 		this(level, null, null);
 	}
 
-	public static ArrayList<Class> getAllClasses() throws Exception {
+	public static ArrayList<Class> getAll() throws Exception {
 		ArrayList<Class> classes = new ArrayList<Class>();
 		ArrayList<Row> rows = DatabaseTools.getQueryResult("SELECT * FROM class");
 		for(Row row : rows) {
@@ -46,7 +46,7 @@ public class Class {
 					row.getValueAsString("stream"),
 					row.getValueAsString("notes")
 					);
-			newClass.setID((Long)row.getValue("id"));
+			newClass.setID(row.getValueAsLong("id"));
 			classes.add(newClass);
 		}
 		return classes;

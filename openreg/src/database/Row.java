@@ -1,5 +1,6 @@
 package database;
 
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -24,6 +25,27 @@ public class Row {
 			return null;
 		}
 		return data.get(key).toString();
+	}
+	
+	public Long getValueAsLong(String key) {
+		if(data.get(key) == null) {
+			return null;
+		}
+		return (Long)data.get(key);
+	}
+	
+	public Integer getValueAsInt(String key) {
+		if(data.get(key) == null) {
+			return null;
+		}
+		return (Integer)data.get(key);
+	}
+	
+	public Date getValueAsDate(String key) {
+		if(data.get(key) == null) {
+			return null;
+		}
+		return (Date)data.get(key);
 	}
 
 	@Override
