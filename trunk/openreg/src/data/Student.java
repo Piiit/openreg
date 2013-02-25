@@ -1,6 +1,5 @@
 package data;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import database.DatabaseTools;
 import database.Row;
@@ -30,19 +29,19 @@ public class Student {
 		this(null, name, surname, birthday, enrolmentYear, classID, addressID);
 	}
 	
-	public static ArrayList<Student> getAllStudents() throws Exception {
+	public static ArrayList<Student> getAll() throws Exception {
 		ArrayList<Student> students = new ArrayList<Student>();
 		ArrayList<Row> rows = DatabaseTools.getQueryResult("SELECT * FROM student");
 		for(Row row : rows) {
 			Student newStudent = new Student(
+					row.getValueAsLong("id"),
 					row.getValueAsString("name"), 
 					row.getValueAsString("surname"),
-					SimpleDate.fromDate((Date)row.getValue("birthday")),
-					(int)row.getValue("enrolment_year"),
-					(Long)row.getValue("class_id"),
-					(Long)row.getValue("address_id")
+					SimpleDate.fromDate(row.getValueAsDate("birthday")),
+					row.getValueAsInt("enrolment_year"),
+					row.getValueAsLong("class_id"),
+					row.getValueAsLong("address_id")
 					);
-			newStudent.setID((Long)row.getValue("id"));
 			students.add(newStudent);
 		}
 		return students;

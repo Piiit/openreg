@@ -15,12 +15,7 @@ import org.junit.Test;
 
 public class GuiModuleTest {
 	
-	private class MyGuiModule extends GuiModule {
-
-		public MyGuiModule(String name) throws Exception {
-			super(name);
-			// TODO Auto-generated constructor stub
-		}
+	private class MyGuiModule1 extends GuiModule {
 
 		@Override
 		public void createContent(Composite parent) {
@@ -29,11 +24,55 @@ public class GuiModuleTest {
 		}
 
 		@Override
-		public void update(Object... parameters) {
+		public void update() {
 			// TODO Auto-generated method stub
 			
 		}
-		
+
+		@Override
+		public String getName() {
+			return "Test1";
+		}
+	}	
+	
+	private class MyGuiModule2 extends GuiModule {
+
+		@Override
+		public void createContent(Composite parent) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void update() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public String getName() {
+			return "Test2";
+		}
+	}	
+	
+	private class MyGuiModule3 extends GuiModule {
+
+		@Override
+		public void createContent(Composite parent) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void update() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public String getName() {
+			return "Test3";
+		}
 	}
 	
 	
@@ -42,9 +81,9 @@ public class GuiModuleTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		MyGuiModule gm1 = new MyGuiModule("Test1");
-		MyGuiModule gm2 = new MyGuiModule("Test2");
-		MyGuiModule gm3 = new MyGuiModule("Test3");
+		MyGuiModule1 gm1 = new MyGuiModule1();
+		MyGuiModule2 gm2 = new MyGuiModule2();
+		MyGuiModule3 gm3 = new MyGuiModule3();
 		gmList1.add(gm1);
 		gmList1.add(gm2);
 		gmList2.add(gm3);

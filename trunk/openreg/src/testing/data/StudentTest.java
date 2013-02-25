@@ -32,14 +32,14 @@ public class StudentTest {
 	@Test
 	public void test() throws Exception {
 		
-		int stCount = Student.getAllStudents().size();
+		int stCount = Student.getAll().size();
 		Address ad1 = new Address(addressId, "1", "2", "3", "4", "5");
 		ad1.store();
 		Class cl1 = new Class(classId, "lvl1");
 		cl1.store();
 		Student st1 = new Student(studentId, "Pinco", "Pallino", new SimpleDate(22, 5, 1990), 2000, classId, addressId);
 		st1.store();
-		assertEquals(stCount+1, Student.getAllStudents().size());
+		assertEquals(stCount+1, Student.getAll().size());
 	}
 
 }

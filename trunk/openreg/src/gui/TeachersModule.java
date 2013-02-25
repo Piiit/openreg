@@ -12,10 +12,6 @@ import org.eclipse.swt.widgets.ToolItem;
 
 public class TeachersModule extends GuiModule {
 
-	public TeachersModule() throws Exception {
-		super("Teachers");
-	}
-
 	/**
 	 * @wbp.parser.entryPoint
 	 */
@@ -42,9 +38,14 @@ public class TeachersModule extends GuiModule {
 	}
 
 	@Override
-	public void update(Object... parameters) {
+	public void update() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public String getName() {
+		return "Teachers";
 	}
 
 }

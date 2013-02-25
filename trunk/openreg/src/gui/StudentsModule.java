@@ -1,12 +1,14 @@
 package gui;
 
 import java.util.ArrayList;
+
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.TableColumn;
@@ -18,10 +20,6 @@ import org.eclipse.swt.widgets.TableItem;
 
 public class StudentsModule extends GuiModule {
 	
-	public StudentsModule() throws Exception {
-		super("Students");
-	}
-
 	private Table table;
 
 	/**
@@ -45,6 +43,7 @@ public class StudentsModule extends GuiModule {
 			public void widgetSelected(SelectionEvent arg0) {
 				StudentsAddDialog addDialog = new StudentsAddDialog(container.getShell(), SWT.NONE);
 				addDialog.open();
+				update();
 			}
 		});
 		tltmAdd.setText("Add");
@@ -59,10 +58,6 @@ public class StudentsModule extends GuiModule {
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
-		
-		TableColumn tblclmnControl = new TableColumn(table, SWT.NONE);
-		tblclmnControl.setResizable(false);
-		tblclmnControl.setWidth(30);
 		
 		TableColumn tableColumn = new TableColumn(table, SWT.NONE);
 		tableColumn.setWidth(30);
@@ -83,27 +78,67 @@ public class StudentsModule extends GuiModule {
 		TableColumn tblclmnClass = new TableColumn(table, SWT.NONE);
 		tblclmnClass.setWidth(100);
 		tblclmnClass.setText("Class");
+		
+		tltmRemove.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				TableItem tableItems[] = table.getItems();
+				ArrayList<Long> selected = new ArrayList<Long>();
+				for(int i = 0; i < tableItems.length; i++) {
+					if(tableItems[i].getChecked() == true) {
+						selected.add((Long)tableItems[i].getData("ID"));
+					}
+				}
+				MessageBox messageBox = new MessageBox(container.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+				messageBox.setMessage("Delete " + selected.size() + " students?");
+				messageBox.setText(container.getShell().getText());
+				if(messageBox.open() == SWT.YES) {
+					try {
+						for(Long studentId : selected)
+							Student.delete(studentId);
+						update();
+					} catch (Exception e) {
+						e.printStackTrace();
+
+						MessageBox message = new MessageBox(container.getShell(), SWT.ICON_INFORMATION | SWT.OK);
+						message.setMessage(e.getMessage());
+						message.setText(container.getShell().getText());
+						message.open();
+					}
+				}
+			}
+		});
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
-	public void update(final Object... parameters) throws Exception {
-		if(parameters.length != 1 || !(parameters[0] instanceof ArrayList)) {
-			throw new IllegalArgumentException("Parameter #1: ArrayList of students!");
-		}
-		ArrayList<Student> students = (ArrayList<Student>)parameters[0];
+	public void update() {
 		table.removeAll();
 		int i = 1;
-		for(Student student : students) {
-			TableItem tableItem = new TableItem(table, SWT.NONE);
-			tableItem.setText(new String[] {
-					"", 
-					Integer.toString(i++), 
-					student.getName() + " " + student.getSurname(), 
-					Integer.toString(student.getEnrolmentYear()), 
-					student.getBirthday().toString(),
-					Class.getClassByID(student.getClassID()).toString()
-					});
+		try {
+			//TODO Better don't use getAll because classes need to get fetched for every student... performance issue!
+			for(Student student : Student.getAll()) {
+				TableItem tableItem = new TableItem(table, SWT.NONE);
+				tableItem.setText(new String[] {
+						Integer.toString(i++), 
+						student.getName() + " " + student.getSurname(), 
+						Integer.toString(student.getEnrolmentYear()), 
+						student.getBirthday().toString(),
+						Class.getClassByID(student.getClassID()).toString()
+						});
+				tableItem.setData("ID", student.getID());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+			MessageBox message = new MessageBox(container.getShell(), SWT.ICON_ERROR | SWT.OK);
+			message.setMessage("Unable to fetch data from your Database! See stdout for more information!\n\n" + e.getMessage());
+			message.setText(this.getName());
+			message.open();	
 		}	
+	}
+
+	@Override
+	public String getName() {
+		return "Students";
 	}
 }

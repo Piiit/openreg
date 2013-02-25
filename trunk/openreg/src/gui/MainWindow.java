@@ -15,13 +15,14 @@ import org.eclipse.swt.widgets.ExpandItem;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.custom.StackLayout;
-
-import data.Student;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
 
 public class MainWindow {
 
 	protected Shell shlRegisterForTeachers;
 	protected ArrayList<GuiModuleList> gmLists = new ArrayList<GuiModuleList>();
+	protected GuiModule currentModule;
 	
 	public void addModuleList(GuiModuleList gmList) {
 		gmLists.add(gmList);
@@ -90,11 +91,14 @@ public class MainWindow {
 		ExpandBar expandBar = new ExpandBar(shlRegisterForTeachers, SWT.NONE);
 		expandBar.setLayoutData(BorderLayout.WEST);
 		
-		Composite compositeCenter = new Composite(shlRegisterForTeachers, SWT.NONE);
+		final Composite compositeCenter = new Composite(shlRegisterForTeachers, SWT.NONE);
 		compositeCenter.setLayoutData(BorderLayout.CENTER);
 		compositeCenter.setLayout(new StackLayout());
 		
 		for(final GuiModuleList gmList : gmLists) {
+			if(gmList.size() == 0) {
+				continue;
+			}
 			ExpandItem item = new ExpandItem(expandBar, SWT.NONE);
 			item.setExpanded(true);
 			item.setText(gmList.getGroupType().toString());
@@ -111,19 +115,23 @@ public class MainWindow {
 					@Override
 					public void widgetSelected(SelectionEvent arg0) {
 						gmList.setVisibleModule(module);
-						try {
-							module.update(Student.getAllStudents());
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+						currentModule = module;
+						module.update();
 					}
 				});
 				i++;
 			}
 			item.setHeight(item.getControl().computeSize(SWT.DEFAULT, SWT.DEFAULT).y + 10);
 		}
-			
+		
+		shlRegisterForTeachers.addControlListener(new ControlAdapter() {
+			@Override
+			public void controlResized(ControlEvent arg0) {
+				if(currentModule != null) {
+					currentModule.container.setVisible(true);
+				}
+			}
+		});
 		
 	}
 }
