@@ -60,15 +60,26 @@ public class Address {
 	}
 	
 	public void store() throws Exception {
-		DatabaseTools.executeUpdate(
-				"INSERT INTO address (id, street, no, zip_code, city, country) VALUES (?, ?, ?, ?, ?, ?)",  
-				id,
-				getStreet(),
-				getNumber(),
-				getZipCode(),
-				getCity(),
-				getCountry()
-				);
+		if(id == null) {
+			DatabaseTools.executeUpdate(
+					"INSERT INTO address (street, no, zip_code, city, country) VALUES (?, ?, ?, ?, ?)",  
+					getStreet(),
+					getNumber(),
+					getZipCode(),
+					getCity(),
+					getCountry()
+					);
+		} else {
+			DatabaseTools.executeUpdate(
+					"INSERT INTO address (id, street, no, zip_code, city, country) VALUES (?, ?, ?, ?, ?, ?)",  
+					id,
+					getStreet(),
+					getNumber(),
+					getZipCode(),
+					getCity(),
+					getCountry()
+					);
+		}
 	}
 	
 	public void delete() throws Exception {

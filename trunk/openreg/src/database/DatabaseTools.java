@@ -1,5 +1,6 @@
 package database;
 
+import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -53,12 +54,19 @@ public class DatabaseTools {
 			prepStatement.setObject(i + 1, parameters[i]);
 		}
 		
+		int updatedLines = prepStatement.executeUpdate();
+		
 		Log.info("Executing update: " + prepStatement.toString());
 		
-		return prepStatement.executeUpdate();
+		return updatedLines;
 	}
 	
 	public static int executeUpdate(final String query) throws Exception {
 		return executeUpdate(query, new Object[0]);
+	}
+	
+	public static Long getRandomID() {
+		SecureRandom sr = new SecureRandom();
+		return sr.nextLong();
 	}
 }
