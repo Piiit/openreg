@@ -28,6 +28,7 @@ import database.AddressView;
 import database.ClassesView;
 import database.DatabaseTools;
 import database.Row;
+import database.StudentsView;
 
 import org.eclipse.swt.widgets.Link;
 
@@ -265,28 +266,26 @@ public class StudentsAddDialog extends GuiDialog {
 		btnSave.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				if(addressID == null) {
-					addressID = DatabaseTools.getRandomID();
-				}
 				
 				try {
 					Row newAddress = new Row();
-					newAddress.setValue("id", addressID);
 					newAddress.setValue("street", GuiTools.nullIfEmptyTrimmed(addressStreet.getText()));
 					newAddress.setValue("no", GuiTools.nullIfEmptyTrimmed(addressNo.getText()));
 					newAddress.setValue("zip_code", GuiTools.nullIfEmptyTrimmed(addressZip.getText()));
 					newAddress.setValue("city", GuiTools.nullIfEmptyTrimmed(addressCity.getText()));
 					newAddress.setValue("country", GuiTools.nullIfEmptyTrimmed(addressCountry.getText()));
+					Long addressId = AddressView.insert(newAddress);
 
 					Row newStudent = new Row();
-					newAddress.setValue("country", GuiTools.nullIfEmptyTrimmed(studentName.getText()));
-					newAddress.setValue("country", GuiTools.nullIfEmptyTrimmed(studentSurname.getText()));
-					newAddress.setValue("country", new SimpleDate(studentBirthday.getDay(), studentBirthday.getMonth(), studentBirthday.getYear()));
-					newAddress.setValue("country", studentYear.getSelection());
-					newAddress.setValue("country", (Long)studentClass.getData(studentClass.getText()));
-					newAddress.setValue("country", addressID);
+					newStudent.setValue("name", GuiTools.nullIfEmptyTrimmed(studentName.getText()));
+					newStudent.setValue("surname", GuiTools.nullIfEmptyTrimmed(studentSurname.getText()));
+					newStudent.setValue("birthday", new SimpleDate(studentBirthday.getDay(), studentBirthday.getMonth(), studentBirthday.getYear()));
+					newStudent.setValue("enrolment_year", studentYear.getSelection());
+					newStudent.setValue("class_id", (Long)studentClass.getData(studentClass.getText()));
+					newStudent.setValue("address_id", addressId);
+					
+					StudentsView.insert(newStudent);
 
-					AddressView.insert(newAddress);
 					shlAddStudent.dispose();
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -369,10 +368,9 @@ public class StudentsAddDialog extends GuiDialog {
 	public void update() {
 		try {
 			studentClass.removeAll();
-			ClassesView classesView = new ClassesView();
-			for(Row cl : classesView.getFullDataset()) {
+			for(Row cl : ClassesView.getFullDataset()) {
 				studentClass.add(cl.getValueAsString("level") + cl.getValueAsString("stream"));
-				studentClass.setData(cl.toString(), cl.getValue("id"));
+				studentClass.setData(cl.getValueAsString("level") + cl.getValueAsString("stream"), cl.getValue("id"));
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

@@ -18,8 +18,15 @@ public class AddressView {
 		return null;
 	}
 
-	public static void insert(Row row) throws Exception {
-		// TODO Auto-generated method stub
+	public static Long insert(Row row) throws Exception {
+		return (Long)DatabaseTools.executeUpdate(
+				"INSERT INTO address (street, no, zip_code, city, country) VALUES (?, ?, ?, ?, ?)",
+				row.getValueAsString("street"),
+				row.getValueAsString("no"),
+				row.getValueAsString("zip_code"),
+				row.getValueAsString("city"),
+				row.getValueAsString("country")
+				);
 
 	}
 

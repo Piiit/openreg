@@ -1,5 +1,6 @@
 package database;
 
+import java.sql.Statement;
 import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -46,9 +47,9 @@ public class DatabaseTools {
 		return getQueryResult(query, new Object[0]);
 	}
 	
-	public static int executeUpdate(final String query, final Object... parameters) throws Exception {
+	public static Object executeUpdate(final String query, final Object... parameters) throws Exception {
 		Connection con = DatabaseConnection.getConnection();
-		PreparedStatement prepStatement = con.prepareStatement(query);
+		PreparedStatement prepStatement = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 		
 		for(int i = 0; i < parameters.length; i++) {
 			prepStatement.setObject(i + 1, parameters[i]);
@@ -56,12 +57,19 @@ public class DatabaseTools {
 		
 		int updatedLines = prepStatement.executeUpdate();
 		
-		Log.info("Executing update: " + prepStatement.toString());
+		prepStatement.executeUpdate();
 		
-		return updatedLines;
+		Log.info("Executing update (" + updatedLines + " rows): " + prepStatement.toString());
+
+		ResultSet rs = prepStatement.getGeneratedKeys();
+		if (rs.next()) {
+		  return rs.getObject(1);
+		}
+		
+		return null;
 	}
 	
-	public static int executeUpdate(final String query) throws Exception {
+	public static Object executeUpdate(final String query) throws Exception {
 		return executeUpdate(query, new Object[0]);
 	}
 	
