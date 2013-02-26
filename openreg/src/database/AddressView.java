@@ -30,8 +30,16 @@ public class AddressView {
 	}
 
 	public static void update(Row row) throws Exception {
-		// TODO Auto-generated method stub
-
+		DatabaseTools.executeUpdate(
+				"UPDATE address SET street = ?, no = ?, zip_code = ?, city = ?, country = ?" +
+				"WHERE id = ?",
+				row.getValueAsString("street"),
+				row.getValueAsString("no"),
+				row.getValueAsString("zip_code"),
+				row.getValueAsString("city"),
+				row.getValueAsString("country"),
+				row.getValueAsLong("id")
+				);
 	}
 
 	public static void delete(Object id) throws Exception {
