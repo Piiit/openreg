@@ -1,18 +1,14 @@
 package database;
 
 import java.util.ArrayList;
-import data.SimpleDate;
-import log.Log;
 
 public class StudentsView {
 	
-	public static ArrayList<Row> getDataset() {
-		// TODO Auto-generated method stub
-		return null;
+	public static ArrayList<Row> getDataset() throws Exception {
+		return DatabaseTools.getQueryResult("SELECT * FROM class cl, ability_description ab");
 	}
 
 	public static ArrayList<Row> getDataset(Object id) throws Exception {
-		Log.info("Loading student with ID " + id.toString());
 		return DatabaseTools.getQueryResult(
 				"SELECT st.id AS student_id, * FROM student st " +
 				"INNER JOIN class cl ON cl.id = class_id " +
