@@ -58,7 +58,9 @@ public class Address {
 	public void setCountry(String country) {
 		this.country = country;
 	}
-	
+	/*
+	 * 
+	 */
 	public void store() throws Exception {
 		if(id == null) {
 			DatabaseTools.executeUpdate(
