@@ -3,16 +3,14 @@ package database;
 import java.util.ArrayList;
 import log.Log;
 
-public class StudentsView implements DatabaseView {
+public class StudentsView {
 	
-	@Override
-	public ArrayList<Row> getDataset() {
+	public static ArrayList<Row> getDataset() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
-	public ArrayList<Row> getDataset(Object id) throws Exception {
+	public static ArrayList<Row> getDataset(Object id) throws Exception {
 		Log.info("Loading student with ID " + id.toString());
 		return DatabaseTools.getQueryResult(
 				"SELECT * FROM student st " +
@@ -22,26 +20,22 @@ public class StudentsView implements DatabaseView {
 				"WHERE st.id = ?", id);
 	}
 
-	@Override
-	public void insert(ArrayList<Row> rows) throws Exception {
+	public static void insert(ArrayList<Row> rows) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
-	public void update(ArrayList<Row> rows) throws Exception {
+	public static void update(ArrayList<Row> rows) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
-	public void delete(Object id) throws Exception {
+	public static void delete(Object id) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
-	public ArrayList<Row> getFullDataset() throws Exception {
+	public static ArrayList<Row> getFullDataset() throws Exception {
 		return DatabaseTools.getQueryResult("SELECT * FROM student " +
 				"INNER JOIN class cl ON class_id = cl.id " +
 				"INNER JOIN address ad ON address_id = ad.id " +

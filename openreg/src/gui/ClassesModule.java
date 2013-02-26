@@ -67,7 +67,7 @@ public class ClassesModule extends GuiModule {
 	public void reloadData() {
 		table.removeAll();
 		try {
-			for(Row thisClass : view.getFullDataset()) {
+			for(Row thisClass : ClassesView.getFullDataset()) {
 				TableItem tableItem = new TableItem(table, SWT.NONE);
 				tableItem.setText(new String[] {
 						thisClass.getValueAsString("level") + " " + thisClass.getValueAsString("stream"),
@@ -87,11 +87,6 @@ public class ClassesModule extends GuiModule {
 	@Override
 	public String getName() {
 		return "Classes";
-	}
-
-	@Override
-	public void createView() {
-		view = new ClassesView();
 	}
 
 	@Override

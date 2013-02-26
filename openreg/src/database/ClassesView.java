@@ -2,40 +2,34 @@ package database;
 
 import java.util.ArrayList;
 
-public class ClassesView implements DatabaseView {
+public class ClassesView {
 
-	@Override
-	public ArrayList<Row> getDataset() throws Exception {
+	public static ArrayList<Row> getDataset() throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
-	public ArrayList<Row> getDataset(Object id) throws Exception {
+	public static ArrayList<Row> getDataset(Object id) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
-	public ArrayList<Row> getFullDataset() throws Exception {
+	public static ArrayList<Row> getFullDataset() throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
-	public void insert(ArrayList<Row> rows) throws Exception {
+	public static void insert(ArrayList<Row> rows) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
-	public void update(ArrayList<Row> rows) throws Exception {
+	public static void update(ArrayList<Row> rows) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
-	public void delete(Object id) throws Exception {
+	public static void delete(Object id) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
