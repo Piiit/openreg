@@ -27,6 +27,13 @@ public class Row {
 		return data.get(key).toString();
 	}
 	
+	public String getValueAsStringNotNull(String key) {
+		if(data.get(key) == null) {
+			return "";
+		}
+		return data.get(key).toString();
+	}
+	
 	public Long getValueAsLong(String key) {
 		if(data.get(key) == null) {
 			return null;

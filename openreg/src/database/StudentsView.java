@@ -14,7 +14,7 @@ public class StudentsView {
 	public static ArrayList<Row> getDataset(Object id) throws Exception {
 		Log.info("Loading student with ID " + id.toString());
 		return DatabaseTools.getQueryResult(
-				"SELECT * FROM student st " +
+				"SELECT st.id AS student_id, * FROM student st " +
 				"INNER JOIN class cl ON cl.id = class_id " +
 				"INNER JOIN address ad ON ad.id = address_id " +
 				"LEFT JOIN ability_description ab ON ab.id = ability_description_id " +
@@ -39,9 +39,23 @@ public class StudentsView {
 				);
 	}
 
-	public static void update(ArrayList<Row> rows) throws Exception {
-		// TODO Auto-generated method stub
-		
+	public static void update(Row row) throws Exception {
+		DatabaseTools.executeUpdate(
+				"UPDATE student SET name = ?, surname = ?, birthday = ?, address_id = ?, class_id = ?, " +
+				"phonenumber = ?, enrolment_year = ?, ability_description_id = ?, picture = ?, notes = ? " +
+				"WHERE id = ?",
+				row.getValueAsString("name"),
+				row.getValueAsString("surname"),
+				((SimpleDate)row.getValue("birthday")).getSqlDate(),
+				row.getValueAsLong("address_id"),
+				row.getValueAsLong("class_id"),
+				row.getValueAsString("phonenumber"),
+				row.getValueAsInt("enrolment_year"),
+				row.getValueAsLong("ability_description_id"),
+				row.getValue("picture"),
+				row.getValueAsString("notes"),
+				row.getValueAsLong("id")
+				);		
 	}
 
 	public static void delete(Object id) throws Exception {
@@ -54,5 +68,4 @@ public class StudentsView {
 				"INNER JOIN address ad ON address_id = ad.id " +
 				"LEFT JOIN ability_description ab ON ability_description_id = ab.id");
 	}
-
 }

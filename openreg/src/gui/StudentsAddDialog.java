@@ -1,5 +1,7 @@
 package gui;
 
+import java.util.ArrayList;
+
 import log.Log;
 
 import org.eclipse.swt.widgets.Display;
@@ -44,7 +46,8 @@ public class StudentsAddDialog extends GuiDialog {
 	private Text studentPhone;
 	private DateTime studentBirthday;
 	private Spinner studentYear;
-	private Row student;
+	private StyledText studentNotes;
+	private Row loadedData;
 
 	public StudentsAddDialog(Shell parent) {
 		super(parent);
@@ -255,7 +258,7 @@ public class StudentsAddDialog extends GuiDialog {
 		lblNotes.setBounds(10, 51, 55, 15);
 		lblNotes.setText("Notes");
 		
-		StyledText studentNotes = new StyledText(grpAdditionalInformation, SWT.BORDER);
+		studentNotes = new StyledText(grpAdditionalInformation, SWT.BORDER);
 		studentNotes.setBounds(10, 72, 594, 211);
 		
 		Button btnSave = new Button(shlAddStudent, SWT.CENTER);
@@ -277,7 +280,7 @@ public class StudentsAddDialog extends GuiDialog {
 		btnCancel.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				shlAddStudent.dispose();
+				cancel();
 			}
 		});
 		FormData fd_btnCancel = new FormData();
@@ -312,23 +315,6 @@ public class StudentsAddDialog extends GuiDialog {
 		lblMandatoryFields.setText("* Mandatory Fields");
 		
 		update();
-		
-		loadData();
-	}
-	
-	private void loadData() {
-		if(student == null) {
-			return;
-		}
-		studentName.setText(student.getValueAsString("name"));
-		studentSurname.setText(student.getValueAsString("surname"));
-		//TODO search correct selection with comboBox data fields <=> class_id
-//		studentClass.select();
-		SimpleDate date = SimpleDate.fromDate((java.sql.Date)student.getValue("birthday"));
-		studentBirthday.setDate(date.getYear(), date.getMonth(), date.getDay());
-		studentYear.setSelection(student.getValueAsInt("enrolment_year"));
-		studentPhone.setText(student.getValueAsString("phonenumber"));
-		
 	}
 	
 	@Override
@@ -339,6 +325,26 @@ public class StudentsAddDialog extends GuiDialog {
 				studentClass.add(cl.getValueAsString("level") + cl.getValueAsString("stream"));
 				studentClass.setData(cl.getValueAsString("level") + cl.getValueAsString("stream"), cl.getValue("id"));
 			}
+			
+			if(loadedData != null) {
+				studentName.setText(loadedData.getValueAsString("name"));
+				studentSurname.setText(loadedData.getValueAsString("surname"));
+				SimpleDate date = SimpleDate.fromDate((java.sql.Date)loadedData.getValue("birthday"));
+				studentBirthday.setDate(date.getYear(), date.getMonth(), date.getDay());
+				studentYear.setSelection(loadedData.getValueAsInt("enrolment_year"));
+				
+				//TODO search correct selection with comboBox data fields <=> class_id
+	//			studentClass.select();
+				
+				addressStreet.setText(loadedData.getValueAsString("street"));
+				addressNo.setText(loadedData.getValueAsString("no"));
+				addressZip.setText(loadedData.getValueAsString("zip_code"));
+				addressCity.setText(loadedData.getValueAsString("city"));
+				addressCountry.setText(loadedData.getValueAsString("country"));
+				
+				studentPhone.setText(loadedData.getValueAsStringNotNull("phonenumber"));
+				studentNotes.setText(loadedData.getValueAsString("notes"));
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -347,6 +353,11 @@ public class StudentsAddDialog extends GuiDialog {
 
 	@Override
 	public void loadData(Object data) throws Exception {
+		ArrayList<Row> students = StudentsView.getDataset((Long)data);
+		if(students.size() == 0) {
+			throw new Exception("No student with ID " + data.toString() + " found.");
+		}
+		loadedData = students.get(0);
 	}
 
 	@Override
@@ -359,7 +370,11 @@ public class StudentsAddDialog extends GuiDialog {
 			newAddress.setValue("zip_code", GuiTools.nullIfEmptyTrimmed(addressZip.getText()));
 			newAddress.setValue("city", GuiTools.nullIfEmptyTrimmed(addressCity.getText()));
 			newAddress.setValue("country", GuiTools.nullIfEmptyTrimmed(addressCountry.getText()));
-			addressId = AddressView.insert(newAddress);
+			if(addressId == null && loadedData == null) {
+				addressId = AddressView.insert(newAddress);
+			} else {
+				AddressView.update(newAddress);
+			}
 
 			Row newStudent = new Row();
 			newStudent.setValue("name", GuiTools.nullIfEmptyTrimmed(studentName.getText()));
@@ -367,9 +382,14 @@ public class StudentsAddDialog extends GuiDialog {
 			newStudent.setValue("birthday", new SimpleDate(studentBirthday.getDay(), studentBirthday.getMonth(), studentBirthday.getYear()));
 			newStudent.setValue("enrolment_year", studentYear.getSelection());
 			newStudent.setValue("class_id", (Long)studentClass.getData(studentClass.getText()));
-			newStudent.setValue("address_id", addressId);
+			newStudent.setValue("address_id", (loadedData == null ? addressId : loadedData.getValueAsLong("address_id")));
 			
-			StudentsView.insert(newStudent);
+			if(loadedData == null) {
+				StudentsView.insert(newStudent);
+			} else {
+				newStudent.setValue("id", loadedData.getValueAsLong("student_id"));
+				StudentsView.update(newStudent);
+			}
 
 			shlAddStudent.dispose();
 		} catch (Exception e) {
@@ -394,7 +414,6 @@ public class StudentsAddDialog extends GuiDialog {
 
 	@Override
 	public void cancel() {
-		// TODO Auto-generated method stub
-		
+		shlAddStudent.dispose();		
 	}
 }

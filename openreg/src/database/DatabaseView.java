@@ -2,7 +2,7 @@ package database;
 
 import java.util.ArrayList;
 
-public interface DatabaseView {
+public abstract class DatabaseView {
 	public abstract ArrayList<Row> getDataset() throws Exception;
 	public abstract ArrayList<Row> getDataset(Object id) throws Exception;
 	public abstract ArrayList<Row> getFullDataset() throws Exception;
