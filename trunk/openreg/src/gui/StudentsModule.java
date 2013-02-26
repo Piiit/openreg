@@ -1,6 +1,9 @@
 package gui;
 
 import java.util.ArrayList;
+
+import log.Log;
+
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.SWT;
@@ -99,9 +102,10 @@ public class StudentsModule extends GuiModule {
 			public void widgetSelected(SelectionEvent arg0) {
 				TableItem tableItems[] = table.getItems();
 				ArrayList<Long> selected = new ArrayList<Long>();
-				for(int i = 0; i < tableItems.length; i++) {
+				for(int i = 1; i < tableItems.length; i++) {
 					if(tableItems[i].getChecked() == true) {
-						selected.add((Long)tableItems[i].getData("ID"));
+						Log.info("" + tableItems[i].getData());
+						selected.add((Long)tableItems[i].getData());
 					}
 				}
 				
@@ -119,6 +123,7 @@ public class StudentsModule extends GuiModule {
 				
 				try {
 					for(Long studentId : selected) {
+						Log.info("Deleting " + studentId);
 						StudentsView.delete(studentId);
 					}
 					reloadData();
@@ -141,6 +146,7 @@ public class StudentsModule extends GuiModule {
 		try {
 			for(Row student : StudentsView.getFullDataset()) {
 				TableItem tableItem = new TableItem(table, SWT.NONE);
+				tableItem.setData(student.getValueAsLong("student_id"));
 				tableItem.setText(new String[] {
 						Integer.toString(i++), 
 						student.getValueAsString("name") + " " + student.getValueAsString("surname"), 
@@ -148,7 +154,6 @@ public class StudentsModule extends GuiModule {
 						student.getValueAsString("birthday"),
 						student.getValueAsString("level") + student.getValueAsString("stream")
 						});
-				tableItem.setData("ID", student.getValue("id"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
