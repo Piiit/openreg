@@ -15,13 +15,12 @@ public class ClassesView {
 	}
 
 	public static ArrayList<Row> getFullDataset() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return DatabaseTools.getQueryResult("SELECT * FROM class");
 	}
 
-	public static void insert(ArrayList<Row> rows) throws Exception {
+	public static Long insert(ArrayList<Row> rows) throws Exception {
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
 
 	public static void update(ArrayList<Row> rows) throws Exception {

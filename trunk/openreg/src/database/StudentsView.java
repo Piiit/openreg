@@ -1,6 +1,9 @@
 package database;
 
+import java.sql.Date;
 import java.util.ArrayList;
+
+import data.SimpleDate;
 import log.Log;
 
 public class StudentsView {
@@ -20,9 +23,22 @@ public class StudentsView {
 				"WHERE st.id = ?", id);
 	}
 
-	public static void insert(ArrayList<Row> rows) throws Exception {
-		// TODO Auto-generated method stub
-		
+	public static Long insert(Row row) throws Exception {
+		return (Long)DatabaseTools.executeUpdate(
+				"INSERT INTO student (name, surname, birthday, address_id, class_id, " +
+				"phonenumber, enrolment_year, ability_description_id, picture, notes) " +
+				"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+				row.getValueAsString("name"),
+				row.getValueAsString("surname"),
+				((SimpleDate)row.getValue("birthday")).getSqlDate(),
+				row.getValueAsLong("address_id"),
+				row.getValueAsLong("class_id"),
+				row.getValueAsString("phonenumber"),
+				row.getValueAsInt("enrolment_year"),
+				row.getValueAsLong("ability_description_id"),
+				row.getValue("picture"),
+				row.getValueAsString("notes")
+				);
 	}
 
 	public static void update(ArrayList<Row> rows) throws Exception {
