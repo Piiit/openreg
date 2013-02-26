@@ -38,14 +38,26 @@ public class TeachersModule extends GuiModule {
 	}
 
 	@Override
-	public void update() {
+	public String getName() {
+		return "Teachers";
+	}
+
+	@Override
+	public void createView() {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public String getName() {
-		return "Teachers";
+	public void reloadData() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getDescription() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

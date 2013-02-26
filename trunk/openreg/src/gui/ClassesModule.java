@@ -13,7 +13,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import data.Class;
+import database.ClassesView;
+import database.Row;
 
 public class ClassesModule extends GuiModule {
 
@@ -40,7 +41,7 @@ public class ClassesModule extends GuiModule {
 			public void widgetSelected(SelectionEvent arg0) {
 				ClassesAddDialog classAddDialog = new ClassesAddDialog(group.getShell(), SWT.NONE);
 				classAddDialog.open();
-				update();
+				reloadData();
 			}
 		});
 		tltmAdd.setText("Add");
@@ -63,14 +64,14 @@ public class ClassesModule extends GuiModule {
 	}
 
 	@Override
-	public void update() {
+	public void reloadData() {
 		table.removeAll();
 		try {
-			for(Class thisClass : Class.getAll()) {
+			for(Row thisClass : view.getFullDataset()) {
 				TableItem tableItem = new TableItem(table, SWT.NONE);
 				tableItem.setText(new String[] {
-						thisClass.getLevel() + " " + thisClass.getStream(),
-						thisClass.getNotes()
+						thisClass.getValueAsString("level") + " " + thisClass.getValueAsString("stream"),
+						thisClass.getValueAsString("notes")
 						});
 			}
 		} catch (Exception e) {
@@ -86,5 +87,16 @@ public class ClassesModule extends GuiModule {
 	@Override
 	public String getName() {
 		return "Classes";
+	}
+
+	@Override
+	public void createView() {
+		view = new ClassesView();
+	}
+
+	@Override
+	public String getDescription() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

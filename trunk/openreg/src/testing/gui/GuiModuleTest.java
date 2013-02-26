@@ -24,7 +24,7 @@ public class GuiModuleTest {
 		}
 
 		@Override
-		public void update() {
+		public void setInitialData() {
 			// TODO Auto-generated method stub
 			
 		}
@@ -44,7 +44,7 @@ public class GuiModuleTest {
 		}
 
 		@Override
-		public void update() {
+		public void setInitialData() {
 			// TODO Auto-generated method stub
 			
 		}
@@ -64,7 +64,7 @@ public class GuiModuleTest {
 		}
 
 		@Override
-		public void update() {
+		public void setInitialData() {
 			// TODO Auto-generated method stub
 			
 		}
