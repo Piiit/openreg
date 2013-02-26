@@ -57,8 +57,6 @@ public class DatabaseTools {
 		
 		int updatedLines = prepStatement.executeUpdate();
 		
-		prepStatement.executeUpdate();
-		
 		Log.info("Executing update (" + updatedLines + " rows): " + prepStatement.toString());
 
 		ResultSet rs = prepStatement.getGeneratedKeys();
