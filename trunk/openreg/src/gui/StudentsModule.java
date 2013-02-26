@@ -65,12 +65,14 @@ public class StudentsModule extends GuiModule {
 			public void mouseDoubleClick(MouseEvent arg0) {
 				StudentsAddDialog addDialog = new StudentsAddDialog(container.getShell());
 				try {
-//					addDialog.loadStudent((Long)table.getItem(table.getSelectionIndex()).getData("ID"));
+					TableItem ti = table.getItem(table.getSelectionIndex());
+					addDialog.loadData((Long)ti.getData());
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				addDialog.open();
+				reloadData();
 			}
 		});
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -102,7 +104,7 @@ public class StudentsModule extends GuiModule {
 			public void widgetSelected(SelectionEvent arg0) {
 				TableItem tableItems[] = table.getItems();
 				ArrayList<Long> selected = new ArrayList<Long>();
-				for(int i = 1; i < tableItems.length; i++) {
+				for(int i = 0; i < tableItems.length; i++) {
 					if(tableItems[i].getChecked() == true) {
 						selected.add((Long)tableItems[i].getData());
 					}

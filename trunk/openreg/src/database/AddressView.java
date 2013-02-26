@@ -29,7 +29,7 @@ public class AddressView {
 				);
 	}
 
-	public static void update(ArrayList<Row> rows) throws Exception {
+	public static void update(Row row) throws Exception {
 		// TODO Auto-generated method stub
 
 	}
