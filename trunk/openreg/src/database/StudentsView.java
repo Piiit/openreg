@@ -1,8 +1,6 @@
 package database;
 
-import java.sql.Date;
 import java.util.ArrayList;
-
 import data.SimpleDate;
 import log.Log;
 
