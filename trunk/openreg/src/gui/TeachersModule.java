@@ -43,12 +43,6 @@ public class TeachersModule extends GuiModule {
 	}
 
 	@Override
-	public void createView() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void reloadData() {
 		// TODO Auto-generated method stub
 		

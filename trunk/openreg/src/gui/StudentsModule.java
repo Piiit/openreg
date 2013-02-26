@@ -15,6 +15,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import database.Row;
 import database.StudentsView;
+
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -28,7 +29,6 @@ public class StudentsModule extends GuiModule {
 	 */
 	@Override
 	public void createContent(Composite parent) {
-		createView();
 		
 		final Group group = new Group(parent, SWT.NONE);
 		group.setText(this.getName());
@@ -43,7 +43,7 @@ public class StudentsModule extends GuiModule {
 		tltmAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				StudentsAddDialog addDialog = new StudentsAddDialog(container.getShell(), SWT.NONE, guiModule);
+				StudentsAddDialog addDialog = new StudentsAddDialog(container.getShell());
 				addDialog.open();
 				reloadData();
 			}
@@ -60,9 +60,9 @@ public class StudentsModule extends GuiModule {
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent arg0) {
-				StudentsAddDialog addDialog = new StudentsAddDialog(container.getShell(), SWT.NONE, guiModule);
+				StudentsAddDialog addDialog = new StudentsAddDialog(container.getShell());
 				try {
-					addDialog.loadStudent((Long)table.getItem(table.getSelectionIndex()).getData("ID"));
+//					addDialog.loadStudent((Long)table.getItem(table.getSelectionIndex()).getData("ID"));
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -119,7 +119,7 @@ public class StudentsModule extends GuiModule {
 				
 				try {
 					for(Long studentId : selected) {
-						view.delete(studentId);
+						StudentsView.delete(studentId);
 					}
 					reloadData();
 				} catch (Exception e) {
@@ -139,7 +139,7 @@ public class StudentsModule extends GuiModule {
 		table.removeAll();
 		int i = 1;
 		try {
-			for(Row student : view.getFullDataset()) {
+			for(Row student : StudentsView.getFullDataset()) {
 				TableItem tableItem = new TableItem(table, SWT.NONE);
 				tableItem.setText(new String[] {
 						Integer.toString(i++), 
@@ -170,8 +170,4 @@ public class StudentsModule extends GuiModule {
 		return null;
 	}
 
-	@Override
-	public void createView() {
-		view = new StudentsView();
-	}
 }

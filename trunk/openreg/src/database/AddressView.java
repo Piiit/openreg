@@ -2,40 +2,33 @@ package database;
 
 import java.util.ArrayList;
 
-public class AddressView implements DatabaseView {
+public class AddressView {
 
-	@Override
-	public ArrayList<Row> getDataset() throws Exception {
+	public static ArrayList<Row> getDataset() throws Exception {
+		return null;
+	}
+
+	public static ArrayList<Row> getDataset(Object id) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
-	public ArrayList<Row> getDataset(Object id) throws Exception {
+	public static ArrayList<Row> getFullDataset() throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
-	public ArrayList<Row> getFullDataset() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void insert(ArrayList<Row> rows) throws Exception {
+	public static void insert(Row row) throws Exception {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
-	public void update(ArrayList<Row> rows) throws Exception {
+	public static void update(ArrayList<Row> rows) throws Exception {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
-	public void delete(Object id) throws Exception {
+	public static void delete(Object id) throws Exception {
 		// TODO Auto-generated method stub
 
 	}

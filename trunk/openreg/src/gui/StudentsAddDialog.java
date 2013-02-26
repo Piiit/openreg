@@ -1,5 +1,7 @@
 package gui;
 
+import java.util.ArrayList;
+
 import log.Log;
 import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
@@ -21,16 +23,15 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import data.Address;
-import data.Class;
 import data.SimpleDate;
-import data.Student;
+import database.AddressView;
+import database.ClassesView;
 import database.DatabaseTools;
 import database.Row;
 
 import org.eclipse.swt.widgets.Link;
 
-public class StudentsAddDialog extends Dialog {
+public class StudentsAddDialog extends GuiDialog {
 
 	protected Object result;
 	protected Shell shlAddStudent;
@@ -47,17 +48,9 @@ public class StudentsAddDialog extends Dialog {
 	private Spinner studentYear;
 	private Long addressID;
 	private Row student;
-	private GuiModule parentModule;
 
-	/**
-	 * Create the dialog.
-	 * @param parent
-	 * @param style
-	 */
-	public StudentsAddDialog(Shell parent, int style, GuiModule parentModule) {
-		super(parent, style);
-		setText("Add a new student");
-		this.parentModule = parentModule;
+	public StudentsAddDialog(Shell parent) {
+		super(parent);
 	}
 
 	/**
@@ -77,10 +70,6 @@ public class StudentsAddDialog extends Dialog {
 		return result;
 	}
 	
-	public void loadStudent(Long id) throws Exception {
-		Log.info(parentModule.view.getDataset(id).toString());
-	}
-
 	/**
 	 * Create contents of the dialog.
 	 */
@@ -281,24 +270,23 @@ public class StudentsAddDialog extends Dialog {
 				}
 				
 				try {
-					Address newAddress = new Address(
-							addressID,
-							GuiTools.nullIfEmptyTrimmed(addressStreet.getText()),
-							GuiTools.nullIfEmptyTrimmed(addressNo.getText()),
-							GuiTools.nullIfEmptyTrimmed(addressZip.getText()),
-							GuiTools.nullIfEmptyTrimmed(addressCity.getText()),
-							GuiTools.nullIfEmptyTrimmed(addressCountry.getText())
-							);
-					Student newStudent = new Student(
-							GuiTools.nullIfEmptyTrimmed(studentName.getText()),
-							GuiTools.nullIfEmptyTrimmed(studentSurname.getText()),
-							new SimpleDate(studentBirthday.getDay(), studentBirthday.getMonth(), studentBirthday.getYear()),
-							studentYear.getSelection(),
-							(Long)studentClass.getData(studentClass.getText()),
-							addressID
-							);
-					newAddress.store();
-					newStudent.store();
+					Row newAddress = new Row();
+					newAddress.setValue("id", addressID);
+					newAddress.setValue("street", GuiTools.nullIfEmptyTrimmed(addressStreet.getText()));
+					newAddress.setValue("no", GuiTools.nullIfEmptyTrimmed(addressNo.getText()));
+					newAddress.setValue("zip_code", GuiTools.nullIfEmptyTrimmed(addressZip.getText()));
+					newAddress.setValue("city", GuiTools.nullIfEmptyTrimmed(addressCity.getText()));
+					newAddress.setValue("country", GuiTools.nullIfEmptyTrimmed(addressCountry.getText()));
+
+					Row newStudent = new Row();
+					newAddress.setValue("country", GuiTools.nullIfEmptyTrimmed(studentName.getText()));
+					newAddress.setValue("country", GuiTools.nullIfEmptyTrimmed(studentSurname.getText()));
+					newAddress.setValue("country", new SimpleDate(studentBirthday.getDay(), studentBirthday.getMonth(), studentBirthday.getYear()));
+					newAddress.setValue("country", studentYear.getSelection());
+					newAddress.setValue("country", (Long)studentClass.getData(studentClass.getText()));
+					newAddress.setValue("country", addressID);
+
+					AddressView.insert(newAddress);
 					shlAddStudent.dispose();
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -377,16 +365,34 @@ public class StudentsAddDialog extends Dialog {
 		
 	}
 	
-	private void update() {
+	@Override
+	public void update() {
 		try {
 			studentClass.removeAll();
-			for(Class cl : Class.getAll()) {
-				studentClass.add(cl.toString());
-				studentClass.setData(cl.toString(), cl.getID());
+			ClassesView classesView = new ClassesView();
+			for(Row cl : classesView.getFullDataset()) {
+				studentClass.add(cl.getValueAsString("level") + cl.getValueAsString("stream"));
+				studentClass.setData(cl.toString(), cl.getValue("id"));
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void loadData(Object data) throws Exception {
+	}
+
+	@Override
+	public void store() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void cancel() {
+		// TODO Auto-generated method stub
+		
 	}
 }
