@@ -31,12 +31,11 @@ public class StudentsView {
 	}
 
 	public static void delete(Object id) throws Exception {
-		// TODO Auto-generated method stub
-		
+		DatabaseTools.executeUpdate("DELETE FROM student WHERE id = ?", (Long)id);
 	}
 
 	public static ArrayList<Row> getFullDataset() throws Exception {
-		return DatabaseTools.getQueryResult("SELECT * FROM student " +
+		return DatabaseTools.getQueryResult("SELECT st.id AS student_id, * FROM student st " +
 				"INNER JOIN class cl ON class_id = cl.id " +
 				"INNER JOIN address ad ON address_id = ad.id " +
 				"LEFT JOIN ability_description ab ON ability_description_id = ab.id");
