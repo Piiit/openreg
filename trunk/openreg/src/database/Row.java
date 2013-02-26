@@ -3,6 +3,8 @@ package database;
 import java.util.Date;
 import java.util.HashMap;
 
+import data.SimpleDate;
+
 /**
  * Some ideas taken from prom/database written by A. Janes
  * @author Peter Moser (pemoser)
@@ -53,6 +55,13 @@ public class Row {
 			return null;
 		}
 		return (Date)data.get(key);
+	}
+	
+	public SimpleDate getValueAsSimpleDate(String key) {
+		if(data.get(key) == null) {
+			return null;
+		}
+		return (SimpleDate)data.get(key);
 	}
 
 	@Override
