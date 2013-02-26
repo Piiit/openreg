@@ -104,7 +104,6 @@ public class StudentsModule extends GuiModule {
 				ArrayList<Long> selected = new ArrayList<Long>();
 				for(int i = 1; i < tableItems.length; i++) {
 					if(tableItems[i].getChecked() == true) {
-						Log.info("" + tableItems[i].getData());
 						selected.add((Long)tableItems[i].getData());
 					}
 				}
@@ -123,7 +122,6 @@ public class StudentsModule extends GuiModule {
 				
 				try {
 					for(Long studentId : selected) {
-						Log.info("Deleting " + studentId);
 						StudentsView.delete(studentId);
 					}
 					reloadData();

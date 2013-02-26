@@ -1,9 +1,7 @@
 package gui;
 
-import java.util.ArrayList;
-
 import log.Log;
-import org.eclipse.swt.widgets.Dialog;
+
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.SWT;
@@ -26,7 +24,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import data.SimpleDate;
 import database.AddressView;
 import database.ClassesView;
-import database.DatabaseTools;
 import database.Row;
 import database.StudentsView;
 
@@ -47,7 +44,6 @@ public class StudentsAddDialog extends GuiDialog {
 	private Text studentPhone;
 	private DateTime studentBirthday;
 	private Spinner studentYear;
-	private Long addressID;
 	private Row student;
 
 	public StudentsAddDialog(Shell parent) {
@@ -266,36 +262,7 @@ public class StudentsAddDialog extends GuiDialog {
 		btnSave.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				
-				try {
-					Row newAddress = new Row();
-					newAddress.setValue("street", GuiTools.nullIfEmptyTrimmed(addressStreet.getText()));
-					newAddress.setValue("no", GuiTools.nullIfEmptyTrimmed(addressNo.getText()));
-					newAddress.setValue("zip_code", GuiTools.nullIfEmptyTrimmed(addressZip.getText()));
-					newAddress.setValue("city", GuiTools.nullIfEmptyTrimmed(addressCity.getText()));
-					newAddress.setValue("country", GuiTools.nullIfEmptyTrimmed(addressCountry.getText()));
-					Long addressId = AddressView.insert(newAddress);
-
-					Row newStudent = new Row();
-					newStudent.setValue("name", GuiTools.nullIfEmptyTrimmed(studentName.getText()));
-					newStudent.setValue("surname", GuiTools.nullIfEmptyTrimmed(studentSurname.getText()));
-					newStudent.setValue("birthday", new SimpleDate(studentBirthday.getDay(), studentBirthday.getMonth(), studentBirthday.getYear()));
-					newStudent.setValue("enrolment_year", studentYear.getSelection());
-					newStudent.setValue("class_id", (Long)studentClass.getData(studentClass.getText()));
-					newStudent.setValue("address_id", addressId);
-					
-					StudentsView.insert(newStudent);
-
-					shlAddStudent.dispose();
-				} catch (Exception e) {
-					e.printStackTrace();
-
-					MessageBox message = new MessageBox(shlAddStudent, SWT.ICON_INFORMATION | SWT.OK);
-					message.setMessage(e.getMessage());
-					message.setText(shlAddStudent.getText());
-					message.open();
-				}
-				addressID = null;
+				store();
 			}
 		});
 		FormData fd_btnSave = new FormData();
@@ -384,8 +351,45 @@ public class StudentsAddDialog extends GuiDialog {
 
 	@Override
 	public void store() {
-		// TODO Auto-generated method stub
-		
+		Long addressId = null;
+		try {
+			Row newAddress = new Row();
+			newAddress.setValue("street", GuiTools.nullIfEmptyTrimmed(addressStreet.getText()));
+			newAddress.setValue("no", GuiTools.nullIfEmptyTrimmed(addressNo.getText()));
+			newAddress.setValue("zip_code", GuiTools.nullIfEmptyTrimmed(addressZip.getText()));
+			newAddress.setValue("city", GuiTools.nullIfEmptyTrimmed(addressCity.getText()));
+			newAddress.setValue("country", GuiTools.nullIfEmptyTrimmed(addressCountry.getText()));
+			addressId = AddressView.insert(newAddress);
+
+			Row newStudent = new Row();
+			newStudent.setValue("name", GuiTools.nullIfEmptyTrimmed(studentName.getText()));
+			newStudent.setValue("surname", GuiTools.nullIfEmptyTrimmed(studentSurname.getText()));
+			newStudent.setValue("birthday", new SimpleDate(studentBirthday.getDay(), studentBirthday.getMonth(), studentBirthday.getYear()));
+			newStudent.setValue("enrolment_year", studentYear.getSelection());
+			newStudent.setValue("class_id", (Long)studentClass.getData(studentClass.getText()));
+			newStudent.setValue("address_id", addressId);
+			
+			StudentsView.insert(newStudent);
+
+			shlAddStudent.dispose();
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+			if(addressId != null) {
+				Log.info("Address with ID " + addressId + " already inserted, but without a valid student record. Deleting...");
+				try {
+					AddressView.delete(addressId);
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+
+			MessageBox message = new MessageBox(shlAddStudent, SWT.ICON_INFORMATION | SWT.OK);
+			message.setMessage(e.getMessage());
+			message.setText(shlAddStudent.getText());
+			message.open();
+		}
 	}
 
 	@Override

@@ -25,11 +25,9 @@ public class ClassesModule extends GuiModule {
 	 */
 	@Override
 	public void createContent(Composite parent) {
-
 		final Group group = new Group(parent, SWT.NONE);
 		group.setText(this.getName());
 		group.setLayout(new GridLayout(1, false));
-
 		container = group;
 		
 		ToolBar toolBar = new ToolBar(group, SWT.FLAT | SWT.RIGHT);

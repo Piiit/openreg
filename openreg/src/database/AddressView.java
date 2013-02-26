@@ -27,7 +27,6 @@ public class AddressView {
 				row.getValueAsString("city"),
 				row.getValueAsString("country")
 				);
-
 	}
 
 	public static void update(ArrayList<Row> rows) throws Exception {
