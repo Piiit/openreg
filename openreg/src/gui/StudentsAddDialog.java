@@ -1,5 +1,6 @@
 package gui;
 
+import log.Log;
 import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -25,6 +26,8 @@ import data.Class;
 import data.SimpleDate;
 import data.Student;
 import database.DatabaseTools;
+import database.Row;
+
 import org.eclipse.swt.widgets.Link;
 
 public class StudentsAddDialog extends Dialog {
@@ -40,16 +43,21 @@ public class StudentsAddDialog extends Dialog {
 	private Text addressCity;
 	private Text addressCountry;
 	private Text studentPhone;
+	private DateTime studentBirthday;
+	private Spinner studentYear;
 	private Long addressID;
+	private Row student;
+	private GuiModule parentModule;
 
 	/**
 	 * Create the dialog.
 	 * @param parent
 	 * @param style
 	 */
-	public StudentsAddDialog(Shell parent, int style) {
+	public StudentsAddDialog(Shell parent, int style, GuiModule parentModule) {
 		super(parent, style);
 		setText("Add a new student");
+		this.parentModule = parentModule;
 	}
 
 	/**
@@ -67,6 +75,10 @@ public class StudentsAddDialog extends Dialog {
 			}
 		}
 		return result;
+	}
+	
+	public void loadStudent(Long id) throws Exception {
+		Log.info(parentModule.view.getDataset(id).toString());
 	}
 
 	/**
@@ -124,7 +136,7 @@ public class StudentsAddDialog extends Dialog {
 		lblBirthday.setLayoutData(fd_lblBirthday);
 		lblBirthday.setText("Birthday *");
 		
-		final DateTime studentBirthday = new DateTime(shlAddStudent, SWT.BORDER);
+		studentBirthday = new DateTime(shlAddStudent, SWT.BORDER);
 		FormData fd_studentBirthday = new FormData();
 		fd_studentBirthday.left = new FormAttachment(canvas, 6);
 		fd_studentBirthday.top = new FormAttachment(lblBirthday, 6);
@@ -136,7 +148,7 @@ public class StudentsAddDialog extends Dialog {
 		lblEnrolmentYear.setLayoutData(fd_lblEnrolmentYear);
 		lblEnrolmentYear.setText("Enrolment Year *");
 		
-		final Spinner studentYear = new Spinner(shlAddStudent, SWT.BORDER);
+		studentYear = new Spinner(shlAddStudent, SWT.BORDER);
 		fd_studentBirthday.right = new FormAttachment(studentYear, -28);
 		studentYear.setPageIncrement(5);
 		studentYear.setMaximum(2100);
@@ -346,6 +358,23 @@ public class StudentsAddDialog extends Dialog {
 		lblMandatoryFields.setText("* Mandatory Fields");
 		
 		update();
+		
+		loadData();
+	}
+	
+	private void loadData() {
+		if(student == null) {
+			return;
+		}
+		studentName.setText(student.getValueAsString("name"));
+		studentSurname.setText(student.getValueAsString("surname"));
+		//TODO search correct selection with comboBox data fields <=> class_id
+//		studentClass.select();
+		SimpleDate date = SimpleDate.fromDate((java.sql.Date)student.getValue("birthday"));
+		studentBirthday.setDate(date.getYear(), date.getMonth(), date.getDay());
+		studentYear.setSelection(student.getValueAsInt("enrolment_year"));
+		studentPhone.setText(student.getValueAsString("phonenumber"));
+		
 	}
 	
 	private void update() {

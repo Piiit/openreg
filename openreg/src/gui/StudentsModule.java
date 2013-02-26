@@ -1,7 +1,6 @@
 package gui;
 
 import java.util.ArrayList;
-
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.SWT;
@@ -14,9 +13,11 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import data.Class;
-import data.Student;
+import database.Row;
+import database.StudentsView;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 
 public class StudentsModule extends GuiModule {
 	
@@ -27,6 +28,7 @@ public class StudentsModule extends GuiModule {
 	 */
 	@Override
 	public void createContent(Composite parent) {
+		createView();
 		
 		final Group group = new Group(parent, SWT.NONE);
 		group.setText(this.getName());
@@ -41,9 +43,9 @@ public class StudentsModule extends GuiModule {
 		tltmAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				StudentsAddDialog addDialog = new StudentsAddDialog(container.getShell(), SWT.NONE);
+				StudentsAddDialog addDialog = new StudentsAddDialog(container.getShell(), SWT.NONE, guiModule);
 				addDialog.open();
-				update();
+				reloadData();
 			}
 		});
 		tltmAdd.setText("Add");
@@ -55,6 +57,19 @@ public class StudentsModule extends GuiModule {
 		tltmFilter.setText("All classes");
 		
 		table = new Table(group, SWT.BORDER | SWT.CHECK | SWT.FULL_SELECTION | SWT.MULTI);
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDoubleClick(MouseEvent arg0) {
+				StudentsAddDialog addDialog = new StudentsAddDialog(container.getShell(), SWT.NONE, guiModule);
+				try {
+					addDialog.loadStudent((Long)table.getItem(table.getSelectionIndex()).getData("ID"));
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				addDialog.open();
+			}
+		});
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
@@ -89,43 +104,51 @@ public class StudentsModule extends GuiModule {
 						selected.add((Long)tableItems[i].getData("ID"));
 					}
 				}
+				
+				if(selected.size() == 0) {
+					return;
+				}
+				
 				MessageBox messageBox = new MessageBox(container.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 				messageBox.setMessage("Delete " + selected.size() + " students?");
 				messageBox.setText(container.getShell().getText());
-				if(messageBox.open() == SWT.YES) {
-					try {
-						for(Long studentId : selected)
-							Student.delete(studentId);
-						update();
-					} catch (Exception e) {
-						e.printStackTrace();
-
-						MessageBox message = new MessageBox(container.getShell(), SWT.ICON_INFORMATION | SWT.OK);
-						message.setMessage(e.getMessage());
-						message.setText(container.getShell().getText());
-						message.open();
+				
+				if(messageBox.open() == SWT.NO) {
+					return;
+				}
+				
+				try {
+					for(Long studentId : selected) {
+						view.delete(studentId);
 					}
+					reloadData();
+				} catch (Exception e) {
+					e.printStackTrace();
+
+					MessageBox message = new MessageBox(container.getShell(), SWT.ICON_INFORMATION | SWT.OK);
+					message.setMessage(e.getMessage());
+					message.setText(container.getShell().getText());
+					message.open();
 				}
 			}
 		});
 	}
 
 	@Override
-	public void update() {
+	public void reloadData() {
 		table.removeAll();
 		int i = 1;
 		try {
-			//TODO Better don't use getAll because classes need to get fetched for every student... performance issue!
-			for(Student student : Student.getAll()) {
+			for(Row student : view.getFullDataset()) {
 				TableItem tableItem = new TableItem(table, SWT.NONE);
 				tableItem.setText(new String[] {
 						Integer.toString(i++), 
-						student.getName() + " " + student.getSurname(), 
-						Integer.toString(student.getEnrolmentYear()), 
-						student.getBirthday().toString(),
-						Class.getClassByID(student.getClassID()).toString()
+						student.getValueAsString("name") + " " + student.getValueAsString("surname"), 
+						student.getValueAsString("enrolment_year"), 
+						student.getValueAsString("birthday"),
+						student.getValueAsString("level") + student.getValueAsString("stream")
 						});
-				tableItem.setData("ID", student.getID());
+				tableItem.setData("ID", student.getValue("id"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -140,5 +163,15 @@ public class StudentsModule extends GuiModule {
 	@Override
 	public String getName() {
 		return "Students";
+	}
+
+	@Override
+	public String getDescription() {
+		return null;
+	}
+
+	@Override
+	public void createView() {
+		view = new StudentsView();
 	}
 }

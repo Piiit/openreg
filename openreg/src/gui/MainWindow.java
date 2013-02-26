@@ -72,22 +72,6 @@ public class MainWindow {
 		});
 		mntmExit.setText("Exit");
 		
-		MenuItem mntmNewSubmenu = new MenuItem(menu, SWT.CASCADE);
-		mntmNewSubmenu.setText("Student");
-		
-		Menu menu_2 = new Menu(mntmNewSubmenu);
-		mntmNewSubmenu.setMenu(menu_2);
-		
-		MenuItem mntmAddStudent = new MenuItem(menu_2, SWT.NONE);
-		mntmAddStudent.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-				StudentsAddDialog addDialog = new StudentsAddDialog(shlRegisterForTeachers, SWT.NONE);
-				addDialog.open();
-			}
-		});
-		mntmAddStudent.setText("Add Student");
-		
 		ExpandBar expandBar = new ExpandBar(shlRegisterForTeachers, SWT.NONE);
 		expandBar.setLayoutData(BorderLayout.WEST);
 		
@@ -116,7 +100,7 @@ public class MainWindow {
 					public void widgetSelected(SelectionEvent arg0) {
 						gmList.setVisibleModule(module);
 						currentModule = module;
-						module.update();
+						module.reloadData();
 					}
 				});
 				i++;

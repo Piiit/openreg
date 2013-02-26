@@ -14,7 +14,7 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import data.Class;
+import database.Row;
 
 public class ClassesAddDialog extends Dialog {
 
@@ -114,12 +114,10 @@ public class ClassesAddDialog extends Dialog {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
 				try {
-					Class newClass = new Class(
-							GuiTools.nullIfEmptyTrimmed(classLevel.getText()),
-							GuiTools.nullIfEmptyTrimmed(classStream.getText()),
-							GuiTools.nullIfEmpty(classNotes.getText())
-							);
-					newClass.store();
+					Row newClass = new Row();
+					newClass.setValue("level", GuiTools.nullIfEmptyTrimmed(classLevel.getText()));
+					newClass.setValue("stream", GuiTools.nullIfEmptyTrimmed(classStream.getText()));
+					newClass.setValue("notes", GuiTools.nullIfEmpty(classNotes.getText()));
 					shlAddANew.close();
 				} catch (Exception e) {
 					e.printStackTrace();
