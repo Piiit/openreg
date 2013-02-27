@@ -4,37 +4,52 @@ import java.util.ArrayList;
 
 import database.Row;
 
-public abstract class QueryTemplate {
+/**
+ * This is just a template to copy/paste for new Query classes!
+ * @author pemoser
+ */
+
+public class QueryTemplate {
 	
 	/**
 	 * Selecting tuples, that are needed to choose from, when inserting a new student (e.g. in drop-down menus)
 	 */
-	public abstract ArrayList<Row> getDataset() throws Exception;
+	public static ArrayList<Row> getDataset() throws Exception {
+		return null;
+	}
 	
 	/**
 	 * Selecting specific tuples by id, returning an ArrayList
 	 * Note: Please keep they return value as it is, to standardize our queries classes. 
 	 */
-	public abstract ArrayList<Row> getDataset(Object id) throws Exception;
+	public static ArrayList<Row> getDataset(Object id) throws Exception{
+		return null;
+	}
 	
 	/**
 	 * Returns all tuples needed to list them inside gui-modules.
 	 */
-	public abstract ArrayList<Row> getFullDataset() throws Exception;
+	public static ArrayList<Row> getFullDataset() throws Exception{
+		return null;
+	}
 	
 	/**
 	 * Inserts a new tuple.
 	 * @return ID of the new tuple formerly inserted.
 	 */
-	public abstract Long insert(Row row) throws Exception;
+	public static Long insert(Row row) throws Exception{
+		return null;
+	}
 	
 	/**
 	 * Update a certain tuple.
 	 */
-	public abstract void update(Object id, Row row) throws Exception;
+	public static void update(Object id, Row row) throws Exception{
+	}
 	
 	/**
 	 * Delete a certain tuple.
 	 */
-	public abstract void delete(Object id) throws Exception;
+	public static void delete(Object id) throws Exception{
+	}
 }
