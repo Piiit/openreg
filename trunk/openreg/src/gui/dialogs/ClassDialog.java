@@ -188,9 +188,9 @@ public class ClassDialog extends GuiDialog {
 	public void update() {
 		try {
 			if (loadedClass != null){
-				classLevel.setText(loadedClass.getValueAsString("level"));
-				classStream.setText(loadedClass.getValueAsString("stream"));
-				classNotes.setText(loadedClass.getValueAsString("notes"));
+				classLevel.setText(loadedClass.getValueAsStringNotNull("level"));
+				classStream.setText(loadedClass.getValueAsStringNotNull("stream"));
+				classNotes.setText(loadedClass.getValueAsStringNotNull("notes"));
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

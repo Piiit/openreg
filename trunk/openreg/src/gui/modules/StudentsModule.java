@@ -116,6 +116,11 @@ public class StudentsModule extends GuiModule {
 				}
 				
 				if(selected.size() == 0) {
+					MessageBox message = new MessageBox(container.getShell(), SWT.ICON_INFORMATION | SWT.OK);
+					message.setMessage("No students selected.");
+					message.setText(container.getShell().getText());
+					message.open();
+					reloadData();
 					return;
 				}
 				
