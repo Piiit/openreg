@@ -302,8 +302,7 @@ public class TeacherDialog extends GuiDialog {
 				addressId = AddressQuery.insert(newAddress);
 			} else {
 				addressId = loadedTeacher.getValueAsLong("address_id");
-				newAddress.setValue("id", addressId);
-				AddressQuery.update(newAddress);
+				AddressQuery.update(addressId, newAddress);
 			}
 			
 			
@@ -320,8 +319,7 @@ public class TeacherDialog extends GuiDialog {
 			if(loadedTeacher == null) {
 				TeacherQuery.insert(newTeacher);
 			} else {
-				newTeacher.setValue("id", loadedTeacher.getValueAsLong("teacher_id"));
-				TeacherQuery.update(newTeacher);
+				TeacherQuery.update(loadedTeacher.getValueAsLong("teacher_id"), newTeacher);
 			}
 
 			shlAddTeacher.dispose();

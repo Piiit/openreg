@@ -170,8 +170,7 @@ public class ClassDialog extends GuiDialog {
 			if(loadedClass == null) {
 				ClassQuery.insert(newClass);	
 			} else {
-				newClass.setValue("id", loadedClass.getValueAsLong("id"));
-				ClassQuery.update(newClass);
+				ClassQuery.update(loadedClass.getValueAsLong("id"), newClass);
 			}
 			
 			shlAddANew.close();
