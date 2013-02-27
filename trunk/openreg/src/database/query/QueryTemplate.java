@@ -1,8 +1,10 @@
-package database;
+package database.query;
 
 import java.util.ArrayList;
 
-public abstract class DatabaseView {
+import database.Row;
+
+public abstract class QueryTemplate {
 	public abstract ArrayList<Row> getDataset() throws Exception;
 	public abstract ArrayList<Row> getDataset(Object id) throws Exception;
 	public abstract ArrayList<Row> getFullDataset() throws Exception;

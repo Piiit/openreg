@@ -7,11 +7,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import data.SimpleDate;
-import database.AddressView;
-import database.ClassesView;
 import database.DatabaseConnection;
 import database.Row;
-import database.StudentsView;
+import database.query.AddressQuery;
+import database.query.ClassQuery;
+import database.query.StudentQuery;
 
 public class StudentsViewTest {
 
@@ -30,7 +30,7 @@ public class StudentsViewTest {
 		
 		Row studentsClass = new Row();
 		studentsClass.setValue("level", "7");
-		Long classId = ClassesView.insert(studentsClass);
+		Long classId = ClassQuery.insert(studentsClass);
 		
 		Row address = new Row();
 		address.setValue("street", "s1");
@@ -38,7 +38,7 @@ public class StudentsViewTest {
 		address.setValue("zip_code", "s1");
 		address.setValue("city", "s1");
 		address.setValue("country", "s1");
-		Long addressId = AddressView.insert(address);
+		Long addressId = AddressQuery.insert(address);
 		
 		Row student = new Row();
 		student.setValue("name", "Test1");
@@ -48,7 +48,7 @@ public class StudentsViewTest {
 		student.setValue("address_id", addressId);
 		student.setValue("class_id", classId);
 		
-		StudentsView.insert(student);
+		StudentQuery.insert(student);
 	}
 
 }

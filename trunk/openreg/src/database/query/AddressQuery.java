@@ -1,8 +1,11 @@
-package database;
+package database.query;
 
 import java.util.ArrayList;
 
-public class AddressView {
+import database.DatabaseTools;
+import database.Row;
+
+public class AddressQuery {
 
 	public static ArrayList<Row> getDataset() throws Exception {
 		return null;
