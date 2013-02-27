@@ -1,11 +1,8 @@
 package gui.modules;
 
 import java.util.ArrayList;
-
 import gui.GuiModule;
 import gui.dialogs.ClassDialog;
-import gui.dialogs.StudentDialog;
-
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
@@ -21,8 +18,6 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import database.Row;
 import database.query.ClassQuery;
-import database.query.StudentQuery;
-
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 
