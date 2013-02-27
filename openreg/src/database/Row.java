@@ -61,6 +61,9 @@ public class Row {
 		if(data.get(key) == null) {
 			return null;
 		}
+		if(data.get(key) instanceof Date) {
+			return (SimpleDate)SimpleDate.fromDate((Date)data.get(key));
+		}
 		return (SimpleDate)data.get(key);
 	}
 

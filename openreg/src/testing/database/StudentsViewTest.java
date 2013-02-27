@@ -2,6 +2,8 @@ package testing.database;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,10 +36,10 @@ public class StudentsViewTest {
 		
 		Row address = new Row();
 		address.setValue("street", "s1");
-		address.setValue("no", "s1");
-		address.setValue("zip_code", "s1");
-		address.setValue("city", "s1");
-		address.setValue("country", "s1");
+		address.setValue("no", "n1");
+		address.setValue("zip_code", "z1");
+		address.setValue("city", "c1");
+		address.setValue("country", "co1");
 		Long addressId = AddressQuery.insert(address);
 		
 		Row student = new Row();
@@ -48,7 +50,15 @@ public class StudentsViewTest {
 		student.setValue("address_id", addressId);
 		student.setValue("class_id", classId);
 		
-		StudentQuery.insert(student);
+		Long studentId = StudentQuery.insert(student);
+		
+		ArrayList<Row> rows = StudentQuery.getDataset(studentId);
+		assertEquals(1, rows.size());
+		Row fetchedStudent = rows.get(0);
+		assertEquals("Test1", fetchedStudent.getValueAsString("name"));
+		assertEquals(addressId, fetchedStudent.getValueAsLong("address_id"));
+		assertEquals(classId, fetchedStudent.getValueAsLong("class_id"));
+		
 	}
 
 }

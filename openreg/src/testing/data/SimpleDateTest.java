@@ -5,7 +5,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import org.junit.Test;
-
 import data.SimpleDate;
 
 public class SimpleDateTest {
@@ -28,6 +27,6 @@ public class SimpleDateTest {
 		
 		// Sometimes there are small rounding errors within two "same" times...
 		assertTrue(Math.abs(date2.getTime() - date.toDate().getTime()) <= EPSILON);
+		
 	}
-
 }
