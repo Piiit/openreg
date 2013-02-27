@@ -2,7 +2,6 @@ package gui.modules;
 
 import gui.GuiModule;
 import gui.dialogs.TeacherDialog;
-
 import java.util.ArrayList;
 import log.Log;
 import org.eclipse.swt.SWT;
@@ -19,9 +18,7 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import database.Row;
-import database.query.StudentQuery;
 import database.query.TeacherQuery;
-
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 

@@ -1,11 +1,8 @@
 package gui.dialogs;
 
 import java.util.ArrayList;
-
 import gui.GuiDialog;
 import gui.GuiTools;
-
-import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
@@ -19,11 +16,8 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-
-import data.SimpleDate;
 import database.Row;
 import database.query.ClassQuery;
-import database.query.TeacherQuery;
 
 public class ClassDialog extends GuiDialog {
 
