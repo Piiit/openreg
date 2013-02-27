@@ -18,12 +18,16 @@ public class ClassesView {
 		return DatabaseTools.getQueryResult("SELECT * FROM class");
 	}
 
-	public static Long insert(ArrayList<Row> rows) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public static Long insert(Row row) throws Exception {
+		return (Long)DatabaseTools.executeUpdate(
+				"INSERT INTO class (level, stream, notes) VALUES (?, ?, ?)",
+				row.getValueAsString("level"),
+				row.getValueAsString("stream"),
+				row.getValueAsString("notes")
+				);
 	}
 
-	public static void update(ArrayList<Row> rows) throws Exception {
+	public static void update(Row row) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}

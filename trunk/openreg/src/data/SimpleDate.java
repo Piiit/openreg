@@ -12,11 +12,11 @@ public class SimpleDate {
 
 	public SimpleDate(int day, int month, int year) {
 		calendar = GregorianCalendar.getInstance();
-		calendar.set(year, month - 1, day);  // months are counted from 0=January, 1=February, ...
+		calendar.set(year, month, day);
 		date = calendar.getTime();
 	}
 
-	public Date getDate() {
+	public Date toDate() {
 		return date;
 	}
 	
@@ -32,7 +32,7 @@ public class SimpleDate {
 		return calendar.get(Calendar.YEAR);
 	}
 	
-	public java.sql.Date getSqlDate() {
+	public java.sql.Date toSqlDate() {
 		return new java.sql.Date(calendar.getTimeInMillis());
 	}
 	

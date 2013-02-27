@@ -24,14 +24,20 @@ public class GuiModuleTest {
 		}
 
 		@Override
-		public void setInitialData() {
+		public String getName() {
+			return "Test1";
+		}
+
+		@Override
+		public void reloadData() {
 			// TODO Auto-generated method stub
 			
 		}
 
 		@Override
-		public String getName() {
-			return "Test1";
+		public String getDescription() {
+			// TODO Auto-generated method stub
+			return null;
 		}
 	}	
 	
@@ -44,14 +50,20 @@ public class GuiModuleTest {
 		}
 
 		@Override
-		public void setInitialData() {
+		public String getName() {
+			return "Test2";
+		}
+
+		@Override
+		public void reloadData() {
 			// TODO Auto-generated method stub
 			
 		}
 
 		@Override
-		public String getName() {
-			return "Test2";
+		public String getDescription() {
+			// TODO Auto-generated method stub
+			return null;
 		}
 	}	
 	
@@ -64,14 +76,20 @@ public class GuiModuleTest {
 		}
 
 		@Override
-		public void setInitialData() {
+		public String getName() {
+			return "Test3";
+		}
+
+		@Override
+		public void reloadData() {
 			// TODO Auto-generated method stub
 			
 		}
 
 		@Override
-		public String getName() {
-			return "Test3";
+		public String getDescription() {
+			// TODO Auto-generated method stub
+			return null;
 		}
 	}
 	

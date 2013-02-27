@@ -343,7 +343,7 @@ public class StudentsAddDialog extends GuiDialog {
 				addressCountry.setText(loadedData.getValueAsString("country"));
 				
 				studentPhone.setText(loadedData.getValueAsStringNotNull("phonenumber"));
-				studentNotes.setText(loadedData.getValueAsString("notes"));
+				studentNotes.setText(loadedData.getValueAsStringNotNull("notes"));
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
