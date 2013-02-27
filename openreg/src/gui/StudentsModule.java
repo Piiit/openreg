@@ -57,6 +57,12 @@ public class StudentsModule extends GuiModule {
 		tltmRemove.setText("Remove");
 		
 		ToolItem tltmFilter = new ToolItem(toolBar, SWT.DROP_DOWN);
+		tltmFilter.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				Log.info("Filter not implemented yet");
+			}
+		});
 		tltmFilter.setText("All classes");
 		
 		table = new Table(group, SWT.BORDER | SWT.CHECK | SWT.FULL_SELECTION | SWT.MULTI);
