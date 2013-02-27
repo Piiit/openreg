@@ -61,7 +61,7 @@ public class Row {
 		if(data.get(key) == null) {
 			return null;
 		}
-		return (SimpleDate)data.get(key);
+		return SimpleDate.fromDate((Date)data.get(key));
 	}
 
 	@Override
