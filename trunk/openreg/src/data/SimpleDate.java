@@ -5,6 +5,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+/**
+ * Note: SimpleDate starts with 1 when indexing months, java.util.Date starts with 0...
+ * @author user
+ *
+ */
 public class SimpleDate {
 	
 	private Date date;
@@ -44,7 +49,7 @@ public class SimpleDate {
 
 	@Override
 	public String toString() {
-		SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy");
+		SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 		return df.format(date);	
 	}
 

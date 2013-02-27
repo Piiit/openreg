@@ -1,7 +1,7 @@
 package openreg;
 
 import log.Log;
-import gui.GroupType;
+import gui.GuiModuleType;
 import gui.GuiModuleList;
 import gui.MainWindow;
 import gui.SWTTools;
@@ -26,12 +26,12 @@ public class Openreg {
 			}
 		}
 		
-		GuiModuleList gmListAdmin = new GuiModuleList(GroupType.Administration);
+		GuiModuleList gmListAdmin = new GuiModuleList(GuiModuleType.Administration);
 		gmListAdmin.add(new StudentsModule());
 		gmListAdmin.add(new ClassesModule());
 		gmListAdmin.add(new TeachersModule());
 		
-		GuiModuleList gmListReport = new GuiModuleList(GroupType.Reports);
+		GuiModuleList gmListReport = new GuiModuleList(GuiModuleType.Reports);
 		
 		SWTTools.initSWT();
 		MainWindow window = new MainWindow();

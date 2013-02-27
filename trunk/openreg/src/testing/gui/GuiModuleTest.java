@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 
-import gui.GroupType;
+import gui.GuiModuleType;
 import gui.GuiModule;
 import gui.GuiModuleList;
 
@@ -94,8 +94,8 @@ public class GuiModuleTest {
 	}
 	
 	
-	GuiModuleList gmList1 = new GuiModuleList(GroupType.Administration);
-	GuiModuleList gmList2 = new GuiModuleList(GroupType.Reports);
+	GuiModuleList gmList1 = new GuiModuleList(GuiModuleType.Administration);
+	GuiModuleList gmList2 = new GuiModuleList(GuiModuleType.Reports);
 	
 	@Before
 	public void setUp() throws Exception {
