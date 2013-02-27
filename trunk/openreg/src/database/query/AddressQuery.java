@@ -34,7 +34,7 @@ public class AddressQuery {
 
 	public static void update(Row row) throws Exception {
 		DatabaseTools.executeUpdate(
-				"UPDATE address SET street = ?, no = ?, zip_code = ?, city = ?, country = ?" +
+				"UPDATE address SET street = ?, no = ?, zip_code = ?, city = ?, country = ? " +
 				"WHERE id = ?",
 				row.getValueAsString("street"),
 				row.getValueAsString("no"),

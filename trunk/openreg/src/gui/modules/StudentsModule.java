@@ -154,7 +154,7 @@ public class StudentsModule extends GuiModule {
 				tableItem.setData(student.getValueAsLong("student_id"));
 				tableItem.setText(new String[] {
 						Integer.toString(i++), 
-						student.getValueAsString("name") + " " + student.getValueAsString("surname"), 
+						student.getValueAsString("surname") + " " + student.getValueAsString("name"), 
 						student.getValueAsString("enrolment_year"), 
 						student.getValueAsString("birthday"),
 						student.getValueAsString("level") + student.getValueAsString("stream")

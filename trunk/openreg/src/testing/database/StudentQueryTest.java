@@ -15,7 +15,7 @@ import database.query.AddressQuery;
 import database.query.ClassQuery;
 import database.query.StudentQuery;
 
-public class StudentsViewTest {
+public class StudentQueryTest {
 
 	@Before
 	public void setUp() throws Exception {

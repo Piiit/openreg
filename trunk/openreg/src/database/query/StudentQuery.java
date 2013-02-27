@@ -68,6 +68,7 @@ public class StudentQuery {
 		return DatabaseTools.getQueryResult("SELECT st.id AS student_id, * FROM student st " +
 				"INNER JOIN class cl ON class_id = cl.id " +
 				"INNER JOIN address ad ON address_id = ad.id " +
-				"LEFT JOIN ability_description ab ON ability_description_id = ab.id");
+				"LEFT JOIN ability_description ab ON ability_description_id = ab.id " +
+				"ORDER BY st.surname, st.name");
 	}
 }

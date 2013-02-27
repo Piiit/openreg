@@ -1,5 +1,8 @@
 package gui.dialogs;
 
+import java.util.ArrayList;
+
+import gui.GuiDialog;
 import gui.GuiTools;
 
 import org.eclipse.swt.widgets.Dialog;
@@ -16,23 +19,28 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import database.Row;
 
-public class ClassDialog extends Dialog {
+import data.SimpleDate;
+import database.Row;
+import database.query.ClassQuery;
+import database.query.TeacherQuery;
+
+public class ClassDialog extends GuiDialog {
 
 	protected Object result;
 	protected Shell shlAddANew;
 	private Text classLevel;
 	private Text classStream;
+	private StyledText classNotes;
+	private Row loadedClass;
 
 	/**
 	 * Create the dialog.
 	 * @param parent
 	 * @param style
 	 */
-	public ClassDialog(Shell parent, int style) {
-		super(parent, style);
-		setText("SWT Dialog");
+	public ClassDialog(Shell parent) {
+		super(parent);
 	}
 
 	/**
@@ -95,7 +103,7 @@ public class ClassDialog extends Dialog {
 		lblNotes.setLayoutData(fd_lblNotes);
 		lblNotes.setText("Notes");
 		
-		final StyledText classNotes = new StyledText(shlAddANew, SWT.BORDER);
+		classNotes = new StyledText(shlAddANew, SWT.BORDER);
 		fd_classStream.right = new FormAttachment(classNotes, 0, SWT.RIGHT);
 		FormData fd_classNotes = new FormData();
 		fd_classNotes.right = new FormAttachment(100, -10);
@@ -115,20 +123,7 @@ public class ClassDialog extends Dialog {
 		btnSave.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				try {
-					Row newClass = new Row();
-					newClass.setValue("level", GuiTools.nullIfEmptyTrimmed(classLevel.getText()));
-					newClass.setValue("stream", GuiTools.nullIfEmptyTrimmed(classStream.getText()));
-					newClass.setValue("notes", GuiTools.nullIfEmpty(classNotes.getText()));
-					shlAddANew.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-
-					MessageBox message = new MessageBox(shlAddANew, SWT.ICON_INFORMATION | SWT.OK);
-					message.setMessage(e.getMessage());
-					message.setText(shlAddANew.getText());
-					message.open();
-				}
+				store();
 			}
 		});
 		fd_label.bottom = new FormAttachment(btnSave, -6);
@@ -142,7 +137,7 @@ public class ClassDialog extends Dialog {
 		btnCancel.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				shlAddANew.dispose();
+				cancel();
 			}
 		});
 		FormData fd_btnCancel = new FormData();
@@ -158,5 +153,51 @@ public class ClassDialog extends Dialog {
 		lblMandatoryFields.setLayoutData(fd_lblMandatoryFields);
 		lblMandatoryFields.setText("* Mandatory Fields");
 
+	}
+
+	@Override
+	public void loadData(Object data) throws Exception {
+		ArrayList<Row> classes = ClassQuery.getDataset((Long)data);
+		if(classes.size() == 0) {
+			throw new Exception("No class with ID " + data.toString() + " found.");
+		}
+		loadedClass = classes.get(0); 
+	}
+
+	@Override
+	public void store() {
+		try {
+			Row newClass = new Row();
+			newClass.setValue("level", GuiTools.nullIfEmptyTrimmed(classLevel.getText()));
+			newClass.setValue("stream", GuiTools.nullIfEmptyTrimmed(classStream.getText()));
+			newClass.setValue("notes", GuiTools.nullIfEmpty(classNotes.getText()));
+			shlAddANew.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+
+			MessageBox message = new MessageBox(shlAddANew, SWT.ICON_INFORMATION | SWT.OK);
+			message.setMessage(e.getMessage());
+			message.setText(shlAddANew.getText());
+			message.open();
+		}
+	}
+
+	@Override
+	public void update() {
+		try {
+			if (loadedClass != null){
+				classLevel.setText(loadedClass.getValueAsString("level"));
+				classStream.setText(loadedClass.getValueAsString("stream"));
+				classNotes.setText(loadedClass.getValueAsString("notes"));
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void cancel() {
+		shlAddANew.dispose();
 	}
 }

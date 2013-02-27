@@ -40,7 +40,7 @@ public class ClassesModule extends GuiModule {
 		tltmAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				ClassDialog classAddDialog = new ClassDialog(group.getShell(), SWT.NONE);
+				ClassDialog classAddDialog = new ClassDialog(group.getShell());
 				classAddDialog.open();
 				reloadData();
 			}
