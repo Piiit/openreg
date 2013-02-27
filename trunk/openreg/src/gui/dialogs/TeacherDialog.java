@@ -2,9 +2,6 @@ package gui.dialogs;
 
 import gui.GuiDialog;
 import gui.GuiTools;
-
-import java.util.ArrayList;
-
 import log.Log;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -26,7 +23,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import data.SimpleDate;
 import database.Row;
 import database.query.AddressQuery;
-import database.query.StudentQuery;
 import database.query.TeacherQuery;
 
 import org.eclipse.swt.widgets.Link;
