@@ -12,7 +12,7 @@ import database.Row;
 public class QueryTemplate {
 	
 	/**
-	 * Selecting tuples, that are needed to choose from, when inserting a new student (e.g. in drop-down menus)
+	 * Selecting tuples, that are needed to choose from, when inserting a new tuple (e.g. in drop-down menus)
 	 */
 	public static ArrayList<Row> getDataset() throws Exception {
 		return null;
@@ -27,7 +27,7 @@ public class QueryTemplate {
 	}
 	
 	/**
-	 * Returns all tuples needed to list them inside gui-modules.
+	 * Returns all tuples needed to list them inside GUI-modules.
 	 */
 	public static ArrayList<Row> getFullDataset() throws Exception{
 		return null;

@@ -377,11 +377,10 @@ public class StudentDialog extends GuiDialog {
 			newAddress.setValue("zip_code", GuiTools.nullIfEmptyTrimmed(addressZip.getText()));
 			newAddress.setValue("city", GuiTools.nullIfEmptyTrimmed(addressCity.getText()));
 			newAddress.setValue("country", GuiTools.nullIfEmptyTrimmed(addressCountry.getText()));
-			if(addressId == null && loadedData == null) {
+			if(loadedData == null) {
 				addressId = AddressQuery.insert(newAddress);
 			} else {
 				addressId = loadedData.getValueAsLong("address_id");
-				AddressQuery.update(addressId, newAddress);
 			}
 
 			Row newStudent = new Row();
@@ -397,6 +396,7 @@ public class StudentDialog extends GuiDialog {
 			if(loadedData == null) {
 				StudentQuery.insert(newStudent);
 			} else {
+				AddressQuery.update(addressId, newAddress);
 				StudentQuery.update(loadedData.getValueAsLong("student_id"), newStudent);
 			}
 

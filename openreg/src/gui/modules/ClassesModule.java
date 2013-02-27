@@ -62,6 +62,11 @@ public class ClassesModule extends GuiModule {
 				}
 				
 				if(selected.size() == 0) {
+					MessageBox message = new MessageBox(container.getShell(), SWT.ICON_INFORMATION | SWT.OK);
+					message.setMessage("No classes selected.");
+					message.setText(container.getShell().getText());
+					message.open();
+					reloadData();
 					return;
 				}
 				
@@ -114,6 +119,10 @@ public class ClassesModule extends GuiModule {
 		tblclmnLevel.setWidth(100);
 		tblclmnLevel.setText("Level / Stream");
 		
+		TableColumn tblclmnStudents = new TableColumn(table, SWT.NONE);
+		tblclmnStudents.setWidth(100);
+		tblclmnStudents.setText("Students");
+		
 		TableColumn tblclmnNotes = new TableColumn(table, SWT.LEFT);
 		tblclmnNotes.setWidth(200);
 		tblclmnNotes.setText("Notes");
@@ -127,8 +136,9 @@ public class ClassesModule extends GuiModule {
 				TableItem tableItem = new TableItem(table, SWT.NONE);
 				tableItem.setData(thisClass.getValueAsLong("id"));
 				tableItem.setText(new String[] {
-						thisClass.getValueAsString("level") + " " + thisClass.getValueAsString("stream"),
-						thisClass.getValueAsString("notes")
+						thisClass.getValueAsStringNotNull("level") + thisClass.getValueAsStringNotNull("stream"),
+						thisClass.getValueAsStringNotNull("students_count"),
+						thisClass.getValueAsStringNotNull("notes")
 						});
 			}
 		} catch (Exception e) {
