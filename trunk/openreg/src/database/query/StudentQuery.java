@@ -16,7 +16,7 @@ public class StudentQuery {
 
 	public static ArrayList<Row> getDataset(Object id) throws Exception {
 		return DatabaseTools.getQueryResult(
-				"SELECT st.id AS student_id, * FROM student st " +
+				"SELECT st.id AS student_id, st.notes AS student_notes, * FROM student st " +
 				"INNER JOIN class cl ON cl.id = class_id " +
 				"INNER JOIN address ad ON ad.id = address_id " +
 				"LEFT JOIN ability_description ab ON ab.id = ability_description_id " +
@@ -65,7 +65,7 @@ public class StudentQuery {
 	}
 
 	public static ArrayList<Row> getFullDataset() throws Exception {
-		return DatabaseTools.getQueryResult("SELECT st.id AS student_id, * FROM student st " +
+		return DatabaseTools.getQueryResult("SELECT st.id AS student_id, st.notes AS student_notes, * FROM student st " +
 				"INNER JOIN class cl ON class_id = cl.id " +
 				"INNER JOIN address ad ON address_id = ad.id " +
 				"LEFT JOIN ability_description ab ON ability_description_id = ab.id " +

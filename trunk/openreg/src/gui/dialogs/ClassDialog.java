@@ -153,6 +153,7 @@ public class ClassDialog extends GuiDialog {
 		lblMandatoryFields.setLayoutData(fd_lblMandatoryFields);
 		lblMandatoryFields.setText("* Mandatory Fields");
 
+		update();
 	}
 
 	@Override
@@ -171,6 +172,14 @@ public class ClassDialog extends GuiDialog {
 			newClass.setValue("level", GuiTools.nullIfEmptyTrimmed(classLevel.getText()));
 			newClass.setValue("stream", GuiTools.nullIfEmptyTrimmed(classStream.getText()));
 			newClass.setValue("notes", GuiTools.nullIfEmpty(classNotes.getText()));
+			
+			if(loadedClass == null) {
+				ClassQuery.insert(newClass);	
+			} else {
+				newClass.setValue("id", loadedClass.getValueAsLong("id"));
+				ClassQuery.update(newClass);
+			}
+			
 			shlAddANew.close();
 		} catch (Exception e) {
 			e.printStackTrace();
