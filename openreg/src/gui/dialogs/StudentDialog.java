@@ -347,7 +347,7 @@ public class StudentDialog extends GuiDialog {
 				addressCountry.setText(loadedData.getValueAsString("country"));
 				
 				studentPhone.setText(loadedData.getValueAsStringNotNull("phonenumber"));
-				studentNotes.setText(loadedData.getValueAsStringNotNull("notes"));
+				studentNotes.setText(loadedData.getValueAsStringNotNull("student_notes"));
 				
 				String abilityString = loadedData.getValueAsStringNotNull("description");
 				studentAbility.select(studentAbility.indexOf(abilityString));

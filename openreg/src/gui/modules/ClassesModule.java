@@ -1,7 +1,10 @@
 package gui.modules;
 
+import java.util.ArrayList;
+
 import gui.GuiModule;
 import gui.dialogs.ClassDialog;
+import gui.dialogs.StudentDialog;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.SWT;
@@ -18,6 +21,10 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import database.Row;
 import database.query.ClassQuery;
+import database.query.StudentQuery;
+
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 
 public class ClassesModule extends GuiModule {
 
@@ -48,9 +55,62 @@ public class ClassesModule extends GuiModule {
 		tltmAdd.setText("Add");
 		
 		ToolItem tltmRemove = new ToolItem(toolBar, SWT.NONE);
+		tltmRemove.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				TableItem tableItems[] = table.getItems();
+				ArrayList<Long> selected = new ArrayList<Long>();
+				for(int i = 0; i < tableItems.length; i++) {
+					if(tableItems[i].getChecked() == true) {
+						selected.add((Long)tableItems[i].getData());
+					}
+				}
+				
+				if(selected.size() == 0) {
+					return;
+				}
+				
+				MessageBox messageBox = new MessageBox(container.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+				messageBox.setMessage("Delete " + selected.size() + " classes?");
+				messageBox.setText(container.getShell().getText());
+				
+				if(messageBox.open() == SWT.NO) {
+					return;
+				}
+				
+				try {
+					for(Long classId : selected) {
+						ClassQuery.delete(classId);
+					}
+					reloadData();
+				} catch (Exception e) {
+					e.printStackTrace();
+
+					MessageBox message = new MessageBox(container.getShell(), SWT.ICON_INFORMATION | SWT.OK);
+					message.setMessage(e.getMessage());
+					message.setText(container.getShell().getText());
+					message.open();
+				}
+			}
+		});
 		tltmRemove.setText("Remove");
 		
 		table = new Table(group, SWT.BORDER | SWT.CHECK | SWT.FULL_SELECTION);
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDoubleClick(MouseEvent arg0) {
+				ClassDialog dialog = new ClassDialog(container.getShell());
+				try {
+					TableItem ti = table.getItem(table.getSelectionIndex());
+					dialog.loadData((Long)ti.getData());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				dialog.open();
+				reloadData();
+			}
+		});
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -70,6 +130,7 @@ public class ClassesModule extends GuiModule {
 		try {
 			for(Row thisClass : ClassQuery.getFullDataset()) {
 				TableItem tableItem = new TableItem(table, SWT.NONE);
+				tableItem.setData(thisClass.getValueAsLong("id"));
 				tableItem.setText(new String[] {
 						thisClass.getValueAsString("level") + " " + thisClass.getValueAsString("stream"),
 						thisClass.getValueAsString("notes")
