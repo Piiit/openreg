@@ -177,4 +177,10 @@ public class TeachersModule extends GuiModule {
 		return null;
 	}
 
+	@Override
+	public void reloadData(Object o) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

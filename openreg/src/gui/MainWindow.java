@@ -101,7 +101,7 @@ public class MainWindow {
 					public void widgetSelected(SelectionEvent arg0) {
 						gmList.setVisibleModule(module);
 						currentModule = module;
-						module.reloadData();
+						module.reloadData(null);
 					}
 				});
 				i++;

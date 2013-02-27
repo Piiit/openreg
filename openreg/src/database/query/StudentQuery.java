@@ -19,6 +19,15 @@ public class StudentQuery {
 				"LEFT JOIN ability_description ab ON ab.id = ability_description_id " +
 				"WHERE st.id = ?", id);
 	}
+	
+	public static ArrayList<Row> getClassDataset(Object id) throws Exception {
+		return DatabaseTools.getQueryResult(
+				"SELECT st.id AS student_id, st.notes AS student_notes, * FROM student st " +
+				"INNER JOIN class cl ON cl.id = class_id " +
+				"INNER JOIN address ad ON ad.id = address_id " +
+				"LEFT JOIN ability_description ab ON ab.id = ability_description_id " +
+				"WHERE cl.id = ?", id);
+	}
 
 	public static Long insert(Row row) throws Exception {
 		return (Long)DatabaseTools.executeUpdate(

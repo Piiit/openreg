@@ -8,6 +8,7 @@ public abstract class GuiModule {
 
 	public abstract void createContent(Composite parent);
 	public abstract void reloadData();
+	public abstract void reloadData(Object o);
 	public abstract String getName();
 	public abstract String getDescription();
 	
