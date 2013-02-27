@@ -5,10 +5,10 @@ import java.util.ArrayList;
 
 public class GuiModuleList {
 	private ArrayList<GuiModule> modules = new ArrayList<GuiModule>();
-	private GroupType groupType;
+	private GuiModuleType groupType;
 	private GuiModule visibleModule;
 	
-	public GuiModuleList(GroupType groupType) {
+	public GuiModuleList(GuiModuleType groupType) {
 		super();
 		this.groupType = groupType;
 	}
@@ -35,7 +35,7 @@ public class GuiModuleList {
 		return modules;
 	}
 	
-	public GroupType getGroupType() {
+	public GuiModuleType getGroupType() {
 		return groupType;
 	}
 	

@@ -2,11 +2,8 @@ package gui.modules;
 
 import gui.GuiModule;
 import gui.dialogs.StudentDialog;
-
 import java.util.ArrayList;
-
 import log.Log;
-
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.SWT;
@@ -21,7 +18,6 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import database.Row;
 import database.query.StudentQuery;
-
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;

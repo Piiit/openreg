@@ -7,6 +7,9 @@ import database.Row;
 
 public class StudentQuery {
 	
+	/*
+	 * Selecting tuples, that are needed to choose from, when inserting a new student (e.g. in drop-down menus)
+	 */
 	public static ArrayList<Row> getDataset() throws Exception {
 		return DatabaseTools.getQueryResult("SELECT * FROM class cl, ability_description ab");
 	}
