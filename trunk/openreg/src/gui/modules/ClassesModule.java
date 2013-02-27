@@ -1,25 +1,28 @@
 package gui.modules;
 
-import java.util.ArrayList;
 import gui.GuiModule;
 import gui.dialogs.ClassDialog;
-import org.eclipse.swt.widgets.Composite;
+
+import java.util.ArrayList;
+
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
+
 import database.Row;
 import database.query.ClassQuery;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
 
 public class ClassesModule extends GuiModule {
 
@@ -160,5 +163,11 @@ public class ClassesModule extends GuiModule {
 	public String getDescription() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void reloadData(Object o) {
+		// TODO Auto-generated method stub
+		
 	}
 }

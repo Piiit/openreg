@@ -8,6 +8,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.MessageBox;
@@ -17,6 +18,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import database.Row;
+import database.query.ClassQuery;
 import database.query.StudentQuery;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.events.MouseAdapter;
@@ -25,6 +27,8 @@ import org.eclipse.swt.events.MouseEvent;
 public class StudentsModule extends GuiModule {
 	
 	private Table table;
+	private ToolItem tltmFilter;
+	private Combo filterClass;
 
 	/**
 	 * @wbp.parser.entryPoint
@@ -47,7 +51,7 @@ public class StudentsModule extends GuiModule {
 			public void widgetSelected(SelectionEvent arg0) {
 				StudentDialog addDialog = new StudentDialog(container.getShell());
 				addDialog.open();
-				reloadData();
+				reloadData(null);
 			}
 		});
 		tltmAdd.setText("Add");
@@ -55,14 +59,20 @@ public class StudentsModule extends GuiModule {
 		ToolItem tltmRemove = new ToolItem(toolBar, SWT.NONE);
 		tltmRemove.setText("Remove");
 		
-		ToolItem tltmFilter = new ToolItem(toolBar, SWT.DROP_DOWN);
-		tltmFilter.addSelectionListener(new SelectionAdapter() {
+		ToolItem itemPush = new ToolItem(toolBar, SWT.PUSH);
+	    itemPush.setText("Select Class");
+		filterClass = new Combo(toolBar, SWT.READ_ONLY);
+		tltmFilter = new ToolItem(toolBar, SWT.SEPARATOR);
+		tltmFilter.setControl(filterClass);
+		tltmFilter.setWidth(64);
+		filterClass.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				Log.info("Filter not implemented yet");
+				Long classID = (Long)filterClass.getData(filterClass.getText());
+				Log.info("Class ID" + classID);
+				reloadData(classID);
 			}
 		});
-		tltmFilter.setText("All classes");
 		
 		table = new Table(group, SWT.BORDER | SWT.CHECK | SWT.FULL_SELECTION | SWT.MULTI);
 		table.addMouseListener(new MouseAdapter() {
@@ -77,7 +87,7 @@ public class StudentsModule extends GuiModule {
 					e.printStackTrace();
 				}
 				addDialog.open();
-				reloadData();
+				reloadData(null);
 			}
 		});
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -120,7 +130,7 @@ public class StudentsModule extends GuiModule {
 					message.setMessage("No students selected.");
 					message.setText(container.getShell().getText());
 					message.open();
-					reloadData();
+					reloadData(null);
 					return;
 				}
 				
@@ -136,7 +146,7 @@ public class StudentsModule extends GuiModule {
 					for(Long studentId : selected) {
 						StudentQuery.delete(studentId);
 					}
-					reloadData();
+					reloadData(null);
 				} catch (Exception e) {
 					e.printStackTrace();
 
@@ -150,20 +160,39 @@ public class StudentsModule extends GuiModule {
 	}
 
 	@Override
-	public void reloadData() {
+	public void reloadData(Object id) {
 		table.removeAll();
+		filterClass.removeAll();
 		int i = 1;
 		try {
-			for(Row student : StudentQuery.getFullDataset()) {
-				TableItem tableItem = new TableItem(table, SWT.NONE);
-				tableItem.setData(student.getValueAsLong("student_id"));
-				tableItem.setText(new String[] {
-						Integer.toString(i++), 
-						student.getValueAsString("surname") + " " + student.getValueAsString("name"), 
-						student.getValueAsString("enrolment_year"), 
-						student.getValueAsString("birthday"),
-						student.getValueAsString("level") + student.getValueAsString("stream")
-						});
+			if (id == null) {
+				for(Row student : StudentQuery.getFullDataset()) {
+					TableItem tableItem = new TableItem(table, SWT.NONE);
+					tableItem.setData(student.getValueAsLong("student_id"));
+					tableItem.setText(new String[] {
+							Integer.toString(i++), 
+							student.getValueAsString("surname") + " " + student.getValueAsString("name"), 
+							student.getValueAsString("enrolment_year"), 
+							student.getValueAsString("birthday"),
+							student.getValueAsString("level") + student.getValueAsString("stream")
+							});
+				}
+			} else {
+				for(Row student : StudentQuery.getClassDataset(id)) {
+					TableItem tableItem = new TableItem(table, SWT.NONE);
+					tableItem.setData(student.getValueAsLong("student_id"));
+					tableItem.setText(new String[] {
+							Integer.toString(i++), 
+							student.getValueAsString("surname") + " " + student.getValueAsString("name"), 
+							student.getValueAsString("enrolment_year"), 
+							student.getValueAsString("birthday"),
+							student.getValueAsString("level") + student.getValueAsString("stream")
+							});
+				}
+			}
+			for(Row cl : ClassQuery.getFullDataset()) {
+				filterClass.add(cl.getValueAsString("level") + cl.getValueAsString("stream"));
+				filterClass.setData(cl.getValueAsString("level") + cl.getValueAsString("stream"), cl.getValue("id"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -183,6 +212,12 @@ public class StudentsModule extends GuiModule {
 	@Override
 	public String getDescription() {
 		return null;
+	}
+
+	@Override
+	public void reloadData() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -39,6 +39,12 @@ public class GuiModuleTest {
 			// TODO Auto-generated method stub
 			return null;
 		}
+
+		@Override
+		public void reloadData(Object o) {
+			// TODO Auto-generated method stub
+			
+		}
 	}	
 	
 	private class MyGuiModule2 extends GuiModule {
@@ -65,6 +71,12 @@ public class GuiModuleTest {
 			// TODO Auto-generated method stub
 			return null;
 		}
+
+		@Override
+		public void reloadData(Object o) {
+			// TODO Auto-generated method stub
+			
+		}
 	}	
 	
 	private class MyGuiModule3 extends GuiModule {
@@ -90,6 +102,12 @@ public class GuiModuleTest {
 		public String getDescription() {
 			// TODO Auto-generated method stub
 			return null;
+		}
+
+		@Override
+		public void reloadData(Object o) {
+			// TODO Auto-generated method stub
+			
 		}
 	}
 	
