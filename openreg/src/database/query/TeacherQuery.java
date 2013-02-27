@@ -14,8 +14,12 @@ public class TeacherQuery {
 	}
 
 	public static ArrayList<Row> getDataset(Object id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		Log.info("Loading teacher with ID " + id.toString());
+		return DatabaseTools.getQueryResult(
+				"SELECT te.id AS teacher_id, * FROM  teacher te " +
+				"INNER JOIN address ad ON ad.id = address_id " +
+				"WHERE te.id = ? " +
+				"ORDER BY te.surname, te.name", id);
 	}
 
 	public static ArrayList<Row> getFullDataset() throws Exception {
@@ -62,12 +66,4 @@ public class TeacherQuery {
 		DatabaseTools.executeUpdate("DELETE FROM teacher WHERE id = ?", (Long)id);
 	}
 
-	public static Row getTeacher(Long id) throws Exception {
-		Log.info("Loading teacher with ID " + id.toString());
-		ArrayList<Row> rows =  DatabaseTools.getQueryResult(
-				"SELECT te.id AS teacher_id, * FROM  teacher te " +
-				"INNER JOIN address ad ON ad.id = address_id " +
-				"WHERE te.id = ?", id);
-		return rows.get(0);
-	}
 }

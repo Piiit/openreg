@@ -1,5 +1,7 @@
 package gui.dialogs;
 
+import java.util.ArrayList;
+
 import gui.GuiDialog;
 import gui.GuiTools;
 import log.Log;
@@ -216,7 +218,7 @@ public class TeacherDialog extends GuiDialog {
 		btnCancel.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				shlAddTeacher.dispose();
+				cancel();
 			}
 		});
 		FormData fd_btnCancel = new FormData();
@@ -278,7 +280,11 @@ public class TeacherDialog extends GuiDialog {
 
 	@Override
 	public void loadData(Object data) throws Exception {
-		loadedTeacher = TeacherQuery.getTeacher((Long)data);
+		ArrayList<Row> teacher = TeacherQuery.getDataset((Long)data);
+		if(teacher.size() == 0) {
+			throw new Exception("No teacher with ID " + data.toString() + " found.");
+		}
+		loadedTeacher = teacher.get(0); 
 	}
 
 	@Override
@@ -341,7 +347,6 @@ public class TeacherDialog extends GuiDialog {
 
 	@Override
 	public void cancel() {
-		// TODO Auto-generated method stub
-		
+		shlAddTeacher.dispose();
 	}
 }

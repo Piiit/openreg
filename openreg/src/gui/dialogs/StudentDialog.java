@@ -50,6 +50,7 @@ public class StudentDialog extends GuiDialog {
 	private DateTime studentBirthday;
 	private Spinner studentYear;
 	private StyledText studentNotes;
+	private Combo studentAbility;
 	private Row loadedData;
 
 	public StudentDialog(Shell parent) {
@@ -128,7 +129,7 @@ public class StudentDialog extends GuiDialog {
 		lblBirthday.setLayoutData(fd_lblBirthday);
 		lblBirthday.setText("Birthday *");
 		
-		studentBirthday = new DateTime(shlAddStudent, SWT.BORDER);
+		studentBirthday = new DateTime(shlAddStudent, SWT.BORDER | SWT.DROP_DOWN);
 		FormData fd_studentBirthday = new FormData();
 		fd_studentBirthday.left = new FormAttachment(canvas, 6);
 		fd_studentBirthday.top = new FormAttachment(lblBirthday, 6);
@@ -171,7 +172,7 @@ public class StudentDialog extends GuiDialog {
 		link_1.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				ClassDialog classAddDialog = new ClassDialog(shlAddStudent, SWT.NONE);
+				ClassDialog classAddDialog = new ClassDialog(shlAddStudent);
 				classAddDialog.open();
 				update();
 			}
@@ -254,7 +255,7 @@ public class StudentDialog extends GuiDialog {
 		lblAbilityDescription.setBounds(268, 5, 145, 15);
 		lblAbilityDescription.setText("Ability Description");
 		
-		Combo studentAbility = new Combo(grpAdditionalInformation, SWT.READ_ONLY);
+		studentAbility = new Combo(grpAdditionalInformation, SWT.READ_ONLY);
 		studentAbility.setBounds(268, 24, 336, 23);
 		
 		Label lblNotes = new Label(grpAdditionalInformation, SWT.NONE);
@@ -336,8 +337,8 @@ public class StudentDialog extends GuiDialog {
 				studentBirthday.setDate(date.getYear(), date.getMonth(), date.getDay());
 				studentYear.setSelection(loadedData.getValueAsInt("enrolment_year"));
 				
-				//TODO search correct selection with comboBox data fields <=> class_id
-	//			studentClass.select();
+				String classString = loadedData.getValueAsString("level") + loadedData.getValueAsString("stream");
+				studentClass.select(studentClass.indexOf(classString));
 				
 				addressStreet.setText(loadedData.getValueAsString("street"));
 				addressNo.setText(loadedData.getValueAsString("no"));
@@ -347,6 +348,9 @@ public class StudentDialog extends GuiDialog {
 				
 				studentPhone.setText(loadedData.getValueAsStringNotNull("phonenumber"));
 				studentNotes.setText(loadedData.getValueAsStringNotNull("notes"));
+				
+				String abilityString = loadedData.getValueAsStringNotNull("description");
+				studentAbility.select(studentAbility.indexOf(abilityString));
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -376,6 +380,8 @@ public class StudentDialog extends GuiDialog {
 			if(addressId == null && loadedData == null) {
 				addressId = AddressQuery.insert(newAddress);
 			} else {
+				addressId = loadedData.getValueAsLong("address_id");
+				newAddress.setValue("id", addressId);
 				AddressQuery.update(newAddress);
 			}
 
@@ -384,8 +390,10 @@ public class StudentDialog extends GuiDialog {
 			newStudent.setValue("surname", GuiTools.nullIfEmptyTrimmed(studentSurname.getText()));
 			newStudent.setValue("birthday", new SimpleDate(studentBirthday.getDay(), studentBirthday.getMonth(), studentBirthday.getYear()));
 			newStudent.setValue("enrolment_year", studentYear.getSelection());
+			newStudent.setValue("phonenumber", GuiTools.nullIfEmptyTrimmed(studentPhone.getText()));
+			newStudent.setValue("notes", GuiTools.nullIfEmptyTrimmed(studentNotes.getText()));
 			newStudent.setValue("class_id", (Long)studentClass.getData(studentClass.getText()));
-			newStudent.setValue("address_id", (loadedData == null ? addressId : loadedData.getValueAsLong("address_id")));
+			newStudent.setValue("address_id", addressId);
 			
 			if(loadedData == null) {
 				StudentQuery.insert(newStudent);
@@ -399,6 +407,7 @@ public class StudentDialog extends GuiDialog {
 			e.printStackTrace();
 			
 			if(addressId != null) {
+				//TODO solve this with a SQL transaction with 2 inserts/updates!
 				Log.info("Address with ID " + addressId + " already inserted, but without a valid student record. Deleting...");
 				try {
 					AddressQuery.delete(addressId);
