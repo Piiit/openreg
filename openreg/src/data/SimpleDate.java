@@ -12,7 +12,7 @@ public class SimpleDate {
 
 	public SimpleDate(int day, int month, int year) {
 		calendar = GregorianCalendar.getInstance();
-		calendar.set(year, month, day);
+		calendar.set(year, month - 1, day);
 		date = calendar.getTime();
 	}
 
@@ -25,7 +25,7 @@ public class SimpleDate {
 	}
 
 	public int getMonth() {
-		return calendar.get(Calendar.MONTH);
+		return calendar.get(Calendar.MONTH) + 1;
 	}
 
 	public int getYear() {
@@ -39,7 +39,7 @@ public class SimpleDate {
 	public static SimpleDate fromDate(Date date) {
 		Calendar cal = GregorianCalendar.getInstance();
 		cal.setTime(date);
-		return new SimpleDate(cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR));
+		return new SimpleDate(cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.YEAR));
 	}
 
 	@Override
