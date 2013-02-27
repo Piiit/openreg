@@ -32,7 +32,7 @@ public class AddressQuery {
 				);
 	}
 
-	public static void update(Row row) throws Exception {
+	public static void update(Object id, Row row) throws Exception {
 		DatabaseTools.executeUpdate(
 				"UPDATE address SET street = ?, no = ?, zip_code = ?, city = ?, country = ? " +
 				"WHERE id = ?",
@@ -41,7 +41,7 @@ public class AddressQuery {
 				row.getValueAsString("zip_code"),
 				row.getValueAsString("city"),
 				row.getValueAsString("country"),
-				row.getValueAsLong("id")
+				(Long)id
 				);
 	}
 

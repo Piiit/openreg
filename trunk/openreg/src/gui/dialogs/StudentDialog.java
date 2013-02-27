@@ -381,8 +381,7 @@ public class StudentDialog extends GuiDialog {
 				addressId = AddressQuery.insert(newAddress);
 			} else {
 				addressId = loadedData.getValueAsLong("address_id");
-				newAddress.setValue("id", addressId);
-				AddressQuery.update(newAddress);
+				AddressQuery.update(addressId, newAddress);
 			}
 
 			Row newStudent = new Row();
@@ -398,8 +397,7 @@ public class StudentDialog extends GuiDialog {
 			if(loadedData == null) {
 				StudentQuery.insert(newStudent);
 			} else {
-				newStudent.setValue("id", loadedData.getValueAsLong("student_id"));
-				StudentQuery.update(newStudent);
+				StudentQuery.update(loadedData.getValueAsLong("student_id"), newStudent);
 			}
 
 			shlAddStudent.dispose();

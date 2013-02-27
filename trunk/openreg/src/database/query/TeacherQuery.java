@@ -2,7 +2,6 @@ package database.query;
 
 import java.util.ArrayList;
 import log.Log;
-import data.SimpleDate;
 import database.DatabaseTools;
 import database.Row;
 
@@ -19,7 +18,7 @@ public class TeacherQuery {
 				"SELECT te.id AS teacher_id, * FROM  teacher te " +
 				"INNER JOIN address ad ON ad.id = address_id " +
 				"WHERE te.id = ? " +
-				"ORDER BY te.surname, te.name", id);
+				"ORDER BY te.surname, te.name", (Long)id);
 	}
 
 	public static ArrayList<Row> getFullDataset() throws Exception {
@@ -36,7 +35,7 @@ public class TeacherQuery {
 				row.getValueAsString("surname"),
 				row.getValueAsString("login"),
 				row.getValueAsString("password"),
-				((SimpleDate)row.getValue("birthday")).toSqlDate(),
+				row.getValueAsSimpleDate("birthday").toSqlDate(),
 				row.getValueAsLong("address_id"),
 				row.getValueAsString("phone_number"),
 				row.getValue("picture"),
@@ -44,7 +43,7 @@ public class TeacherQuery {
 				);
 	}
 
-	public static void update(Row row) throws Exception {
+	public static void update(Object id, Row row) throws Exception {
 		DatabaseTools.executeUpdate(
 				"UPDATE teacher SET name = ?, surname = ?, login = ?, password = ?, " +
 				"birthday = ?, address_id = ?, phone_number = ?, picture = ?, " +
@@ -53,12 +52,12 @@ public class TeacherQuery {
 				row.getValueAsString("surname"),
 				row.getValueAsString("login"),
 				row.getValueAsString("password"),
-				((SimpleDate)row.getValue("birthday")).toSqlDate(),
+				row.getValueAsSimpleDate("birthday").toSqlDate(),
 				row.getValueAsLong("address_id"),
 				row.getValueAsString("phone_number"),
 				row.getValue("picture"),
 				row.getValueAsString("notes"),
-				row.getValueAsLong("id")
+				(Long)id
 				);
 	}
 

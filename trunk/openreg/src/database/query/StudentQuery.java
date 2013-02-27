@@ -7,9 +7,6 @@ import database.Row;
 
 public class StudentQuery {
 	
-	/*
-	 * Selecting tuples, that are needed to choose from, when inserting a new student (e.g. in drop-down menus)
-	 */
 	public static ArrayList<Row> getDataset() throws Exception {
 		return DatabaseTools.getQueryResult("SELECT * FROM class cl, ability_description ab");
 	}
@@ -41,7 +38,7 @@ public class StudentQuery {
 				);
 	}
 
-	public static void update(Row row) throws Exception {
+	public static void update(Object id, Row row) throws Exception {
 		DatabaseTools.executeUpdate(
 				"UPDATE student SET name = ?, surname = ?, birthday = ?, address_id = ?, class_id = ?, " +
 				"phonenumber = ?, enrolment_year = ?, ability_description_id = ?, picture = ?, notes = ? " +
@@ -56,7 +53,7 @@ public class StudentQuery {
 				row.getValueAsLong("ability_description_id"),
 				row.getValue("picture"),
 				row.getValueAsString("notes"),
-				row.getValueAsLong("id")
+				(Long)id
 				);		
 	}
 

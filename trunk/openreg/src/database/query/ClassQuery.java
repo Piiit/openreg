@@ -28,13 +28,13 @@ public class ClassQuery {
 				);
 	}
 
-	public static void update(Row row) throws Exception {
+	public static void update(Object id, Row row) throws Exception {
 		DatabaseTools.executeUpdate(
 				"UPDATE class SET level = ?, stream = ?, notes = ? WHERE id = ?",
 				row.getValueAsString("level"),
 				row.getValueAsString("stream"),
 				row.getValueAsString("notes"),
-				row.getValueAsLong("id")
+				(Long)id
 				);
 	}
 
