@@ -1,13 +1,13 @@
 package openreg;
 
 import log.Log;
-import gui.ClassesModule;
 import gui.GroupType;
 import gui.GuiModuleList;
 import gui.MainWindow;
 import gui.SWTTools;
-import gui.StudentsModule;
-import gui.TeachersModule;
+import gui.modules.ClassesModule;
+import gui.modules.StudentsModule;
+import gui.modules.TeachersModule;
 import database.DatabaseConnection;
 
 public class Openreg {

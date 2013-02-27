@@ -1,4 +1,7 @@
-package gui;
+package gui.dialogs;
+
+import gui.GuiDialog;
+import gui.GuiTools;
 
 import java.util.ArrayList;
 
@@ -24,14 +27,14 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import data.SimpleDate;
-import database.AddressView;
-import database.ClassesView;
 import database.Row;
-import database.StudentsView;
+import database.query.AddressQuery;
+import database.query.ClassQuery;
+import database.query.StudentQuery;
 
 import org.eclipse.swt.widgets.Link;
 
-public class StudentsAddDialog extends GuiDialog {
+public class StudentDialog extends GuiDialog {
 
 	protected Object result;
 	protected Shell shlAddStudent;
@@ -49,7 +52,7 @@ public class StudentsAddDialog extends GuiDialog {
 	private StyledText studentNotes;
 	private Row loadedData;
 
-	public StudentsAddDialog(Shell parent) {
+	public StudentDialog(Shell parent) {
 		super(parent);
 	}
 
@@ -168,7 +171,7 @@ public class StudentsAddDialog extends GuiDialog {
 		link_1.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				ClassesAddDialog classAddDialog = new ClassesAddDialog(shlAddStudent, SWT.NONE);
+				ClassDialog classAddDialog = new ClassDialog(shlAddStudent, SWT.NONE);
 				classAddDialog.open();
 				update();
 			}
@@ -321,7 +324,7 @@ public class StudentsAddDialog extends GuiDialog {
 	public void update() {
 		try {
 			studentClass.removeAll();
-			for(Row cl : ClassesView.getFullDataset()) {
+			for(Row cl : ClassQuery.getFullDataset()) {
 				studentClass.add(cl.getValueAsString("level") + cl.getValueAsString("stream"));
 				studentClass.setData(cl.getValueAsString("level") + cl.getValueAsString("stream"), cl.getValue("id"));
 			}
@@ -353,7 +356,7 @@ public class StudentsAddDialog extends GuiDialog {
 
 	@Override
 	public void loadData(Object data) throws Exception {
-		ArrayList<Row> students = StudentsView.getDataset((Long)data);
+		ArrayList<Row> students = StudentQuery.getDataset((Long)data);
 		if(students.size() == 0) {
 			throw new Exception("No student with ID " + data.toString() + " found.");
 		}
@@ -371,9 +374,9 @@ public class StudentsAddDialog extends GuiDialog {
 			newAddress.setValue("city", GuiTools.nullIfEmptyTrimmed(addressCity.getText()));
 			newAddress.setValue("country", GuiTools.nullIfEmptyTrimmed(addressCountry.getText()));
 			if(addressId == null && loadedData == null) {
-				addressId = AddressView.insert(newAddress);
+				addressId = AddressQuery.insert(newAddress);
 			} else {
-				AddressView.update(newAddress);
+				AddressQuery.update(newAddress);
 			}
 
 			Row newStudent = new Row();
@@ -385,10 +388,10 @@ public class StudentsAddDialog extends GuiDialog {
 			newStudent.setValue("address_id", (loadedData == null ? addressId : loadedData.getValueAsLong("address_id")));
 			
 			if(loadedData == null) {
-				StudentsView.insert(newStudent);
+				StudentQuery.insert(newStudent);
 			} else {
 				newStudent.setValue("id", loadedData.getValueAsLong("student_id"));
-				StudentsView.update(newStudent);
+				StudentQuery.update(newStudent);
 			}
 
 			shlAddStudent.dispose();
@@ -398,7 +401,7 @@ public class StudentsAddDialog extends GuiDialog {
 			if(addressId != null) {
 				Log.info("Address with ID " + addressId + " already inserted, but without a valid student record. Deleting...");
 				try {
-					AddressView.delete(addressId);
+					AddressQuery.delete(addressId);
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

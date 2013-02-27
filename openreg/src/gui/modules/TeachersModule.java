@@ -1,4 +1,7 @@
-package gui;
+package gui.modules;
+
+import gui.GuiModule;
+import gui.dialogs.TeacherDialog;
 
 import java.util.ArrayList;
 import log.Log;
@@ -16,8 +19,9 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import database.Row;
-import database.StudentsView;
-import database.TeachersView;
+import database.query.StudentQuery;
+import database.query.TeacherQuery;
+
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 
@@ -42,7 +46,7 @@ public class TeachersModule extends GuiModule {
 		tltmAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				TeachersAddDialog addDialog = new TeachersAddDialog(container.getShell());
+				TeacherDialog addDialog = new TeacherDialog(container.getShell());
 				addDialog.open();
 				reloadData();
 			}
@@ -75,7 +79,7 @@ public class TeachersModule extends GuiModule {
 				
 				try {
 					for(Long teacherId : selected) {
-						TeachersView.delete(teacherId);
+						TeacherQuery.delete(teacherId);
 					}
 					reloadData();
 				} catch (Exception e) {
@@ -103,7 +107,7 @@ public class TeachersModule extends GuiModule {
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent arg0) {
-				TeachersAddDialog addDialog = new TeachersAddDialog(container.getShell());
+				TeacherDialog addDialog = new TeacherDialog(container.getShell());
 				try {
 					addDialog.loadData(table.getItem(table.getSelectionIndex()).getData());
 				} catch (Exception e) {
@@ -149,7 +153,7 @@ public class TeachersModule extends GuiModule {
 		table.removeAll();
 		int i = 1;
 		try {
-			for(Row teacher : TeachersView.getFullDataset()) {
+			for(Row teacher : TeacherQuery.getFullDataset()) {
 				TableItem tableItem = new TableItem(table, SWT.NONE);
 				tableItem.setData(teacher.getValueAsLong("teacher_id"));
 				tableItem.setText(new String[] {

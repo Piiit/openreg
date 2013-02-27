@@ -1,4 +1,7 @@
-package gui;
+package gui.modules;
+
+import gui.GuiModule;
+import gui.dialogs.ClassDialog;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.SWT;
@@ -13,8 +16,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import database.ClassesView;
 import database.Row;
+import database.query.ClassQuery;
 
 public class ClassesModule extends GuiModule {
 
@@ -37,7 +40,7 @@ public class ClassesModule extends GuiModule {
 		tltmAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				ClassesAddDialog classAddDialog = new ClassesAddDialog(group.getShell(), SWT.NONE);
+				ClassDialog classAddDialog = new ClassDialog(group.getShell(), SWT.NONE);
 				classAddDialog.open();
 				reloadData();
 			}
@@ -65,7 +68,7 @@ public class ClassesModule extends GuiModule {
 	public void reloadData() {
 		table.removeAll();
 		try {
-			for(Row thisClass : ClassesView.getFullDataset()) {
+			for(Row thisClass : ClassQuery.getFullDataset()) {
 				TableItem tableItem = new TableItem(table, SWT.NONE);
 				tableItem.setText(new String[] {
 						thisClass.getValueAsString("level") + " " + thisClass.getValueAsString("stream"),

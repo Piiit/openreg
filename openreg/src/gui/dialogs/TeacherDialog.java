@@ -1,4 +1,7 @@
-package gui;
+package gui.dialogs;
+
+import gui.GuiDialog;
+import gui.GuiTools;
 
 import java.util.ArrayList;
 
@@ -21,13 +24,14 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import data.SimpleDate;
-import database.AddressView;
 import database.Row;
-import database.StudentsView;
-import database.TeachersView;
+import database.query.AddressQuery;
+import database.query.StudentQuery;
+import database.query.TeacherQuery;
+
 import org.eclipse.swt.widgets.Link;
 
-public class TeachersAddDialog extends GuiDialog {
+public class TeacherDialog extends GuiDialog {
 
 	protected Object result;
 	protected Shell shlAddTeacher;
@@ -43,7 +47,7 @@ public class TeachersAddDialog extends GuiDialog {
 	private DateTime teacherBirthday;
 	private Row loadedTeacher;
 
-	public TeachersAddDialog(Shell parent) {
+	public TeacherDialog(Shell parent) {
 		super(parent);
 	}
 
@@ -278,7 +282,7 @@ public class TeachersAddDialog extends GuiDialog {
 
 	@Override
 	public void loadData(Object data) throws Exception {
-		loadedTeacher = TeachersView.getTeacher((Long)data);
+		loadedTeacher = TeacherQuery.getTeacher((Long)data);
 	}
 
 	@Override
@@ -293,11 +297,11 @@ public class TeachersAddDialog extends GuiDialog {
 			newAddress.setValue("country", GuiTools.nullIfEmptyTrimmed(addressCountry.getText()));
 			
 			if(loadedTeacher == null) {
-				addressId = AddressView.insert(newAddress);
+				addressId = AddressQuery.insert(newAddress);
 			} else {
 				addressId = loadedTeacher.getValueAsLong("address_id");
 				newAddress.setValue("id", addressId);
-				AddressView.update(newAddress);
+				AddressQuery.update(newAddress);
 			}
 			
 			
@@ -312,10 +316,10 @@ public class TeachersAddDialog extends GuiDialog {
 			newTeacher.setValue("address_id", addressId);
 			
 			if(loadedTeacher == null) {
-				TeachersView.insert(newTeacher);
+				TeacherQuery.insert(newTeacher);
 			} else {
 				newTeacher.setValue("id", loadedTeacher.getValueAsLong("teacher_id"));
-				TeachersView.update(newTeacher);
+				TeacherQuery.update(newTeacher);
 			}
 
 			shlAddTeacher.dispose();
@@ -325,7 +329,7 @@ public class TeachersAddDialog extends GuiDialog {
 			if(addressId != null) {
 				Log.info("Address with ID " + addressId + " already inserted, but without a valid teacher record. Deleting...");
 				try {
-					AddressView.delete(addressId);
+					AddressQuery.delete(addressId);
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

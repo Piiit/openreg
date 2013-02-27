@@ -1,4 +1,6 @@
-package gui;
+package gui.dialogs;
+
+import gui.GuiTools;
 
 import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
@@ -16,7 +18,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import database.Row;
 
-public class ClassesAddDialog extends Dialog {
+public class ClassDialog extends Dialog {
 
 	protected Object result;
 	protected Shell shlAddANew;
@@ -28,7 +30,7 @@ public class ClassesAddDialog extends Dialog {
 	 * @param parent
 	 * @param style
 	 */
-	public ClassesAddDialog(Shell parent, int style) {
+	public ClassDialog(Shell parent, int style) {
 		super(parent, style);
 		setText("SWT Dialog");
 	}

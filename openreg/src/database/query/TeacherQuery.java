@@ -1,10 +1,12 @@
-package database;
+package database.query;
 
 import java.util.ArrayList;
 import log.Log;
 import data.SimpleDate;
+import database.DatabaseTools;
+import database.Row;
 
-public class TeachersView {
+public class TeacherQuery {
 
 	public static ArrayList<Row> getDataset() throws Exception {
 		// TODO Auto-generated method stub

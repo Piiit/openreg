@@ -1,8 +1,11 @@
-package database;
+package database.query;
 
 import java.util.ArrayList;
 
-public class ClassesView {
+import database.DatabaseTools;
+import database.Row;
+
+public class ClassQuery {
 
 	public static ArrayList<Row> getDataset() throws Exception {
 		// TODO Auto-generated method stub

@@ -1,8 +1,11 @@
-package database;
+package database.query;
 
 import java.util.ArrayList;
 
-public class StudentsView {
+import database.DatabaseTools;
+import database.Row;
+
+public class StudentQuery {
 	
 	public static ArrayList<Row> getDataset() throws Exception {
 		return DatabaseTools.getQueryResult("SELECT * FROM class cl, ability_description ab");
