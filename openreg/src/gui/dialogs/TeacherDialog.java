@@ -12,7 +12,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.swt.layout.FormLayout;
@@ -354,10 +353,7 @@ public class TeacherDialog extends GuiDialog {
 				}
 			}
 
-			MessageBox message = new MessageBox(shlAddTeacher, SWT.ICON_INFORMATION | SWT.OK);
-			message.setMessage(e.getMessage());
-			message.setText(shlAddTeacher.getText());
-			message.open();
+			GuiTools.showMessageBox(shlAddTeacher, e.getMessage());
 		}
 	}
 

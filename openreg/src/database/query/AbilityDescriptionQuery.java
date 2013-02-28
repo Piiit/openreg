@@ -33,19 +33,28 @@ public class AbilityDescriptionQuery {
 	 * @return ID of the new tuple formerly inserted.
 	 */
 	public static Long insert(Row row) throws Exception{
-		return null;
+		return (Long)DatabaseTools.executeUpdate(
+				"INSERT INTO ability_description (description) VALUES (?)",
+				row.getValueAsString("description")
+				);
 	}
 	
 	/**
 	 * Update a certain tuple.
 	 */
 	public static void update(Object id, Row row) throws Exception{
+		DatabaseTools.executeUpdate(
+				"UPDATE ability_description SET description = ? WHERE id = ?", 
+				row.getValueAsString("description"),
+				(Long)id
+				);
 	}
 	
 	/**
 	 * Delete a certain tuple.
 	 */
 	public static void delete(Object id) throws Exception{
+		DatabaseTools.executeUpdate("DELETE FROM ability_description WHERE id = ?", (Long)id);
 	}
 
 }
