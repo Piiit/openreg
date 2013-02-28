@@ -74,17 +74,17 @@ public class TeachersModule extends GuiModule {
 					return;
 				}
 				
-				try {
-					for(Long teacherId : selected) {
+				for(Long teacherId : selected) {
+					try {
 						TeacherQuery.delete(teacherId);
+					} catch (Exception e) {
+						e.printStackTrace();
+	
+						MessageBox message = new MessageBox(container.getShell(), SWT.ICON_INFORMATION | SWT.OK);
+						message.setMessage(e.getMessage());
+						message.setText(container.getShell().getText());
+						message.open();
 					}
-				} catch (Exception e) {
-					e.printStackTrace();
-
-					MessageBox message = new MessageBox(container.getShell(), SWT.ICON_INFORMATION | SWT.OK);
-					message.setMessage(e.getMessage());
-					message.setText(container.getShell().getText());
-					message.open();
 				}
 				reloadData();
 			}

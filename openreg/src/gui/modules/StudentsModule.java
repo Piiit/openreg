@@ -140,18 +140,18 @@ public class StudentsModule extends GuiModule {
 				if(messageBox.open() == SWT.NO) {
 					return;
 				}
-				
-				try {
-					for(Long studentId : selected) {
-						StudentQuery.delete(studentId);
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
 
-					MessageBox message = new MessageBox(container.getShell(), SWT.ICON_INFORMATION | SWT.OK);
-					message.setMessage(e.getMessage());
-					message.setText(container.getShell().getText());
-					message.open();
+				for(Long studentId : selected) {
+					try {
+						StudentQuery.delete(studentId);
+					} catch (Exception e) {
+						e.printStackTrace();
+	
+						MessageBox message = new MessageBox(container.getShell(), SWT.ICON_INFORMATION | SWT.OK);
+						message.setMessage(e.getMessage());
+						message.setText(container.getShell().getText());
+						message.open();
+					}
 				}
 				reloadData(null);
 			}
