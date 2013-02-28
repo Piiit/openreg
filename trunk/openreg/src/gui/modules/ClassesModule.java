@@ -129,6 +129,8 @@ public class ClassesModule extends GuiModule {
 		TableColumn tblclmnNotes = new TableColumn(table, SWT.LEFT);
 		tblclmnNotes.setWidth(200);
 		tblclmnNotes.setText("Notes");
+		
+		reloadData();
 	}
 
 	@Override
