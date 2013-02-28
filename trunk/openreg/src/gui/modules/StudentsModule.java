@@ -23,6 +23,7 @@ import database.query.StudentQuery;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.widgets.Label;
 
 public class StudentsModule extends GuiModule {
 	
