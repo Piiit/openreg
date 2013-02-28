@@ -58,12 +58,7 @@ public class AddressDialog extends GuiDialog {
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent arg0) {
-				try {
-					Long addressId = (Long)table.getItems()[table.getSelectionIndex()].getData();
-					result = AddressQuery.getDataset(addressId).get(0);
-				} catch (Exception e) {
-				}
-				shlAddressDialog.dispose();
+				chooseSelection();
 			}
 		});
 		FormData fd_table = new FormData();
@@ -83,6 +78,7 @@ public class AddressDialog extends GuiDialog {
 		btnOk.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
+				chooseSelection();
 			}
 		});
 		FormData fd_btnOk = new FormData();
@@ -106,6 +102,15 @@ public class AddressDialog extends GuiDialog {
 		btnCancel.setText("Cancel");
 		
 		update();
+	}
+	
+	private void chooseSelection() {
+		try {
+			Long addressId = (Long)table.getItems()[table.getSelectionIndex()].getData();
+			result = AddressQuery.getDataset(addressId).get(0);
+		} catch (Exception e) {
+		}
+		shlAddressDialog.dispose();
 	}
 
 	@Override

@@ -164,31 +164,19 @@ public class StudentsModule extends GuiModule {
 		filterClass.removeAll();
 		int i = 1;
 		try {
-			if (id == null) {
-				for(Row student : StudentQuery.getFullDataset()) {
-					TableItem tableItem = new TableItem(table, SWT.NONE);
-					tableItem.setData(student.getValueAsLong("student_id"));
-					tableItem.setText(new String[] {
-							Integer.toString(i++), 
-							student.getValueAsString("surname") + " " + student.getValueAsString("name"), 
-							student.getValueAsString("enrolment_year"), 
-							student.getValueAsString("birthday"),
-							student.getValueAsString("level") + student.getValueAsString("stream")
-							});
-				}
-			} else {
-				for(Row student : StudentQuery.getClassDataset(id)) {
-					TableItem tableItem = new TableItem(table, SWT.NONE);
-					tableItem.setData(student.getValueAsLong("student_id"));
-					tableItem.setText(new String[] {
-							Integer.toString(i++), 
-							student.getValueAsString("surname") + " " + student.getValueAsString("name"), 
-							student.getValueAsString("enrolment_year"), 
-							student.getValueAsString("birthday"),
-							student.getValueAsString("level") + student.getValueAsString("stream")
-							});
-				}
+			ArrayList<Row> dataset = (id == null ? StudentQuery.getFullDataset() : StudentQuery.getClassDataset(id));
+			for(Row student : dataset) {
+				TableItem tableItem = new TableItem(table, SWT.NONE);
+				tableItem.setData(student.getValueAsLong("student_id"));
+				tableItem.setText(new String[] {
+						Integer.toString(i++), 
+						student.getValueAsStringNotNull("surname") + " " + student.getValueAsStringNotNull("name"), 
+						student.getValueAsStringNotNull("enrolment_year"), 
+						student.getValueAsStringNotNull("birthday"),
+						student.getValueAsStringNotNull("level") + student.getValueAsStringNotNull("stream")
+						});
 			}
+			
 			String classString = "Show all";
 			filterClass.add(classString);
 			filterClass.select(filterClass.indexOf(classString));
