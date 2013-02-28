@@ -53,8 +53,10 @@ public class TeacherClassCourseDialog extends GuiDialog {
 	private ArrayList<Row> loadedTeachers;
 	private ArrayList<Row> loadedClasses;
 	private ArrayList<Row> loadedCourses;
+	private ArrayList<Row> loadedTeacherClassCourse;
 	private Button buttonCancel;
 	private Button buttonSave;
+	private boolean dataSet = false;
 
 	/**
 	 * Create the dialog.
@@ -139,6 +141,15 @@ public class TeacherClassCourseDialog extends GuiDialog {
 		buttonSave.setText("Save");
 		buttonSave.setBounds(411, 403, 111, 25);
 		
+		Combo combo = new Combo(shlAssignTeacher, SWT.READ_ONLY);
+		combo.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+			}
+		});
+		combo.setBounds(33, 348, 91, 23);
+		
+		//if (loadedTeacherClassCourse == null)
 		createClassCombo();
 		
 		update();
@@ -155,7 +166,7 @@ public class TeacherClassCourseDialog extends GuiDialog {
 				lblSeparator.setBounds(STARTINGPOINT_UPPER_LEFT_CORNER - 5, positionCourseComboY - (COMBO_OFFSET_Y/2), lengthX, 2);
 			}
 			
-			combosClasses.add(new Combo(shlAssignTeacher, SWT.NONE));
+			combosClasses.add(new Combo(shlAssignTeacher, SWT.READ_ONLY));
 			combosClasses.get(combosClasses.size()-1).setBounds(STARTINGPOINT_UPPER_LEFT_CORNER, 
 					posY, SIZE_COMBO_X, SIZE_COMBO_Y);
 			
@@ -171,7 +182,7 @@ public class TeacherClassCourseDialog extends GuiDialog {
 	private void createCourseCombo(){
 		int posX = STARTINGPOINT_UPPER_LEFT_CORNER + SIZE_COMBO_X + COMBO_OFFSET_X;
 		
-		combosCourses.add(new Combo(shlAssignTeacher, SWT.NONE));
+		combosCourses.add(new Combo(shlAssignTeacher, SWT.READ_ONLY));
 		combosCourses.get(combosCourses.size()-1).setToolTipText((combosClasses.size()-1)+"");
 		combosCourses.get(combosCourses.size()-1).setBounds(posX, 
 				positionCourseComboY, SIZE_COMBO_X, SIZE_COMBO_Y);
@@ -181,32 +192,40 @@ public class TeacherClassCourseDialog extends GuiDialog {
 		positionCourseComboY = positionCourseComboY + SIZE_COMBO_Y + COMBO_OFFSET_Y;
 	}
 	
-	
 
-	@Override
-	public void loadData(Object data) throws Exception {
+	public void loadData() throws Exception {
 		loadedTeachers = TeacherQuery.getFullDataset();
 		loadedClasses = ClassQuery.getFullDataset();
 		loadedCourses = CourseQuery.getFullDataset();
+		dataSet = true;
+	}
+	
+	@Override
+	public void loadData(Object data) throws Exception {
+		loadData();
+		loadedTeacherClassCourse = TeacherClassCourseQuery.getDataset(data);
+		dataSet = false;
 	}
 
 	@Override
 	public void store() throws Exception {
-		
 		String [] selection = listTeachers.getSelection();
 		long teacherId = Long.parseLong(listTeachers.getData(selection[0]).toString());
+		int i = 0;
 		for (Combo c : combosClasses){
 			long classId = Long.parseLong(c.getData(c.getItem(c.getSelectionIndex())).toString());
 			for (Combo course : combosCourses){
 				long courseId = Long.parseLong(course.getData(course.getItem(course.getSelectionIndex())).toString());
-				
-				Row newTeacherClassCourse = new Row();
-				newTeacherClassCourse.setValue("teacher_id", teacherId);
-				newTeacherClassCourse.setValue("class_id", classId);
-				newTeacherClassCourse.setValue("course_id", courseId);
-				
-				TeacherClassCourseQuery.insert(newTeacherClassCourse);
+				if (Integer.parseInt(course.getToolTipText()) == i){
+					Row newTeacherClassCourse = new Row();
+					newTeacherClassCourse.setValue("teacher_id", teacherId);
+					newTeacherClassCourse.setValue("class_id", classId);
+					newTeacherClassCourse.setValue("course_id", courseId);
+					
+					TeacherClassCourseQuery.insert(newTeacherClassCourse);
+				}
 			}
+			i += 1;
 		}
 		
 	}
@@ -221,7 +240,7 @@ public class TeacherClassCourseDialog extends GuiDialog {
 			listTeachers.add(s);
 			listTeachers.setData(s, teacher.getValueAsString("teacher_id"));
 		}
-		listTeachers.setSelection(selected-1);
+		listTeachers.setSelection(selected);
 		for (Combo combo : combosClasses){
 			int p = combo.getSelectionIndex();
 			combo.removeAll();
@@ -242,6 +261,50 @@ public class TeacherClassCourseDialog extends GuiDialog {
 			}
 			combo.select(p);
 		}
+		setData();
+	}
+	
+	public void setData(){
+		if (!dataSet){
+			setListData();
+			setComboData();
+			
+			dataSet = true;
+		}
+	}
+	
+	private void setListData(){
+		String name = loadedTeacherClassCourse.get(0).getValueAsString("teacher_name") + " " 
+				+ loadedTeacherClassCourse.get(0).getValueAsString("surname");
+
+		String [] items = listTeachers.getItems();
+		int index = 0;
+		for (int i = 0; i < items.length; i++) {
+			if (items[i].equals(name))
+				index = i;
+		}
+		listTeachers.setSelection(index);
+	}
+	
+	private void setComboData(){
+		int id = 0;
+		long teacher_id = loadedTeacherClassCourse.get(id).getValueAsLong("teacher_id");
+		long class_id = loadedTeacherClassCourse.get(id).getValueAsLong("class_id");
+		long course_id = loadedTeacherClassCourse.get(id).getValueAsLong("course_id");
+		
+		for (int i = 0; i < loadedTeacherClassCourse.size(); i++) {
+			Row ltcc = loadedTeacherClassCourse.get(i);
+			if (class_id != ltcc.getValueAsLong("class_id")){
+				createClassCombo();
+				class_id = ltcc.getValueAsLong("class_id");
+				course_id = ltcc.getValueAsLong("course_id");
+			} else if (course_id != ltcc.getValueAsLong("course_id")){
+				createCourseCombo();
+				course_id = ltcc.getValueAsLong("course_id");
+			}
+			Log.info(teacher_id+" "+class_id +" "+course_id);
+		}
+		
 	}
 
 	@Override

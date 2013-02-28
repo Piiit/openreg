@@ -14,16 +14,20 @@ public class TeacherClassCourseQuery {
 
 	public static ArrayList<Row> getDataset(Object id) throws Exception {
 		Log.info("Loading teacher with ID " + id.toString());
-		return DatabaseTools.getQueryResult(
-				"SELECT te.id AS teacher_id, * FROM  teacher te " +
-				"INNER JOIN address ad ON ad.id = address_id " +
-				"WHERE te.id = ? " +
-				"ORDER BY te.surname, te.name", (Long)id);
+		return DatabaseTools.getQueryResult("SELECT te.name AS teacher_name, co.name AS class_name, * FROM teacher_class_course tcc" +
+				"INNER JOIN teacher te ON teacher_id = te.id " +
+				"INNER JOIN class cl ON class_id = cl.id " +
+				"INNER JOIN course co ON course_id = co.id WHERE teacher_id = ? " +
+				"ORDER BY teacher_id, class_id, course_id", (Long)id
+				);
 	}
 
 	public static ArrayList<Row> getFullDataset() throws Exception {
-		return DatabaseTools.getQueryResult("SELECT te.id AS teacher_id, * FROM teacher te " +
-				"INNER JOIN address ad ON address_id = ad.id ");
+		return DatabaseTools.getQueryResult("SELECT  * FROM teacher_class_course tcc" +
+				"INNER JOIN teacher te ON teacher_id = te.id " +
+				"INNER JOIN class cl ON class_id = cl.id " +
+				"INNER JOIN course co ON course_id = co.id"
+				);
 	
 	}
 
