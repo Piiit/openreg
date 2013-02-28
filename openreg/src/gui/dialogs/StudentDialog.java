@@ -194,7 +194,7 @@ public class StudentDialog extends GuiDialog {
 		link_2.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				AddressDialog addressDialog = new AddressDialog(shlAddStudent);
+				AddressSelectionDialog addressDialog = new AddressSelectionDialog(shlAddStudent);
 				loadedAddress = (Row)addressDialog.open();
 				updateAddressFields();
 			}
@@ -332,8 +332,9 @@ public class StudentDialog extends GuiDialog {
 		try {
 			studentClass.removeAll();
 			for(Row cl : ClassQuery.getFullDataset()) {
-				studentClass.add(cl.getValueAsString("level") + cl.getValueAsString("stream"));
-				studentClass.setData(cl.getValueAsString("level") + cl.getValueAsString("stream"), cl.getValue("id"));
+				String classString = cl.getValueAsStringNotNull("level") + cl.getValueAsStringNotNull("stream");
+				studentClass.add(classString);
+				studentClass.setData(classString, cl.getValue("id"));
 			}
 			
 			if(loadedData != null) {
@@ -397,6 +398,9 @@ public class StudentDialog extends GuiDialog {
 				addressId = AddressQuery.insert(newAddress);
 			} else {
 				addressId = loadedAddress.getValueAsLong("id");
+				if(addressId == null) {
+					addressId = loadedAddress.getValueAsLong("address_id");
+				}
 				AddressQuery.update(addressId, newAddress);
 			}
 
