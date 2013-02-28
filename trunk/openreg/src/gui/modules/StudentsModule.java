@@ -145,7 +145,6 @@ public class StudentsModule extends GuiModule {
 					for(Long studentId : selected) {
 						StudentQuery.delete(studentId);
 					}
-					reloadData(null);
 				} catch (Exception e) {
 					e.printStackTrace();
 
@@ -154,6 +153,7 @@ public class StudentsModule extends GuiModule {
 					message.setText(container.getShell().getText());
 					message.open();
 				}
+				reloadData(null);
 			}
 		});
 	}
