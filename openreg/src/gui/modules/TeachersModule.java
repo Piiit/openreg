@@ -78,7 +78,6 @@ public class TeachersModule extends GuiModule {
 					for(Long teacherId : selected) {
 						TeacherQuery.delete(teacherId);
 					}
-					reloadData();
 				} catch (Exception e) {
 					e.printStackTrace();
 
@@ -87,6 +86,7 @@ public class TeachersModule extends GuiModule {
 					message.setText(container.getShell().getText());
 					message.open();
 				}
+				reloadData();
 			}
 		});
 		tltmRemove.setText("Remove");

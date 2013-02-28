@@ -44,8 +44,7 @@ public class AddressQuery {
 	}
 
 	public static void delete(Object id) throws Exception {
-		// TODO Auto-generated method stub
-
+		DatabaseTools.executeUpdate("DELETE FROM address WHERE id = ?", (Long)id);
 	}
 
 }

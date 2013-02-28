@@ -1,9 +1,7 @@
 package gui.modules;
 
 import java.util.ArrayList;
-
 import gui.GuiModule;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -17,10 +15,8 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
-
 import database.Row;
 import database.query.AddressQuery;
-import database.query.ClassQuery;
 
 public class AddressesModule extends GuiModule {
 
@@ -70,9 +66,8 @@ public class AddressesModule extends GuiModule {
 				
 				try {
 					for(Long classId : selected) {
-						ClassQuery.delete(classId);
+						AddressQuery.delete(classId);
 					}
-					reloadData();
 				} catch (Exception e) {
 					e.printStackTrace();
 
@@ -81,6 +76,7 @@ public class AddressesModule extends GuiModule {
 					message.setText(container.getShell().getText());
 					message.open();
 				}
+				reloadData();
 			}
 		});
 		tltmRemove.setText("Remove");
