@@ -38,6 +38,17 @@ public class AddressesModule extends GuiModule {
 		ToolBar toolBar = new ToolBar(group, SWT.FLAT | SWT.RIGHT);
 		toolBar.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		
+		ToolItem tltmAdd = new ToolItem(toolBar, SWT.NONE);
+		tltmAdd.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				AddressDialog dialog = new AddressDialog(group.getShell());
+				dialog.open();
+				reloadData();
+			}
+		});
+		tltmAdd.setText("Add");
+		
 		ToolItem tltmRemove = new ToolItem(toolBar, SWT.NONE);	
 		tltmRemove.addSelectionListener(new SelectionAdapter() {
 			@Override
