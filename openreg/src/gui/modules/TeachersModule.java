@@ -1,6 +1,7 @@
 package gui.modules;
 
 import gui.GuiModule;
+import gui.dialogs.TeacherClassCourseDialog;
 import gui.GuiTools;
 import gui.dialogs.TeacherDialog;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import database.Row;
 import database.query.TeacherQuery;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.widgets.Label;
 
 public class TeachersModule extends GuiModule {
 	private Table table;
@@ -87,6 +89,23 @@ public class TeachersModule extends GuiModule {
 		});
 		tltmFilter.setText("All classes");
 		
+		ToolItem tltmJoinTeacher = new ToolItem(toolBar, SWT.NONE);
+		tltmJoinTeacher.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				TeacherClassCourseDialog addDialog = new TeacherClassCourseDialog(container.getShell());
+				try {
+					addDialog.loadData(null);
+				} catch (Exception e) {
+					//TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				addDialog.open();
+				reloadData();
+			}
+		});
+		tltmJoinTeacher.setText("Assign Teacher to Class and Course");
+		
 		table = new Table(group, SWT.BORDER | SWT.CHECK | SWT.FULL_SELECTION);
 		table.addMouseListener(new MouseAdapter() {
 			@Override
@@ -97,13 +116,15 @@ public class TeachersModule extends GuiModule {
 					addDialog.loadData(ti.getData());
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					//e.printStackTrace();
 				}
 				addDialog.open();
 				reloadData();
 			}
 		});
-		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		GridData gd_table = new GridData(SWT.FILL, SWT.TOP, true, true, 1, 1);
+		gd_table.heightHint = 293;
+		table.setLayoutData(gd_table);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 		
