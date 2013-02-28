@@ -59,12 +59,10 @@ public class StudentsModule extends GuiModule {
 		ToolItem tltmRemove = new ToolItem(toolBar, SWT.NONE);
 		tltmRemove.setText("Remove");
 		
-		ToolItem itemPush = new ToolItem(toolBar, SWT.PUSH);
-	    itemPush.setText("Select Class");
 		filterClass = new Combo(toolBar, SWT.READ_ONLY);
 		tltmFilter = new ToolItem(toolBar, SWT.SEPARATOR);
 		tltmFilter.setControl(filterClass);
-		tltmFilter.setWidth(64);
+		tltmFilter.setWidth(100);
 		filterClass.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
@@ -190,9 +188,16 @@ public class StudentsModule extends GuiModule {
 							});
 				}
 			}
+			String classString = "Show all";
+			filterClass.add(classString);
+			filterClass.select(filterClass.indexOf(classString));
 			for(Row cl : ClassQuery.getFullDataset()) {
-				filterClass.add(cl.getValueAsString("level") + cl.getValueAsString("stream"));
-				filterClass.setData(cl.getValueAsString("level") + cl.getValueAsString("stream"), cl.getValue("id"));
+				classString = cl.getValueAsString("level") + cl.getValueAsString("stream");
+				filterClass.add(classString);
+				filterClass.setData(classString, cl.getValue("id"));
+				if(id != null && id.equals(cl.getValue("id"))) {
+					filterClass.select(filterClass.indexOf(classString));
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
