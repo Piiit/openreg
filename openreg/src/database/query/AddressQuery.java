@@ -12,13 +12,11 @@ public class AddressQuery {
 	}
 
 	public static ArrayList<Row> getDataset(Object id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return DatabaseTools.getQueryResult("SELECT * FROM address WHERE id = ?", (Long)id);
 	}
 
 	public static ArrayList<Row> getFullDataset() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return DatabaseTools.getQueryResult("SELECT * FROM address ORDER BY street, no, city");
 	}
 
 	public static Long insert(Row row) throws Exception {

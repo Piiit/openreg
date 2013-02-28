@@ -49,6 +49,7 @@ public class StudentDialog extends GuiDialog {
 	private StyledText studentNotes;
 	private Combo studentAbility;
 	private Row loadedData;
+	private Row loadedAddress;
 
 	public StudentDialog(Shell parent) {
 		super(parent);
@@ -194,8 +195,8 @@ public class StudentDialog extends GuiDialog {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
 				AddressDialog addressDialog = new AddressDialog(shlAddStudent);
-				addressDialog.open();
-				update();
+				loadedAddress = (Row)addressDialog.open();
+				updateAddressFields();
 			}
 		});
 		link_2.setBounds(191, 0, 194, 15);
@@ -345,22 +346,32 @@ public class StudentDialog extends GuiDialog {
 				String classString = loadedData.getValueAsString("level") + loadedData.getValueAsString("stream");
 				studentClass.select(studentClass.indexOf(classString));
 				
-				addressStreet.setText(loadedData.getValueAsString("street"));
-				addressNo.setText(loadedData.getValueAsString("no"));
-				addressZip.setText(loadedData.getValueAsString("zip_code"));
-				addressCity.setText(loadedData.getValueAsString("city"));
-				addressCountry.setText(loadedData.getValueAsString("country"));
-				
 				studentPhone.setText(loadedData.getValueAsStringNotNull("phonenumber"));
 				studentNotes.setText(loadedData.getValueAsStringNotNull("student_notes"));
 				
 				String abilityString = loadedData.getValueAsStringNotNull("description");
 				studentAbility.select(studentAbility.indexOf(abilityString));
+				
+				loadedAddress = loadedData;
 			}
+			
+			updateAddressFields();
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public void updateAddressFields() {
+		if(loadedAddress == null) {
+			return;
+		}
+		addressStreet.setText(loadedAddress.getValueAsStringNotNull("street"));
+		addressNo.setText(loadedAddress.getValueAsStringNotNull("no"));
+		addressZip.setText(loadedAddress.getValueAsStringNotNull("zip_code"));
+		addressCity.setText(loadedAddress.getValueAsStringNotNull("city"));
+		addressCountry.setText(loadedAddress.getValueAsStringNotNull("country"));
 	}
 
 	@Override
@@ -382,10 +393,11 @@ public class StudentDialog extends GuiDialog {
 			newAddress.setValue("zip_code", GuiTools.nullIfEmptyTrimmed(addressZip.getText()));
 			newAddress.setValue("city", GuiTools.nullIfEmptyTrimmed(addressCity.getText()));
 			newAddress.setValue("country", GuiTools.nullIfEmptyTrimmed(addressCountry.getText()));
-			if(loadedData == null) {
+			if(loadedAddress == null) {
 				addressId = AddressQuery.insert(newAddress);
 			} else {
-				addressId = loadedData.getValueAsLong("address_id");
+				addressId = loadedAddress.getValueAsLong("id");
+				AddressQuery.update(addressId, newAddress);
 			}
 
 			Row newStudent = new Row();
@@ -401,7 +413,6 @@ public class StudentDialog extends GuiDialog {
 			if(loadedData == null) {
 				StudentQuery.insert(newStudent);
 			} else {
-				AddressQuery.update(addressId, newAddress);
 				StudentQuery.update(loadedData.getValueAsLong("student_id"), newStudent);
 			}
 
