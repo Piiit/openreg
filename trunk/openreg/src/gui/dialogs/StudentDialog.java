@@ -2,11 +2,8 @@ package gui.dialogs;
 
 import gui.GuiDialog;
 import gui.GuiTools;
-
+import java.sql.Date;
 import java.util.ArrayList;
-
-import log.Log;
-
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.SWT;
@@ -31,8 +28,8 @@ import database.Row;
 import database.query.AddressQuery;
 import database.query.ClassQuery;
 import database.query.StudentQuery;
-
 import org.eclipse.swt.widgets.Link;
+import log.Log;
 
 public class StudentDialog extends GuiDialog {
 
@@ -341,7 +338,7 @@ public class StudentDialog extends GuiDialog {
 			if(loadedData != null) {
 				studentName.setText(loadedData.getValueAsString("name"));
 				studentSurname.setText(loadedData.getValueAsString("surname"));
-				SimpleDate date = SimpleDate.fromDate((java.sql.Date)loadedData.getValue("birthday"));
+				SimpleDate date = new SimpleDate((Date)loadedData.getValue("birthday"));
 				studentBirthday.setDate(date.getYear(), date.getMonth(), date.getDay());
 				studentYear.setSelection(loadedData.getValueAsInt("enrolment_year"));
 				

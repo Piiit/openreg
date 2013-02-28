@@ -5,11 +5,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-/**
- * Note: SimpleDate starts with 1 when indexing months, java.util.Date starts with 0...
- * @author user
- *
- */
 public class SimpleDate {
 	
 	private Date date;
@@ -17,8 +12,14 @@ public class SimpleDate {
 
 	public SimpleDate(int day, int month, int year) {
 		calendar = GregorianCalendar.getInstance();
-		calendar.set(year, month - 1, day);
+		calendar.set(year, month, day);
 		date = calendar.getTime();
+	}
+	
+	public SimpleDate(Date date) {
+		calendar = GregorianCalendar.getInstance();
+		calendar.setTime(date);
+		this.date = date;
 	}
 
 	public Date toDate() {
@@ -30,7 +31,7 @@ public class SimpleDate {
 	}
 
 	public int getMonth() {
-		return calendar.get(Calendar.MONTH) + 1;
+		return calendar.get(Calendar.MONTH);
 	}
 
 	public int getYear() {
@@ -44,7 +45,7 @@ public class SimpleDate {
 	public static SimpleDate fromDate(Date date) {
 		Calendar cal = GregorianCalendar.getInstance();
 		cal.setTime(date);
-		return new SimpleDate(cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.YEAR));
+		return new SimpleDate(cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR));
 	}
 
 	@Override

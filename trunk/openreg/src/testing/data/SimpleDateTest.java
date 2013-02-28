@@ -13,8 +13,10 @@ public class SimpleDateTest {
 
 	@Test
 	public void test() {
-		SimpleDate date = new SimpleDate(16, 5, 1981);
-		assertEquals(5, date.getMonth());
+		
+		// Notice: Date counts the months from 0 = JANUARY...
+		SimpleDate date = new SimpleDate(16, 4, 1981);
+		assertEquals(4, date.getMonth());
 		assertEquals("1981-05-16", date.toSqlDate().toString());
 		
 		Calendar calendar;
@@ -23,10 +25,12 @@ public class SimpleDateTest {
 		Date date2 = calendar.getTime();
 		
 		// SimpeDate starts with 1 = JANUARY, java.util.Date starts with 0 = JANUARY...
-		assertEquals(calendar.get(Calendar.MONTH) + 1, date.getMonth());
+		assertEquals(calendar.get(Calendar.MONTH), date.getMonth());
 		
 		// Sometimes there are small rounding errors within two "same" times...
 		assertTrue(Math.abs(date2.getTime() - date.toDate().getTime()) <= EPSILON);
-		
+
+		date = new SimpleDate(new Date(calendar.getTimeInMillis()));
+		assertEquals(4, date.getMonth());
 	}
 }

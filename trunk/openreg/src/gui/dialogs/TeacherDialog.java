@@ -1,5 +1,6 @@
 package gui.dialogs;
 
+import java.sql.Date;
 import java.util.ArrayList;
 
 import gui.GuiDialog;
@@ -261,7 +262,7 @@ public class TeacherDialog extends GuiDialog {
 			if (loadedTeacher != null){
 				teacherName.setText(loadedTeacher.getValueAsString("name").toString());
 				teacherSurname.setText(loadedTeacher.getValueAsString("surname"));
-				SimpleDate date = SimpleDate.fromDate((java.sql.Date)loadedTeacher.getValue("birthday"));
+				SimpleDate date = new SimpleDate((Date)loadedTeacher.getValue("birthday"));
 				teacherBirthday.setDate(date.getYear(), date.getMonth(), date.getDay());
 				addressStreet.setText(loadedTeacher.getValueAsString("street"));
 				addressNo.setText(loadedTeacher.getValueAsString("no"));
