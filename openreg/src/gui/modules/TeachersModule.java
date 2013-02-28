@@ -1,6 +1,7 @@
 package gui.modules;
 
 import gui.GuiModule;
+import gui.GuiTools;
 import gui.dialogs.TeacherDialog;
 import java.util.ArrayList;
 import log.Log;
@@ -11,7 +12,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
@@ -54,23 +54,14 @@ public class TeachersModule extends GuiModule {
 		tltmRemove.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				TableItem tableItems[] = table.getItems();
-				ArrayList<Long> selected = new ArrayList<Long>();
-				for(int i = 1; i < tableItems.length; i++) {
-					if(tableItems[i].getChecked() == true) {
-						selected.add((Long)tableItems[i].getData());
-					}
-				}
-				
+				ArrayList<Long> selected = GuiTools.getSelectedItems(table);
 				if(selected.size() == 0) {
+					GuiTools.showMessageBox(container.getShell(), "No teachers selected.");
 					return;
 				}
 				
-				MessageBox messageBox = new MessageBox(container.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-				messageBox.setMessage("Delete " + selected.size() + " students?");
-				messageBox.setText(container.getShell().getText());
-				
-				if(messageBox.open() == SWT.NO) {
+				int answer = GuiTools.showQuestionBox(container.getShell(), "Delete " + selected.size() + " teachers?");
+				if(answer == SWT.NO) {
 					return;
 				}
 				
@@ -79,11 +70,7 @@ public class TeachersModule extends GuiModule {
 						TeacherQuery.delete(teacherId);
 					} catch (Exception e) {
 						e.printStackTrace();
-	
-						MessageBox message = new MessageBox(container.getShell(), SWT.ICON_INFORMATION | SWT.OK);
-						message.setMessage(e.getMessage());
-						message.setText(container.getShell().getText());
-						message.open();
+						GuiTools.showMessageBox(container.getShell(), e.getMessage());
 					}
 				}
 				reloadData();
@@ -106,10 +93,11 @@ public class TeachersModule extends GuiModule {
 			public void mouseDoubleClick(MouseEvent arg0) {
 				TeacherDialog addDialog = new TeacherDialog(container.getShell());
 				try {
-					addDialog.loadData(table.getItem(table.getSelectionIndex()).getData());
+					TableItem ti = table.getItem(table.getSelectionIndex());
+					addDialog.loadData((Long)ti.getData());
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
-					//e.printStackTrace();
+					e.printStackTrace();
 				}
 				addDialog.open();
 				reloadData();
@@ -138,6 +126,8 @@ public class TeachersModule extends GuiModule {
 		TableColumn tblclmnPhoneNumber = new TableColumn(table, SWT.NONE);
 		tblclmnPhoneNumber.setWidth(100);
 		tblclmnPhoneNumber.setText("PhoneNumber");
+		
+		reloadData();
 	}
 
 	@Override
@@ -163,11 +153,9 @@ public class TeachersModule extends GuiModule {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-
-			MessageBox message = new MessageBox(container.getShell(), SWT.ICON_ERROR | SWT.OK);
-			message.setMessage("Unable to fetch data from your Database! See stdout for more information!\n\n" + e.getMessage());
-			message.setText(this.getName());
-			message.open();	
+			GuiTools.showMessageBox(container.getShell(), 
+					"Unable to fetch data from your Database! See stdout for more information!\n\n" + e.getMessage()
+					);
 		}
 	}
 
