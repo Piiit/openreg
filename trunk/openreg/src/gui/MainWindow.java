@@ -93,7 +93,7 @@ public class MainWindow {
 			int i = 0;
 			for(final GuiModule module : gmList.getModules()) {
 				Link li = new Link(composite, SWT.NONE);
-				li.setBounds(10, 5+20*i, 55, 15);
+				li.setBounds(5, 5+20*i, 155, 15);
 				li.setText("<a>" + module.getName() + "</a>");
 				module.createContent(compositeCenter);
 				li.addSelectionListener(new SelectionAdapter() {

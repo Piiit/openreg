@@ -87,7 +87,7 @@ public class ClassesModule extends GuiModule {
 				ClassDialog dialog = new ClassDialog(container.getShell());
 				try {
 					TableItem ti = table.getItem(table.getSelectionIndex());
-					dialog.loadData((Long)ti.getData());
+					dialog.loadData(ti.getData());
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

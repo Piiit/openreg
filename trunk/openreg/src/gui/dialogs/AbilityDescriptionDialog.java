@@ -14,7 +14,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import database.Row;
 import database.query.AbilityDescriptionQuery;
-import database.query.ClassQuery;
 import gui.GuiDialog;
 import gui.GuiTools;
 
@@ -117,7 +116,7 @@ public class AbilityDescriptionDialog extends GuiDialog {
 	
 	@Override
 	public void loadData(Object data) throws Exception {
-		ArrayList<Row> ab = ClassQuery.getDataset((Long)data);
+		ArrayList<Row> ab = AbilityDescriptionQuery.getDataset(data);
 		if(ab.size() == 0) {
 			throw new Exception("No ability descriptioin with ID " + data.toString() + " found.");
 		}
@@ -148,6 +147,7 @@ public class AbilityDescriptionDialog extends GuiDialog {
 		try {
 			if (loadedDescription != null){
 				text.setText(loadedDescription.getValueAsStringNotNull("description"));
+				shlDialog.setText("Modify an ability description");
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

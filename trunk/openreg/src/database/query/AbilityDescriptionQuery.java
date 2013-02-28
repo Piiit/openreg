@@ -46,7 +46,7 @@ public class AbilityDescriptionQuery {
 		DatabaseTools.executeUpdate(
 				"UPDATE ability_description SET description = ? WHERE id = ?", 
 				row.getValueAsString("description"),
-				(Long)id
+				id
 				);
 	}
 	

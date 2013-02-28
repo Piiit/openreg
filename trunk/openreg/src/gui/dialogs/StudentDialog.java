@@ -395,7 +395,7 @@ public class StudentDialog extends GuiDialog {
 
 	@Override
 	public void loadData(Object data) throws Exception {
-		ArrayList<Row> students = StudentQuery.getDataset((Long)data);
+		ArrayList<Row> students = StudentQuery.getDataset(data);
 		if(students.size() == 0) {
 			throw new Exception("No student with ID " + data.toString() + " found.");
 		}
@@ -429,8 +429,8 @@ public class StudentDialog extends GuiDialog {
 			newStudent.setValue("enrolment_year", studentYear.getSelection());
 			newStudent.setValue("phonenumber", GuiTools.nullIfEmptyTrimmed(studentPhone.getText()));
 			newStudent.setValue("notes", GuiTools.nullIfEmptyTrimmed(studentNotes.getText()));
-			newStudent.setValue("class_id", (Long)studentClass.getData(studentClass.getText()));
-			newStudent.setValue("ability_description_id", (Long)studentAbility.getData(studentAbility.getText()));
+			newStudent.setValue("class_id", studentClass.getData(studentClass.getText()));
+			newStudent.setValue("ability_description_id", studentAbility.getData(studentAbility.getText()));
 			newStudent.setValue("address_id", addressId);
 			
 			if(loadedData == null) {

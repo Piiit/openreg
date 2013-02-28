@@ -3,7 +3,6 @@ package data;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 public class SimpleDate {
 	
@@ -11,13 +10,13 @@ public class SimpleDate {
 	private Calendar calendar;
 
 	public SimpleDate(int day, int month, int year) {
-		calendar = GregorianCalendar.getInstance();
+		calendar = Calendar.getInstance();
 		calendar.set(year, month, day);
 		date = calendar.getTime();
 	}
 	
 	public SimpleDate(Date date) {
-		calendar = GregorianCalendar.getInstance();
+		calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		this.date = date;
 	}
@@ -43,7 +42,7 @@ public class SimpleDate {
 	}
 	
 	public static SimpleDate fromDate(Date date) {
-		Calendar cal = GregorianCalendar.getInstance();
+		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 		return new SimpleDate(cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR));
 	}

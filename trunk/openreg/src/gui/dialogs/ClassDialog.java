@@ -151,7 +151,7 @@ public class ClassDialog extends GuiDialog {
 
 	@Override
 	public void loadData(Object data) throws Exception {
-		ArrayList<Row> classes = ClassQuery.getDataset((Long)data);
+		ArrayList<Row> classes = ClassQuery.getDataset(data);
 		if(classes.size() == 0) {
 			throw new Exception("No class with ID " + data.toString() + " found.");
 		}
