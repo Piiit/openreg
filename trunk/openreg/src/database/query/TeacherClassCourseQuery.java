@@ -29,17 +29,10 @@ public class TeacherClassCourseQuery {
 
 	public static Long insert(Row row) throws Exception {
 		return (Long)DatabaseTools.executeUpdate(
-				"INSERT INTO teacher (name, surname, login, password, birthday, " +
-				"address_id, phone_number, picture, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-				row.getValueAsString("name"),
-				row.getValueAsString("surname"),
-				row.getValueAsString("login"),
-				row.getValueAsString("password"),
-				row.getValueAsSimpleDate("birthday").toSqlDate(),
-				row.getValueAsLong("address_id"),
-				row.getValueAsString("phone_number"),
-				row.getValue("picture"),
-				row.getValueAsString("notes")
+				"INSERT INTO teacher_class_course (teacher_id, class_id, course_id) VALUES (?, ?, ?)",
+				row.getValueAsLong("teacher_id"),
+				row.getValueAsLong("class_id"),
+				row.getValueAsLong("course_id")
 				);
 	}
 

@@ -5,13 +5,18 @@ import java.util.ArrayList;
 import log.Log;
 
 import gui.GuiDialog;
+import gui.GuiTools;
+
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.SWT;
+
+import data.SimpleDate;
 import database.Row;
 import database.query.ClassQuery;
 import database.query.CourseQuery;
+import database.query.TeacherClassCourseQuery;
 import database.query.TeacherQuery;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -20,11 +25,14 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Label;
 
 public class TeacherClassCourseDialog extends GuiDialog {
 
 	protected Object result;
-	protected Shell shlAssignTeacherTo;
+	protected Shell shlAssignTeacher;
 	private List listTeachers;
 	private ArrayList<Combo> combosClasses = new ArrayList<Combo>();
 	private ArrayList<Combo> combosCourses = new ArrayList<Combo>();
@@ -34,8 +42,8 @@ public class TeacherClassCourseDialog extends GuiDialog {
 	private final int SIZE_COMBO_Y = 25;
 	private final int COMBO_OFFSET_X = 10;
 	private final int COMBO_OFFSET_Y = 10;
-	private final int STARTINGPOINT_UPPER_LEFT_CORNER = 150;
-	private final int DEFAULT_POSITION_Y = 0;
+	private final int STARTINGPOINT_UPPER_LEFT_CORNER = 160;
+	private final int DEFAULT_POSITION_Y = 20;
 	private int positionClassComboY = DEFAULT_POSITION_Y;
 	private int positionCourseComboY = DEFAULT_POSITION_Y;
 	private Link linkAddCourse;
@@ -45,6 +53,8 @@ public class TeacherClassCourseDialog extends GuiDialog {
 	private ArrayList<Row> loadedTeachers;
 	private ArrayList<Row> loadedClasses;
 	private ArrayList<Row> loadedCourses;
+	private Button buttonCancel;
+	private Button buttonSave;
 
 	/**
 	 * Create the dialog.
@@ -62,10 +72,10 @@ public class TeacherClassCourseDialog extends GuiDialog {
 	 */
 	public Object open() {
 		createContents();
-		shlAssignTeacherTo.open();
-		shlAssignTeacherTo.layout();
+		shlAssignTeacher.open();
+		shlAssignTeacher.layout();
 		Display display = getParent().getDisplay();
-		while (!shlAssignTeacherTo.isDisposed()) {
+		while (!shlAssignTeacher.isDisposed()) {
 			if (!display.readAndDispatch()) {
 				display.sleep();
 			}
@@ -77,14 +87,14 @@ public class TeacherClassCourseDialog extends GuiDialog {
 	 * Create contents of the dialog.
 	 */
 	private void createContents() {
-		shlAssignTeacherTo = new Shell(getParent(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
-		shlAssignTeacherTo.setText("Assign Teacher to Class and Course");
-		shlAssignTeacherTo.setSize(538, 423);
+		shlAssignTeacher = new Shell(getParent(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
+		shlAssignTeacher.setText("Assign Teacher to Class and Course");
+		shlAssignTeacher.setSize(538, 467);
 		
-		listTeachers = new List(shlAssignTeacherTo, SWT.BORDER | SWT.V_SCROLL);
+		listTeachers = new List(shlAssignTeacher, SWT.BORDER | SWT.V_SCROLL);
 		listTeachers.setBounds(10, 10, 137, 296);
 		
-		linkAddClass = new Link(shlAssignTeacherTo, SWT.NONE);
+		linkAddClass = new Link(shlAssignTeacher, SWT.NONE);
 		linkAddClass.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
@@ -94,7 +104,7 @@ public class TeacherClassCourseDialog extends GuiDialog {
 		});
 		linkAddClass.setText("<a>Add Class</a>");
 		
-		linkAddCourse = new Link(shlAssignTeacherTo, SWT.NONE);
+		linkAddCourse = new Link(shlAssignTeacher, SWT.NONE);
 		linkAddCourse.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
@@ -104,8 +114,32 @@ public class TeacherClassCourseDialog extends GuiDialog {
 		});
 		linkAddCourse.setText("<a>Add Course</a>");
 		
+		buttonCancel = new Button(shlAssignTeacher, SWT.NONE);
+		buttonCancel.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				cancel();
+			}
+		});
+		buttonCancel.setText("Cancel");
+		buttonCancel.setBounds(302, 403, 103, 25);
+		
+		buttonSave = new Button(shlAssignTeacher, SWT.CENTER);
+		buttonSave.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				try {
+					store();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+		buttonSave.setText("Save");
+		buttonSave.setBounds(411, 403, 111, 25);
+		
 		createClassCombo();
-		createCourseCombo();
 		
 		update();
 	}
@@ -114,10 +148,14 @@ public class TeacherClassCourseDialog extends GuiDialog {
 		if (positionCourseComboY >= positionClassComboY){
 			int posY = positionClassComboY;
 			
-			if (posY != DEFAULT_POSITION_Y)
+			if (posY != DEFAULT_POSITION_Y){
 				posY = positionCourseComboY < positionClassComboY ? positionClassComboY : positionCourseComboY;
+				Label lblSeparator = new Label(shlAssignTeacher, SWT.SEPARATOR | SWT.HORIZONTAL);
+				int lengthX = SIZE_COMBO_X * 2 + COMBO_OFFSET_X + 10;
+				lblSeparator.setBounds(STARTINGPOINT_UPPER_LEFT_CORNER - 5, positionCourseComboY - (COMBO_OFFSET_Y/2), lengthX, 2);
+			}
 			
-			combosClasses.add(new Combo(shlAssignTeacherTo, SWT.NONE));
+			combosClasses.add(new Combo(shlAssignTeacher, SWT.NONE));
 			combosClasses.get(combosClasses.size()-1).setBounds(STARTINGPOINT_UPPER_LEFT_CORNER, 
 					posY, SIZE_COMBO_X, SIZE_COMBO_Y);
 			
@@ -125,13 +163,15 @@ public class TeacherClassCourseDialog extends GuiDialog {
 					posY + SIZE_COMBO_Y + LINK_OFFSET_Y, 81, 15);
 			
 			positionClassComboY = posY + SIZE_COMBO_Y + COMBO_OFFSET_Y;
+			
+			createCourseCombo();
 		}
 	}
 	 
 	private void createCourseCombo(){
 		int posX = STARTINGPOINT_UPPER_LEFT_CORNER + SIZE_COMBO_X + COMBO_OFFSET_X;
 		
-		combosCourses.add(new Combo(shlAssignTeacherTo, SWT.NONE));
+		combosCourses.add(new Combo(shlAssignTeacher, SWT.NONE));
 		combosCourses.get(combosCourses.size()-1).setToolTipText((combosClasses.size()-1)+"");
 		combosCourses.get(combosCourses.size()-1).setBounds(posX, 
 				positionCourseComboY, SIZE_COMBO_X, SIZE_COMBO_Y);
@@ -152,7 +192,22 @@ public class TeacherClassCourseDialog extends GuiDialog {
 
 	@Override
 	public void store() throws Exception {
-		// TODO Auto-generated method stub
+		
+		String [] selection = listTeachers.getSelection();
+		long teacherId = Long.parseLong(listTeachers.getData(selection[0]).toString());
+		for (Combo c : combosClasses){
+			long classId = Long.parseLong(c.getData(c.getItem(c.getSelectionIndex())).toString());
+			for (Combo course : combosCourses){
+				long courseId = Long.parseLong(course.getData(course.getItem(course.getSelectionIndex())).toString());
+				
+				Row newTeacherClassCourse = new Row();
+				newTeacherClassCourse.setValue("teacher_id", teacherId);
+				newTeacherClassCourse.setValue("class_id", classId);
+				newTeacherClassCourse.setValue("course_id", courseId);
+				
+				TeacherClassCourseQuery.insert(newTeacherClassCourse);
+			}
+		}
 		
 	}
 
@@ -166,26 +221,31 @@ public class TeacherClassCourseDialog extends GuiDialog {
 			listTeachers.add(s);
 			listTeachers.setData(s, teacher.getValueAsString("teacher_id"));
 		}
-		listTeachers.setSelection(selected);
+		listTeachers.setSelection(selected-1);
 		for (Combo combo : combosClasses){
+			int p = combo.getSelectionIndex();
+			combo.removeAll();
 			for (Row c : loadedClasses){
 				String s = c.getValueAsString("level") + c.getValueAsString("stream");
 				combo.add(s);
 				combo.setData(s, c.getValueAsString("id"));
 			}
+			combo.select(p);
 		}
 		for (Combo combo : combosCourses){
+			int p = combo.getSelectionIndex();
+			combo.removeAll();
 			for (Row course : loadedCourses){
 				String s = course.getValueAsString("name");
 				combo.add(s);
 				combo.setData(s, course.getValueAsString("id"));
 			}
+			combo.select(p);
 		}
 	}
 
 	@Override
 	public void cancel() {
-		// TODO Auto-generated method stub
-		
+		shlAssignTeacher.dispose();
 	}
 }
