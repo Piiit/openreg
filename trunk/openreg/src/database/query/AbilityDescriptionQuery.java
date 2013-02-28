@@ -1,15 +1,11 @@
 package database.query;
-
 import java.util.ArrayList;
 
+import database.DatabaseTools;
 import database.Row;
 
-/**
- * This is just a template to copy/paste for new Query classes!
- */
+public class AbilityDescriptionQuery {
 
-public class QueryTemplate {
-	
 	/**
 	 * Selecting tuples, that are needed to choose from, when inserting a new tuple (e.g. in drop-down menus)
 	 */
@@ -22,14 +18,14 @@ public class QueryTemplate {
 	 * Note: Please keep they return value as it is, to standardize our queries classes. 
 	 */
 	public static ArrayList<Row> getDataset(Object id) throws Exception{
-		return null;
+		return DatabaseTools.getQueryResult("SELECT * FROM ability_description WHERE id = ? ORDER BY description", (Long)id);
 	}
 	
 	/**
 	 * Returns all tuples needed to list them inside GUI-modules.
 	 */
 	public static ArrayList<Row> getFullDataset() throws Exception{
-		return null;
+		return DatabaseTools.getQueryResult("SELECT * FROM ability_description ORDER BY description");
 	}
 	
 	/**
@@ -51,4 +47,5 @@ public class QueryTemplate {
 	 */
 	public static void delete(Object id) throws Exception{
 	}
+
 }
