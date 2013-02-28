@@ -3,7 +3,6 @@ package testing.data;
 import static org.junit.Assert.*;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import org.junit.Test;
 import data.SimpleDate;
 
@@ -20,7 +19,7 @@ public class SimpleDateTest {
 		assertEquals("1981-05-16", date.toSqlDate().toString());
 		
 		Calendar calendar;
-		calendar = GregorianCalendar.getInstance();
+		calendar = Calendar.getInstance();
 		calendar.set(1981, Calendar.MAY, 16);
 		Date date2 = calendar.getTime();
 		

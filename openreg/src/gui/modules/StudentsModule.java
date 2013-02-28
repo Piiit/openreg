@@ -79,7 +79,7 @@ public class StudentsModule extends GuiModule {
 				StudentDialog addDialog = new StudentDialog(container.getShell());
 				try {
 					TableItem ti = table.getItem(table.getSelectionIndex());
-					addDialog.loadData((Long)ti.getData());
+					addDialog.loadData(ti.getData());
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

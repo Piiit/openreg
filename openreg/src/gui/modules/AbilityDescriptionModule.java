@@ -1,8 +1,6 @@
 package gui.modules;
 
 import java.util.ArrayList;
-import gui.GuiModule;
-import gui.GuiTools;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -18,15 +16,15 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import database.Row;
-import database.query.AddressQuery;
+import database.query.AbilityDescriptionQuery;
+import gui.GuiModule;
+import gui.GuiTools;
+import gui.dialogs.AbilityDescriptionDialog;
 
-public class AddressesModule extends GuiModule {
+public class AbilityDescriptionModule extends GuiModule {
 
 	private Table table;
 	
-	/**
-	 * @wbp.parser.entryPoint
-	 */
 	@Override
 	public void createContent(Composite parent) {
 		final Group group = new Group(parent, SWT.NONE);
@@ -37,6 +35,17 @@ public class AddressesModule extends GuiModule {
 		ToolBar toolBar = new ToolBar(group, SWT.FLAT | SWT.RIGHT);
 		toolBar.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		
+		ToolItem tltmAdd = new ToolItem(toolBar, SWT.NONE);
+		tltmAdd.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				AbilityDescriptionDialog abilityDialog = new AbilityDescriptionDialog(group.getShell());
+				abilityDialog.open();
+				reloadData();
+			}
+		});
+		tltmAdd.setText("Add");
+		
 		ToolItem tltmRemove = new ToolItem(toolBar, SWT.NONE);	
 		tltmRemove.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -44,19 +53,19 @@ public class AddressesModule extends GuiModule {
 				ArrayList<Long> selected = GuiTools.getSelectedItems(table);
 				
 				if(selected.size() == 0) {
-					GuiTools.showMessageBox(container.getShell(), "No addresses selected.");
+					GuiTools.showMessageBox(container.getShell(), "No ability descriptions selected.");
 					reloadData();
 					return;
 				}
 				
-				int answer = GuiTools.showQuestionBox(container.getShell(), "Delete " + selected.size() + " addresses?");
+				int answer = GuiTools.showQuestionBox(container.getShell(), "Delete " + selected.size() + " ability descriptions?");
 				if(answer == SWT.NO) {
 					return;
 				}
 
-				for(Long addressId : selected) {
+				for(Long abilityId : selected) {
 					try {
-						AddressQuery.delete(addressId);
+						AbilityDescriptionQuery.delete(abilityId);
 					} catch (Exception e) {
 						e.printStackTrace();
 						GuiTools.showMessageBox(container.getShell(), e.getMessage());
@@ -67,14 +76,19 @@ public class AddressesModule extends GuiModule {
 		});
 		tltmRemove.setText("Remove");
 		
-		ToolItem tltmShowAll = new ToolItem(toolBar, SWT.DROP_DOWN);
-		tltmShowAll.setText("Show all");
-		
 		table = new Table(group, SWT.BORDER | SWT.CHECK | SWT.FULL_SELECTION);
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent arg0) {
-				GuiTools.showMessageBox(container.getShell(), "Not implemented yet!");
+				AbilityDescriptionDialog dialog = new AbilityDescriptionDialog(container.getShell());
+				try {
+					TableItem ti = table.getItem(table.getSelectionIndex());
+					dialog.loadData(ti.getData());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				dialog.open();
 				reloadData();
 			}
 		});
@@ -84,7 +98,7 @@ public class AddressesModule extends GuiModule {
 		
 		TableColumn tblclmnLevel = new TableColumn(table, SWT.NONE);
 		tblclmnLevel.setWidth(400);
-		tblclmnLevel.setText("Address");
+		tblclmnLevel.setText("Ability Description");
 		
 		reloadData();
 	}
@@ -93,20 +107,15 @@ public class AddressesModule extends GuiModule {
 	public void reloadData() {
 		table.removeAll();
 		try {
-			for(Row address : AddressQuery.getFullDataset()) {
+			for(Row address : AbilityDescriptionQuery.getFullDataset()) {
 				TableItem tableItem = new TableItem(table, SWT.NONE);
 				tableItem.setData(address.getValueAsLong("id"));
 				tableItem.setText(new String[] {
-						address.getValueAsStringNotNull("street") + " " + 
-						address.getValueAsStringNotNull("no") + ", " +
-						address.getValueAsStringNotNull("zip_code") + " " +
-						address.getValueAsStringNotNull("city") + ", " +
-						address.getValueAsStringNotNull("country")
+						address.getValueAsStringNotNull("description")
 						});
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-
 			GuiTools.showMessageBox(container.getShell(),
 					"Unable to fetch data from your Database! See stdout for more information!\n\n" + e.getMessage()
 					);
@@ -116,12 +125,12 @@ public class AddressesModule extends GuiModule {
 	@Override
 	public void reloadData(Object o) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public String getName() {
-		return "Addresses";
+		return "Ability Descriptions";
 	}
 
 	@Override

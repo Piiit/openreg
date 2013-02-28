@@ -39,7 +39,7 @@ public class AddressQuery {
 				row.getValueAsString("zip_code"),
 				row.getValueAsString("city"),
 				row.getValueAsString("country"),
-				(Long)id
+				id
 				);
 	}
 

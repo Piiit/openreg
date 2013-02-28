@@ -62,7 +62,7 @@ public class StudentQuery {
 				row.getValueAsLong("ability_description_id"),
 				row.getValue("picture"),
 				row.getValueAsString("notes"),
-				(Long)id
+				id
 				);		
 	}
 

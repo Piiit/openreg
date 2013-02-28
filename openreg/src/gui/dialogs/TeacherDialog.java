@@ -284,7 +284,7 @@ public class TeacherDialog extends GuiDialog {
 
 	@Override
 	public void loadData(Object data) throws Exception {
-		ArrayList<Row> teacher = TeacherQuery.getDataset((Long)data);
+		ArrayList<Row> teacher = TeacherQuery.getDataset(data);
 		if(teacher.size() == 0) {
 			throw new Exception("No teacher with ID " + data.toString() + " found.");
 		}

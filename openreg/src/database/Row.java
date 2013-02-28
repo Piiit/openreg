@@ -62,7 +62,7 @@ public class Row {
 			return null;
 		}
 		if(data.get(key) instanceof Date) {
-			return (SimpleDate)SimpleDate.fromDate((Date)data.get(key));
+			return SimpleDate.fromDate((Date)data.get(key));
 		}
 		return (SimpleDate)data.get(key);
 	}

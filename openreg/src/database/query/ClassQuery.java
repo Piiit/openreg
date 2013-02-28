@@ -39,7 +39,7 @@ public class ClassQuery {
 				row.getValueAsString("level"),
 				row.getValueAsString("stream"),
 				row.getValueAsString("notes"),
-				(Long)id
+				id
 				);
 	}
 

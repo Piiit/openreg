@@ -57,7 +57,7 @@ public class TeacherQuery {
 				row.getValueAsString("phone_number"),
 				row.getValue("picture"),
 				row.getValueAsString("notes"),
-				(Long)id
+				id
 				);
 	}
 
