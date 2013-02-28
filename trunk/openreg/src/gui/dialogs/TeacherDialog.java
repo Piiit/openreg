@@ -26,6 +26,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import data.SimpleDate;
 import database.Row;
 import database.query.AddressQuery;
+import database.query.StudentQuery;
 import database.query.TeacherQuery;
 
 import org.eclipse.swt.widgets.Link;
@@ -45,6 +46,7 @@ public class TeacherDialog extends GuiDialog {
 	private StyledText teacherNotes;
 	private DateTime teacherBirthday;
 	private Row loadedTeacher;
+	private Row loadedAddress;
 
 	public TeacherDialog(Shell parent) {
 		super(parent);
@@ -139,6 +141,14 @@ public class TeacherDialog extends GuiDialog {
 		grpAddress.setLayoutData(fd_grpAddress);
 		
 		Link link_2 = new Link(grpAddress, SWT.NONE);
+		link_2.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				AddressSelectionDialog addressDialog = new AddressSelectionDialog(shlAddTeacher);
+				loadedAddress = (Row)addressDialog.open();
+				updateAddressFields();
+			}
+		});
 		link_2.setBounds(191, 0, 194, 15);
 		link_2.setText("[<a>Choose an existing address</a>]");
 		
@@ -264,15 +274,11 @@ public class TeacherDialog extends GuiDialog {
 				teacherSurname.setText(loadedTeacher.getValueAsString("surname"));
 				SimpleDate date = new SimpleDate((Date)loadedTeacher.getValue("birthday"));
 				teacherBirthday.setDate(date.getYear(), date.getMonth(), date.getDay());
-				addressStreet.setText(loadedTeacher.getValueAsString("street"));
-				addressNo.setText(loadedTeacher.getValueAsString("no"));
-				addressZip.setText(loadedTeacher.getValueAsString("zip_code"));
-				addressCity.setText(loadedTeacher.getValueAsString("city"));
-				addressCountry.setText(loadedTeacher.getValueAsString("country"));
 				teacherPhone.setText(loadedTeacher.getValueAsString("phone_number"));
 				teacherNotes.setText(loadedTeacher.getValueAsString("notes"));
-				
+				loadedAddress = loadedTeacher;
 			}
+			updateAddressFields();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			//e.printStackTrace();
@@ -287,6 +293,17 @@ public class TeacherDialog extends GuiDialog {
 		}
 		loadedTeacher = teacher.get(0); 
 	}
+	
+	public void updateAddressFields() {
+		if(loadedAddress == null) {
+			return;
+		}
+		addressStreet.setText(loadedAddress.getValueAsStringNotNull("street"));
+		addressNo.setText(loadedAddress.getValueAsStringNotNull("no"));
+		addressZip.setText(loadedAddress.getValueAsStringNotNull("zip_code"));
+		addressCity.setText(loadedAddress.getValueAsStringNotNull("city"));
+		addressCountry.setText(loadedAddress.getValueAsStringNotNull("country"));
+	}
 
 	@Override
 	public void store() {
@@ -299,13 +316,15 @@ public class TeacherDialog extends GuiDialog {
 			newAddress.setValue("city", GuiTools.nullIfEmptyTrimmed(addressCity.getText()));
 			newAddress.setValue("country", GuiTools.nullIfEmptyTrimmed(addressCountry.getText()));
 			
-			if(loadedTeacher == null) {
+			if(loadedAddress == null) {
 				addressId = AddressQuery.insert(newAddress);
 			} else {
-				addressId = loadedTeacher.getValueAsLong("address_id");
+				addressId = loadedAddress.getValueAsLong("id");
+				if(addressId == null) {
+					addressId = loadedAddress.getValueAsLong("address_id");
+				}
 				AddressQuery.update(addressId, newAddress);
 			}
-			
 			
 			Row newTeacher = new Row();
 			newTeacher.setValue("name", GuiTools.nullIfEmptyTrimmed(teacherName.getText()));

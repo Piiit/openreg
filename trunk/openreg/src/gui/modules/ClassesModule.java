@@ -1,10 +1,9 @@
 package gui.modules;
 
 import gui.GuiModule;
+import gui.GuiTools;
 import gui.dialogs.ClassDialog;
-
 import java.util.ArrayList;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -14,7 +13,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -56,41 +54,25 @@ public class ClassesModule extends GuiModule {
 		tltmRemove.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				TableItem tableItems[] = table.getItems();
-				ArrayList<Long> selected = new ArrayList<Long>();
-				for(int i = 0; i < tableItems.length; i++) {
-					if(tableItems[i].getChecked() == true) {
-						selected.add((Long)tableItems[i].getData());
-					}
-				}
+				ArrayList<Long> selected = GuiTools.getSelectedItems(table);
 				
 				if(selected.size() == 0) {
-					MessageBox message = new MessageBox(container.getShell(), SWT.ICON_INFORMATION | SWT.OK);
-					message.setMessage("No classes selected.");
-					message.setText(container.getShell().getText());
-					message.open();
+					GuiTools.showMessageBox(container.getShell(), "No classes selected.");
 					reloadData();
 					return;
 				}
 				
-				MessageBox messageBox = new MessageBox(container.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-				messageBox.setMessage("Delete " + selected.size() + " classes?");
-				messageBox.setText(container.getShell().getText());
-				
-				if(messageBox.open() == SWT.NO) {
+				int answer = GuiTools.showQuestionBox(container.getShell(), "Delete " + selected.size() + " classes?");
+				if(answer == SWT.NO) {
 					return;
 				}
 				
 				for(Long classId : selected) {
 					try {
-							ClassQuery.delete(classId);
+						ClassQuery.delete(classId);
 					} catch (Exception e) {
 						e.printStackTrace();
-	
-						MessageBox message = new MessageBox(container.getShell(), SWT.ICON_INFORMATION | SWT.OK);
-						message.setMessage(e.getMessage());
-						message.setText(container.getShell().getText());
-						message.open();
+						GuiTools.showMessageBox(container.getShell(), e.getMessage());
 					}
 				}
 				reloadData();
@@ -148,11 +130,9 @@ public class ClassesModule extends GuiModule {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-
-			MessageBox message = new MessageBox(container.getShell(), SWT.ICON_ERROR | SWT.OK);
-			message.setMessage("Unable to fetch data from your Database! See stdout for more information!\n\n" + e.getMessage());
-			message.setText(this.getName());
-			message.open();	
+			GuiTools.showMessageBox(container.getShell(), 
+					"Unable to fetch data from your Database! See stdout for more information!\n\n" + e.getMessage()
+					);
 		}	
 	}
 
