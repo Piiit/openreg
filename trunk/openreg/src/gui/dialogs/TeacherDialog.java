@@ -2,7 +2,6 @@ package gui.dialogs;
 
 import java.sql.Date;
 import java.util.ArrayList;
-
 import gui.GuiDialog;
 import gui.GuiTools;
 import log.Log;
@@ -26,7 +25,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import data.SimpleDate;
 import database.Row;
 import database.query.AddressQuery;
-import database.query.StudentQuery;
 import database.query.TeacherQuery;
 
 import org.eclipse.swt.widgets.Link;
@@ -270,18 +268,18 @@ public class TeacherDialog extends GuiDialog {
 	public void update() {
 		try {
 			if (loadedTeacher != null){
-				teacherName.setText(loadedTeacher.getValueAsString("name").toString());
-				teacherSurname.setText(loadedTeacher.getValueAsString("surname"));
+				teacherName.setText(loadedTeacher.getValueAsStringNotNull("name"));
+				teacherSurname.setText(loadedTeacher.getValueAsStringNotNull("surname"));
 				SimpleDate date = new SimpleDate((Date)loadedTeacher.getValue("birthday"));
 				teacherBirthday.setDate(date.getYear(), date.getMonth(), date.getDay());
-				teacherPhone.setText(loadedTeacher.getValueAsString("phone_number"));
-				teacherNotes.setText(loadedTeacher.getValueAsString("notes"));
+				teacherPhone.setText(loadedTeacher.getValueAsStringNotNull("phonenumber"));
+				teacherNotes.setText(loadedTeacher.getValueAsStringNotNull("notes"));
 				loadedAddress = loadedTeacher;
 			}
 			updateAddressFields();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			//e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 

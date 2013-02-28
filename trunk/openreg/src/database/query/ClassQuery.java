@@ -16,7 +16,12 @@ public class ClassQuery {
 	}
 
 	public static ArrayList<Row> getFullDataset() throws Exception {
-		return DatabaseTools.getQueryResult("SELECT * FROM class ORDER BY level, stream");
+		return DatabaseTools.getQueryResult(
+				"SELECT cl.id, level, stream, cl.notes, COUNT(class_id) AS students_count FROM class cl " +
+				"LEFT JOIN student on class_id = cl.id " +
+				"GROUP BY cl.id " +
+				"ORDER BY level, stream"
+				);
 	}
 
 	public static Long insert(Row row) throws Exception {
