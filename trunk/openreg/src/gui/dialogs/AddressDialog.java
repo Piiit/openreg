@@ -58,6 +58,12 @@ public class AddressDialog extends GuiDialog {
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent arg0) {
+				try {
+					Long addressId = (Long)table.getItems()[table.getSelectionIndex()].getData();
+					result = AddressQuery.getDataset(addressId).get(0);
+				} catch (Exception e) {
+				}
+				shlAddressDialog.dispose();
 			}
 		});
 		FormData fd_table = new FormData();
@@ -70,12 +76,8 @@ public class AddressDialog extends GuiDialog {
 		table.setLinesVisible(true);
 		
 		TableColumn tblclmnStreet = new TableColumn(table, SWT.NONE);
-		tblclmnStreet.setWidth(315);
-		tblclmnStreet.setText("Street");
-		
-		TableColumn tblclmnCityzip = new TableColumn(table, SWT.NONE);
-		tblclmnCityzip.setWidth(217);
-		tblclmnCityzip.setText("City (ZIP) / Country");
+		tblclmnStreet.setWidth(507);
+		tblclmnStreet.setText("Address");
 		
 		Button btnOk = new Button(shlAddressDialog, SWT.NONE);
 		btnOk.addSelectionListener(new SelectionAdapter() {
@@ -127,9 +129,9 @@ public class AddressDialog extends GuiDialog {
 				tableItem.setData(address.getValueAsLong("id"));
 				tableItem.setText(new String[] {
 						address.getValueAsStringNotNull("street") + " " + 
-						address.getValueAsStringNotNull("no"),
-						address.getValueAsStringNotNull("city") + 
-						"(" + address.getValueAsStringNotNull("zip_code") + ")" +
+						address.getValueAsStringNotNull("no") + ", " +
+						address.getValueAsStringNotNull("zip_code") + " " +
+						address.getValueAsStringNotNull("city") + ", " +
 						address.getValueAsStringNotNull("country")
 						});
 			}
