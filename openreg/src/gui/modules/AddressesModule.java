@@ -3,6 +3,7 @@ package gui.modules;
 import java.util.ArrayList;
 import gui.GuiModule;
 import gui.GuiTools;
+import gui.dialogs.AddressDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -74,7 +75,15 @@ public class AddressesModule extends GuiModule {
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent arg0) {
-				GuiTools.showMessageBox(container.getShell(), "Not implemented yet!");
+				AddressDialog dialog = new AddressDialog(group.getShell());
+				try {
+					TableItem ti = table.getItem(table.getSelectionIndex());
+					dialog.loadData(ti.getData());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				dialog.open();
 				reloadData();
 			}
 		});
