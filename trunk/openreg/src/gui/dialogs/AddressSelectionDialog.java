@@ -2,10 +2,10 @@ package gui.dialogs;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
 import gui.GuiDialog;
+import gui.GuiTools;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.layout.FormData;
@@ -142,12 +142,11 @@ public class AddressSelectionDialog extends GuiDialog {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-
-			MessageBox message = new MessageBox(this.getParent(), SWT.ICON_ERROR | SWT.OK);
-			message.setMessage("Unable to fetch data from your Database! See stdout for more information!\n\n" + e.getMessage());
-			message.setText(this.getText());
-			message.open();	
-		}		}
+			GuiTools.showMessageBox(shlAddressDialog, 
+					"Unable to fetch data from your Database! See stdout for more information!\n\n" + e.getMessage()
+					);
+		}		
+	}
 
 	@Override
 	public void cancel() {

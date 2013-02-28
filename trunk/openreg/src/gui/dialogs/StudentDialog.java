@@ -11,7 +11,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.swt.layout.FormLayout;
@@ -251,6 +250,9 @@ public class StudentDialog extends GuiDialog {
 		link.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
+				AbilityDescriptionDialog abilityDescriptionDialog = new AbilityDescriptionDialog(shlAddStudent);
+				abilityDescriptionDialog.open();
+				update();
 			}
 		});
 		link.setBounds(424, 4, 124, 15);
@@ -344,6 +346,9 @@ public class StudentDialog extends GuiDialog {
 			}
 			
 			studentAbility.removeAll();
+			studentAbility.add("-");
+			studentAbility.setData("-", null);
+			studentAbility.select(studentAbility.indexOf("-"));
 			for(Row ab : AbilityDescriptionQuery.getFullDataset()) {
 				String abilityString = ab.getValueAsStringNotNull("description");
 				studentAbility.add(abilityString);
@@ -449,10 +454,7 @@ public class StudentDialog extends GuiDialog {
 				}
 			}
 
-			MessageBox message = new MessageBox(shlAddStudent, SWT.ICON_INFORMATION | SWT.OK);
-			message.setMessage(e.getMessage());
-			message.setText(shlAddStudent.getText());
-			message.open();
+			GuiTools.showMessageBox(shlAddStudent, e.getMessage());
 		}
 	}
 

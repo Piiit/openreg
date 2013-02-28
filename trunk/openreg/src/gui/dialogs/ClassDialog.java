@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import gui.GuiDialog;
 import gui.GuiTools;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Label;
@@ -176,11 +175,7 @@ public class ClassDialog extends GuiDialog {
 			shlAddANew.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-
-			MessageBox message = new MessageBox(shlAddANew, SWT.ICON_INFORMATION | SWT.OK);
-			message.setMessage(e.getMessage());
-			message.setText(shlAddANew.getText());
-			message.open();
+			GuiTools.showMessageBox(shlAddANew, e.getMessage());
 		}
 	}
 
