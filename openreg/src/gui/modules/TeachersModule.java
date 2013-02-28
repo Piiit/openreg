@@ -93,12 +93,25 @@ public class TeachersModule extends GuiModule {
 		tltmJoinTeacher.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
+				ArrayList<Long> selected = GuiTools.getSelectedItems(table);
 				TeacherClassCourseDialog addDialog = new TeacherClassCourseDialog(container.getShell());
-				try {
-					addDialog.loadData(null);
-				} catch (Exception e) {
-					//TODO Auto-generated catch block
-					e.printStackTrace();
+				if(selected.size() == 0) {
+					try {
+						addDialog.loadData();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				} else if (selected.size() > 1){
+					GuiTools.showMessageBox(container.getShell(), "Only one Teacher relationship can be mapped!");
+					return;
+				} else {
+					try {
+						addDialog.loadData(selected.get(0));
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 				addDialog.open();
 				reloadData();
