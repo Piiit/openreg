@@ -23,7 +23,6 @@ import database.query.StudentQuery;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.widgets.Label;
 
 public class StudentsModule extends GuiModule {
 	
@@ -181,7 +180,7 @@ public class StudentsModule extends GuiModule {
 			filterClass.add(classString);
 			filterClass.select(filterClass.indexOf(classString));
 			for(Row cl : ClassQuery.getFullDataset()) {
-				classString = cl.getValueAsString("level") + cl.getValueAsString("stream");
+				classString = cl.getValueAsStringNotNull("level") + cl.getValueAsStringNotNull("stream");
 				filterClass.add(classString);
 				filterClass.setData(classString, cl.getValue("id"));
 				if(id != null && id.equals(cl.getValue("id"))) {

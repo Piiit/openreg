@@ -19,13 +19,13 @@ import org.eclipse.swt.events.MouseEvent;
 import database.Row;
 import database.query.AddressQuery;
 
-public class AddressDialog extends GuiDialog {
+public class AddressSelectionDialog extends GuiDialog {
 	
 	protected Object result;
 	protected Shell shlAddressDialog;
 	private Table table;
 	
-	public AddressDialog(Shell parent) {
+	public AddressSelectionDialog(Shell parent) {
 		super(parent);
 	}
 
