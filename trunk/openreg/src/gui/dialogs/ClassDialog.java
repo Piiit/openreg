@@ -183,6 +183,7 @@ public class ClassDialog extends GuiDialog {
 	public void update() {
 		try {
 			if (loadedClass != null){
+				shlAddANew.setText("Modify class data");
 				classLevel.setText(loadedClass.getValueAsStringNotNull("level"));
 				classStream.setText(loadedClass.getValueAsStringNotNull("stream"));
 				classNotes.setText(loadedClass.getValueAsStringNotNull("notes"));

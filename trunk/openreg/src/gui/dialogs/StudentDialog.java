@@ -356,6 +356,7 @@ public class StudentDialog extends GuiDialog {
 			}
 			
 			if(loadedData != null) {
+				shlAddStudent.setText("Modify student data");
 				studentName.setText(loadedData.getValueAsString("name"));
 				studentSurname.setText(loadedData.getValueAsString("surname"));
 				SimpleDate date = new SimpleDate((Date)loadedData.getValue("birthday"));

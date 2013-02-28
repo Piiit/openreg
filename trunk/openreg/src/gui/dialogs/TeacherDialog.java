@@ -267,6 +267,7 @@ public class TeacherDialog extends GuiDialog {
 	public void update() {
 		try {
 			if (loadedTeacher != null){
+				shlAddTeacher.setText("Modify teacher data");
 				teacherName.setText(loadedTeacher.getValueAsStringNotNull("name"));
 				teacherSurname.setText(loadedTeacher.getValueAsStringNotNull("surname"));
 				SimpleDate date = new SimpleDate((Date)loadedTeacher.getValue("birthday"));
