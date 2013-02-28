@@ -141,14 +141,6 @@ public class TeacherClassCourseDialog extends GuiDialog {
 		buttonSave.setText("Save");
 		buttonSave.setBounds(411, 403, 111, 25);
 		
-		Combo combo = new Combo(shlAssignTeacher, SWT.READ_ONLY);
-		combo.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-			}
-		});
-		combo.setBounds(33, 348, 91, 23);
-		
 		//if (loadedTeacherClassCourse == null)
 		createClassCombo();
 		
@@ -232,7 +224,7 @@ public class TeacherClassCourseDialog extends GuiDialog {
 
 	@Override
 	public void update() {
-		int selected = listTeachers.getSelectionCount();
+		int selected = listTeachers.getSelectionIndex();
 		listTeachers.removeAll();
 		for (Row teacher : loadedTeachers){
 			String s = teacher.getValueAsString("name") + " " + 
