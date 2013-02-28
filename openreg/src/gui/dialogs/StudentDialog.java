@@ -25,6 +25,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import data.SimpleDate;
 import database.Row;
+import database.query.AbilityDescriptionQuery;
 import database.query.AddressQuery;
 import database.query.ClassQuery;
 import database.query.StudentQuery;
@@ -247,7 +248,12 @@ public class StudentDialog extends GuiDialog {
 		grpAdditionalInformation.setLayoutData(fd_grpAdditionalInformation);
 		
 		Link link = new Link(grpAdditionalInformation, SWT.NONE);
-		link.setBounds(424, 4, 64, 15);
+		link.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+			}
+		});
+		link.setBounds(424, 4, 124, 15);
 		link.setText("[<a>New</a>]");
 		
 		Label label = new Label(grpAdditionalInformation, SWT.NONE);
@@ -337,6 +343,13 @@ public class StudentDialog extends GuiDialog {
 				studentClass.setData(classString, cl.getValue("id"));
 			}
 			
+			studentAbility.removeAll();
+			for(Row ab : AbilityDescriptionQuery.getFullDataset()) {
+				String abilityString = ab.getValueAsStringNotNull("description");
+				studentAbility.add(abilityString);
+				studentAbility.setData(abilityString, ab.getValue("id"));
+			}
+			
 			if(loadedData != null) {
 				studentName.setText(loadedData.getValueAsString("name"));
 				studentSurname.setText(loadedData.getValueAsString("surname"));
@@ -344,7 +357,7 @@ public class StudentDialog extends GuiDialog {
 				studentBirthday.setDate(date.getYear(), date.getMonth(), date.getDay());
 				studentYear.setSelection(loadedData.getValueAsInt("enrolment_year"));
 				
-				String classString = loadedData.getValueAsString("level") + loadedData.getValueAsString("stream");
+				String classString = loadedData.getValueAsStringNotNull("level") + loadedData.getValueAsStringNotNull("stream");
 				studentClass.select(studentClass.indexOf(classString));
 				
 				studentPhone.setText(loadedData.getValueAsStringNotNull("phonenumber"));
@@ -412,6 +425,7 @@ public class StudentDialog extends GuiDialog {
 			newStudent.setValue("phonenumber", GuiTools.nullIfEmptyTrimmed(studentPhone.getText()));
 			newStudent.setValue("notes", GuiTools.nullIfEmptyTrimmed(studentNotes.getText()));
 			newStudent.setValue("class_id", (Long)studentClass.getData(studentClass.getText()));
+			newStudent.setValue("ability_description_id", (Long)studentAbility.getData(studentAbility.getText()));
 			newStudent.setValue("address_id", addressId);
 			
 			if(loadedData == null) {
