@@ -193,6 +193,14 @@ public class StudentDialog extends GuiDialog {
 		grpAddress.setLayoutData(fd_grpAddress);
 		
 		Link link_2 = new Link(grpAddress, SWT.NONE);
+		link_2.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				AddressDialog addressDialog = new AddressDialog(shlAddStudent);
+				addressDialog.open();
+				update();
+			}
+		});
 		link_2.setBounds(191, 0, 194, 15);
 		link_2.setText("[<a>Choose an existing address</a>]");
 		
