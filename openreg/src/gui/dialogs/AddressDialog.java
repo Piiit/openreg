@@ -5,7 +5,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
-
 import gui.GuiDialog;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Table;
@@ -17,10 +16,8 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-
 import database.Row;
 import database.query.AddressQuery;
-import database.query.ClassQuery;
 
 public class AddressDialog extends GuiDialog {
 	
