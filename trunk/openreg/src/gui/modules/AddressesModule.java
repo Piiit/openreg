@@ -63,18 +63,18 @@ public class AddressesModule extends GuiModule {
 				if(messageBox.open() == SWT.NO) {
 					return;
 				}
-				
-				try {
-					for(Long classId : selected) {
-						AddressQuery.delete(classId);
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
 
-					MessageBox message = new MessageBox(container.getShell(), SWT.ICON_INFORMATION | SWT.OK);
-					message.setMessage(e.getMessage());
-					message.setText(container.getShell().getText());
-					message.open();
+				for(Long addressId : selected) {
+					try {
+						AddressQuery.delete(addressId);
+					} catch (Exception e) {
+						e.printStackTrace();
+		
+						MessageBox message = new MessageBox(container.getShell(), SWT.ICON_INFORMATION | SWT.OK);
+						message.setMessage(e.getMessage());
+						message.setText(container.getShell().getText());
+						message.open();
+					}
 				}
 				reloadData();
 			}

@@ -81,17 +81,17 @@ public class ClassesModule extends GuiModule {
 					return;
 				}
 				
-				try {
-					for(Long classId : selected) {
-						ClassQuery.delete(classId);
+				for(Long classId : selected) {
+					try {
+							ClassQuery.delete(classId);
+					} catch (Exception e) {
+						e.printStackTrace();
+	
+						MessageBox message = new MessageBox(container.getShell(), SWT.ICON_INFORMATION | SWT.OK);
+						message.setMessage(e.getMessage());
+						message.setText(container.getShell().getText());
+						message.open();
 					}
-				} catch (Exception e) {
-					e.printStackTrace();
-
-					MessageBox message = new MessageBox(container.getShell(), SWT.ICON_INFORMATION | SWT.OK);
-					message.setMessage(e.getMessage());
-					message.setText(container.getShell().getText());
-					message.open();
 				}
 				reloadData();
 			}
