@@ -64,7 +64,7 @@ public class MarkDialog extends GuiDialog {
 	 */
 	private void createContents() {
 		shlDialog = new Shell(getParent(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
-		shlDialog.setSize(339, 400);
+		shlDialog.setSize(346, 400);
 		shlDialog.setText("Add a new mark");
 		shlDialog.setLayout(new FormLayout());
 		
@@ -154,7 +154,7 @@ public class MarkDialog extends GuiDialog {
 		
 		Group grpOrderOfMarks = new Group(shlDialog, SWT.NONE);
 		fd_label.top = new FormAttachment(grpOrderOfMarks, 6);
-		grpOrderOfMarks.setText("Order of marks");
+		grpOrderOfMarks.setText("Order of marks...");
 		FormData fd_grpOrderOfMarks = new FormData();
 		fd_grpOrderOfMarks.top = new FormAttachment(scale_1, 6);
 		fd_grpOrderOfMarks.bottom = new FormAttachment(100, -63);
@@ -183,15 +183,14 @@ public class MarkDialog extends GuiDialog {
 		
 		Spinner spinner_1 = new Spinner(shlDialog, SWT.BORDER);
 		FormData fd_spinner_1 = new FormData();
-		fd_spinner_1.top = new FormAttachment(link, 6);
+		fd_spinner_1.top = new FormAttachment(link, 10);
 		fd_spinner_1.left = new FormAttachment(combo, 6);
 		spinner_1.setLayoutData(fd_spinner_1);
 		
 		Spinner spinner_2 = new Spinner(shlDialog, SWT.BORDER);
 		FormData fd_spinner_2 = new FormData();
-		fd_spinner_2.top = new FormAttachment(scale_1, -5, SWT.TOP);
-		fd_spinner_2.left = new FormAttachment(link, 0, SWT.LEFT);
-		fd_spinner_2.right = new FormAttachment(100, -16);
+		fd_spinner_2.top = new FormAttachment(spinner_1, 0);
+		fd_spinner_2.left = new FormAttachment(combo, 6);
 		spinner_2.setLayoutData(fd_spinner_2);
 		
 		update();
