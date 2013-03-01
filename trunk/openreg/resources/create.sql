@@ -24,7 +24,8 @@ CREATE TABLE IF NOT EXISTS class
   stream character varying,
   notes character varying,
   CONSTRAINT unique_class UNIQUE (level, stream)
- );
+);
+CREATE UNIQUE INDEX class_stream_null_idx ON class (level) WHERE stream IS NULL;
  
 CREATE TABLE IF NOT EXISTS teacher
 (
@@ -43,7 +44,8 @@ CREATE TABLE IF NOT EXISTS teacher
 CREATE TABLE IF NOT EXISTS ability_description
 (
   id bigserial NOT NULL PRIMARY KEY,
-  description character varying NOT NULL
+  description character varying NOT NULL,
+  CONSTRAINT unique_per_description UNIQUE (description)
 );
 
 CREATE TABLE IF NOT EXISTS student
