@@ -5,11 +5,6 @@ import java.util.HashMap;
 
 import data.SimpleDate;
 
-/**
- * Some ideas taken from prom/database written by A. Janes
- * @author Peter Moser (pemoser)
- *
- */
 public class Row {
 
 	HashMap<String,Object> data = new HashMap<String,Object>();
