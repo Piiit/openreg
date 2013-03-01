@@ -36,6 +36,7 @@ public class TeacherClassCourseDialog extends GuiDialog {
 	private List listTeachers;
 	private ArrayList<Combo> combosClasses = new ArrayList<Combo>();
 	private ArrayList<Combo> combosCourses = new ArrayList<Combo>();
+	private ArrayList<Label> lblSeparator = new ArrayList<Label>();;
 	private final int DEFAULT_COMBO_BOXES = 1;
 	private final int MAX_COMBO_BOXES = 10;
 	private final int SIZE_COMBO_X = 150;
@@ -94,6 +95,24 @@ public class TeacherClassCourseDialog extends GuiDialog {
 		shlAssignTeacher.setSize(538, 467);
 		
 		listTeachers = new List(shlAssignTeacher, SWT.BORDER | SWT.V_SCROLL);
+		listTeachers.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				String [] selection = listTeachers.getSelection();
+				String s = selection[0];
+				try {
+					loadData(Long.parseLong(listTeachers.getData(s).toString()));
+					removeComboBoxes();
+					update();
+					createClassCombo();
+					dataSet = false;
+					setData();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
 		listTeachers.setBounds(10, 10, 137, 296);
 		
 		linkAddClass = new Link(shlAssignTeacher, SWT.NONE);
@@ -139,9 +158,21 @@ public class TeacherClassCourseDialog extends GuiDialog {
 		buttonSave.setText("Save");
 		buttonSave.setBounds(411, 403, 111, 25);
 		
-		//if (loadedTeacherClassCourse == null)
 		createClassCombo();
 		setData();
+	}
+	
+	private void removeComboBoxes() {
+		for (Combo c : combosClasses)
+			c.setVisible(false);
+		for (Combo c : combosCourses)
+			c.setVisible(false);
+		for (Label l : lblSeparator)
+			l.setVisible(false);
+		combosClasses.removeAll(combosClasses);
+		combosCourses.removeAll(combosCourses);
+		positionClassComboY = DEFAULT_POSITION_Y;
+		positionCourseComboY = DEFAULT_POSITION_Y;
 	}
 	
 	private void createClassCombo(){
@@ -150,9 +181,9 @@ public class TeacherClassCourseDialog extends GuiDialog {
 			
 			if (posY != DEFAULT_POSITION_Y){
 				posY = positionCourseComboY < positionClassComboY ? positionClassComboY : positionCourseComboY;
-				Label lblSeparator = new Label(shlAssignTeacher, SWT.SEPARATOR | SWT.HORIZONTAL);
+				lblSeparator.add(new Label(shlAssignTeacher, SWT.SEPARATOR | SWT.HORIZONTAL));
 				int lengthX = SIZE_COMBO_X * 2 + COMBO_OFFSET_X + 10;
-				lblSeparator.setBounds(STARTINGPOINT_UPPER_LEFT_CORNER - 5, positionCourseComboY - (COMBO_OFFSET_Y/2), lengthX, 2);
+				lblSeparator.get(lblSeparator.size()-1).setBounds(STARTINGPOINT_UPPER_LEFT_CORNER - 5, positionCourseComboY - (COMBO_OFFSET_Y/2), lengthX, 2);
 			}
 			
 			combosClasses.add(new Combo(shlAssignTeacher, SWT.READ_ONLY));
@@ -224,6 +255,11 @@ public class TeacherClassCourseDialog extends GuiDialog {
 
 	@Override
 	public void update() {
+		updateTeachersList();
+		updateCombos();
+	}
+	
+	private void updateTeachersList(){
 		int selected = listTeachers.getSelectionIndex();
 		listTeachers.removeAll();
 		for (Row teacher : loadedTeachers){
@@ -233,6 +269,9 @@ public class TeacherClassCourseDialog extends GuiDialog {
 			listTeachers.setData(s, teacher.getValueAsString("teacher_id"));
 		}
 		listTeachers.setSelection(selected);
+	}
+	
+	private void updateCombos(){
 		for (Combo combo : combosClasses){
 			int p = combo.getSelectionIndex();
 			combo.removeAll();
@@ -306,7 +345,7 @@ public class TeacherClassCourseDialog extends GuiDialog {
 				combosCourses.get(course_counter).select(getComboClassIndex(combosCourses, course_id, class_counter));
 				course_counter +=1;
 			}
-			Log.info(teacher_id+" "+class_id +" "+course_id);
+			Log.info("Inserted the following tuples: " + teacher_id+" "+class_id +" "+course_id);
 		}
 	}
 	
