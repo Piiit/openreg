@@ -172,7 +172,7 @@ public class StudentDialog extends GuiDialog {
 			public void widgetSelected(SelectionEvent arg0) {
 				ClassDialog classAddDialog = new ClassDialog(shlAddStudent);
 				classAddDialog.open();
-				update();
+				updateClassField();
 			}
 		});
 		link_1.setText("[<a>New</a>]");
@@ -252,7 +252,7 @@ public class StudentDialog extends GuiDialog {
 			public void widgetSelected(SelectionEvent arg0) {
 				AbilityDescriptionDialog abilityDescriptionDialog = new AbilityDescriptionDialog(shlAddStudent);
 				abilityDescriptionDialog.open();
-				update();
+				updateAbilityDescriptionField();
 			}
 		});
 		link.setBounds(424, 4, 124, 15);
@@ -338,22 +338,8 @@ public class StudentDialog extends GuiDialog {
 	@Override
 	public void update() {
 		try {
-			studentClass.removeAll();
-			for(Row cl : ClassQuery.getFullDataset()) {
-				String classString = cl.getValueAsStringNotNull("level") + cl.getValueAsStringNotNull("stream");
-				studentClass.add(classString);
-				studentClass.setData(classString, cl.getValue("id"));
-			}
-			
-			studentAbility.removeAll();
-			studentAbility.add("-");
-			studentAbility.setData("-", null);
-			studentAbility.select(studentAbility.indexOf("-"));
-			for(Row ab : AbilityDescriptionQuery.getFullDataset()) {
-				String abilityString = ab.getValueAsStringNotNull("description");
-				studentAbility.add(abilityString);
-				studentAbility.setData(abilityString, ab.getValue("id"));
-			}
+			updateClassField();
+			updateAbilityDescriptionField();
 			
 			if(loadedData != null) {
 				shlAddStudent.setText("Modify student data");
@@ -378,7 +364,35 @@ public class StudentDialog extends GuiDialog {
 			updateAddressFields();
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void updateAbilityDescriptionField() {
+		studentAbility.removeAll();
+		studentAbility.add("-");
+		studentAbility.setData("-", null);
+		studentAbility.select(studentAbility.indexOf("-"));
+		try {
+			for(Row ab : AbilityDescriptionQuery.getFullDataset()) {
+				String abilityString = ab.getValueAsStringNotNull("description");
+				studentAbility.add(abilityString);
+				studentAbility.setData(abilityString, ab.getValue("id"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void updateClassField() {
+		studentClass.removeAll();
+		try {
+			for(Row cl : ClassQuery.getFullDataset()) {
+				String classString = cl.getValueAsStringNotNull("level") + cl.getValueAsStringNotNull("stream");
+				studentClass.add(classString);
+				studentClass.setData(classString, cl.getValue("id"));
+			}
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -450,7 +464,6 @@ public class StudentDialog extends GuiDialog {
 				try {
 					AddressQuery.delete(addressId);
 				} catch (Exception e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
