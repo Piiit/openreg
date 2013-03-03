@@ -58,8 +58,12 @@ public class TeacherClassCourseQuery {
 				);
 	}
 
-	public static void delete(Object id) throws Exception {
-		DatabaseTools.executeUpdate("DELETE FROM teacher WHERE id = ?", (Long)id);
+	public static void delete(Row row) throws Exception {
+		Log.info(DatabaseTools.executeUpdate("DELETE FROM teacher_class_course WHERE " +
+				"teacher_id = ? AND class_id = ? AND course_id = ?", 
+				row.getValueAsLong("teacher_id"),
+				row.getValueAsLong("class_id"),
+				row.getValueAsLong("course_id")).toString());
 	}
 
 }
