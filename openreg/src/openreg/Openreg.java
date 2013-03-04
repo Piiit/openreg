@@ -11,6 +11,7 @@ import gui.modules.ClassesModule;
 import gui.modules.MarkModule;
 import gui.modules.StudentsModule;
 import gui.modules.TeachersModule;
+import gui.modules.TopicModule;
 import database.DatabaseConnection;
 
 public class Openreg {
@@ -36,6 +37,7 @@ public class Openreg {
 		gmListAdmin.add(new AddressesModule());
 		gmListAdmin.add(new AbilityDescriptionModule());
 		gmListAdmin.add(new MarkModule());
+		gmListAdmin.add(new TopicModule());
 		
 		GuiModuleList gmListReport = new GuiModuleList(GuiModuleType.Reports);
 		
