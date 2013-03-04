@@ -68,9 +68,9 @@ public class MarkModule extends GuiModule {
 					return;
 				}
 				
-				for(Long classId : selected) {
+				for(Long markId : selected) {
 					try {
-						MarkQuery.delete(classId);
+						MarkTypeQuery.delete(markId);
 					} catch (Exception e) {
 						e.printStackTrace();
 						GuiTools.showMessageBox(container.getShell(), e.getMessage());
