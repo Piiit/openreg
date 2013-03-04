@@ -119,7 +119,7 @@ public class MarkDialog extends GuiDialog {
 		Label lblMaximum = new Label(shlDialog, SWT.NONE);
 		FormData fd_lblMaximum = new FormData();
 		fd_lblMaximum.top = new FormAttachment(lblMinimum, 0, SWT.TOP);
-		fd_lblMaximum.right = new FormAttachment(btnSave, 0, SWT.RIGHT);
+		fd_lblMaximum.right = new FormAttachment(label, 0, SWT.RIGHT);
 		lblMaximum.setLayoutData(fd_lblMaximum);
 		lblMaximum.setText("< Maximum");
 		
@@ -162,7 +162,7 @@ public class MarkDialog extends GuiDialog {
 		Spinner spinner_2 = new Spinner(shlDialog, SWT.BORDER);
 		FormData fd_spinner_2 = new FormData();
 		fd_spinner_2.top = new FormAttachment(combo, 6);
-		fd_spinner_2.right = new FormAttachment(lblMaximum, -2);
+		fd_spinner_2.right = new FormAttachment(lblMaximum, -3);
 		spinner_2.setLayoutData(fd_spinner_2);
 		spinner_2.setSelection(100);
 		
@@ -183,6 +183,7 @@ public class MarkDialog extends GuiDialog {
 		link.setText("Create a <a>new type</a> or choose one from the list...");
 		
 		Link link_3 = new Link(shlDialog, SWT.NONE);
+		fd_combo.right = new FormAttachment(link_3, -6);
 		link_3.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
@@ -198,10 +199,9 @@ public class MarkDialog extends GuiDialog {
 				updateMarkTypeField();
 			}
 		});
-		fd_combo.right = new FormAttachment(link_3, -6);
 		FormData fd_link_3 = new FormData();
-		fd_link_3.top = new FormAttachment(combo, 2, SWT.TOP);
-		fd_link_3.left = new FormAttachment(0, 277);
+		fd_link_3.bottom = new FormAttachment(lblMaximum, -15);
+		fd_link_3.right = new FormAttachment(label, 0, SWT.RIGHT);
 		link_3.setLayoutData(fd_link_3);
 		link_3.setText("<a>Rename</a>");
 		
