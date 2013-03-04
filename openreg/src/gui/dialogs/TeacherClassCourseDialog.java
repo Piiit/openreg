@@ -3,6 +3,8 @@ package gui.dialogs;
 import java.util.ArrayList;
 import log.Log;
 import gui.GuiDialog;
+import gui.GuiTools;
+
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.SWT;
@@ -371,6 +373,39 @@ public class TeacherClassCourseDialog extends GuiDialog {
 			loadData(teacherIndex);
 		}
 	}
+	
+	private void store(Combo combo, int comboCourseIndex) {
+		String[] selection = listTeachers.getSelection();
+		if (selection.length >= 1) {
+			long teacherId = Long.parseLong(listTeachers.getData(selection[0])
+					.toString());
+			long classId;
+			try {
+				int comboClassIndex = Integer.parseInt(combo.getToolTipText());
+				classId = Long.parseLong(combosClasses
+						.get(comboClassIndex)
+						.getData(
+								combosClasses.get(comboClassIndex).getItem(
+										combosClasses.get(comboClassIndex)
+												.getSelectionIndex()))
+						.toString());
+			} catch (Exception e) {
+				Log.error("No classId selected");
+				return;
+			}
+
+			long courseId = Long.parseLong(combo.getData(
+					combo.getItem(combo.getSelectionIndex())).toString());
+
+			insertOrUpdateTuples(teacherId, classId, courseId, comboCourseIndex);
+			try {
+				loadData(teacherIndex);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
 
 	private void insertOrUpdateTuples(long teacherId, long classId,
 			long courseId, int comboCourseIndex) {
@@ -404,80 +439,35 @@ public class TeacherClassCourseDialog extends GuiDialog {
 				TeacherClassCourseQuery.update(
 						newTeacherClassCourse, updateRow);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				GuiTools.showMessageBox(getParent().getShell(), "Insertion on row " + (comboCourseIndex + 1) + " not possible! DUPLICATE KEY!");
+				comboDuplicateKeyExceptionHandling(combosCourses.get(comboCourseIndex));
 			}
 		}
 	}
 
-	private void store(Combo combo, int comboCourseIndex) {
-		String[] selection = listTeachers.getSelection();
-		if (selection.length >= 1) {
-			long teacherId = Long.parseLong(listTeachers.getData(selection[0])
-					.toString());
-			long classId;
-			try {
-				int comboClassIndex = Integer.parseInt(combo.getToolTipText());
-				classId = Long.parseLong(combosClasses
-						.get(comboClassIndex)
-						.getData(
-								combosClasses.get(comboClassIndex).getItem(
-										combosClasses.get(comboClassIndex)
-												.getSelectionIndex()))
-						.toString());
-			} catch (Exception e) {
-				Log.error("No classId selected");
-				return;
+
+	private void comboDuplicateKeyExceptionHandling(Combo combo) {
+		boolean found = false;
+		if (combosCourses.indexOf(combo) < loadedTeacherClassCourse.size()) {
+			int i = 0;
+			for (String c : combo.getItems()) {
+				Log.info(loadedTeacherClassCourse.get(
+						combosCourses.indexOf(combo)).getValueAsString("name"));
+				if (c.equalsIgnoreCase(loadedTeacherClassCourse.get(
+						combosCourses.indexOf(combo)).getValueAsString("name"))) {
+					combo.select(i);
+					found = true;
+				}
+				i++;
 			}
 
-			long courseId = Long.parseLong(combo.getData(
-					combo.getItem(combo.getSelectionIndex())).toString());
-
-			insertOrUpdateTuples(teacherId, classId, courseId, comboCourseIndex);
-			
-//			Row newTeacherClassCourse = new Row();
-//			newTeacherClassCourse.setValue("teacher_id", teacherId);
-//			newTeacherClassCourse.setValue("class_id", classId);
-//			newTeacherClassCourse.setValue("course_id", courseId);
-//
-//			boolean updateTuple = false;
-//			Row updateRow = new Row();
-//			if (loadedTeacherClassCourse.size() > comboCourseIndex) {
-//				Row updateValues = loadedTeacherClassCourse
-//						.get(comboCourseIndex);
-//				updateRow.setValue("teacher_id",
-//						updateValues.getValueAsLong("teacher_id"));
-//				updateRow.setValue("class_id",
-//						updateValues.getValueAsLong("class_id"));
-//				updateRow.setValue("course_id",
-//						updateValues.getValueAsLong("course_id"));
-//				updateTuple = true;
-//			}
-//
-//			if (!updateTuple) {
-//				try {
-//					TeacherClassCourseQuery.insert(newTeacherClassCourse);
-//				} catch (Exception e) {
-//					comboDuplicateKeyExceptionHandling(combo);
-//				}
-//			} else {
-//				try {
-//					TeacherClassCourseQuery.update(newTeacherClassCourse,
-//							updateRow);
-//				} catch (Exception e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//			}
-			try {
-				loadData(teacherIndex);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
+		if (!found)
+			combo.deselectAll();
+		Log.error("Insertion on row " + combosCourses.indexOf(combo)
+				+ " not possible, DUPLICATE KEY EXCEPTION!");
 	}
-
+	
 	@Override
 	public void update() {
 		updateTeachersList();
@@ -527,6 +517,13 @@ public class TeacherClassCourseDialog extends GuiDialog {
 			setListData();
 			setComboData();
 			dataSet = true;
+		} else {
+			String[] items = listTeachers.getItems();
+			for (int i=0; i < listTeachers.getItems().length; i++) {
+				if (Long.parseLong(listTeachers.getData(items[i]).toString()) == teacherIndex)
+					listTeachers.select(i);
+				Log.info("hoi");
+			}
 		}
 	}
 
@@ -599,28 +596,6 @@ public class TeacherClassCourseDialog extends GuiDialog {
 			i++;
 		}
 		return -1;
-	}
-
-	private void comboDuplicateKeyExceptionHandling(Combo combo) {
-		boolean found = false;
-		if (combosCourses.indexOf(combo) < loadedTeacherClassCourse.size() - 1) {
-			int i = 0;
-			for (String c : combo.getItems()) {
-				Log.info(loadedTeacherClassCourse.get(
-						combosCourses.indexOf(combo)).getValueAsString("name"));
-				if (c.equalsIgnoreCase(loadedTeacherClassCourse.get(
-						combosCourses.indexOf(combo)).getValueAsString("name"))) {
-					combo.select(i);
-					found = true;
-				}
-				i++;
-			}
-
-		}
-		if (!found)
-			combo.deselectAll();
-		Log.error("Insertion on row " + combosCourses.indexOf(combo)
-				+ " not possible, DUPLICATE KEY EXCEPTION!");
 	}
 
 	@Override
