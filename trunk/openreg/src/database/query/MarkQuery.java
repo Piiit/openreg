@@ -23,10 +23,6 @@ public class MarkQuery {
 	 * Note: Please keep they return value as it is, to standardize our queries classes. 
 	 */
 	public static ArrayList<Row> getDataset(Object id) throws Exception{
-		return null;
-	}
-
-	public static ArrayList<Row> getAllMarksFromType(Object id) throws Exception{
 		return DatabaseTools.getQueryResult(
 				"SELECT * FROM mark m " +
 				"INNER JOIN mark_type mt ON m.mark_type_id = mt.id " +
@@ -34,7 +30,7 @@ public class MarkQuery {
 				"ORDER BY bound DESC", 
 				id);
 	}
-	
+
 	/**
 	 * Returns all tuples needed to list them inside GUI-modules.
 	 */
