@@ -23,7 +23,7 @@ public class MarkTypeQuery {
 	 * Note: Please keep they return value as it is, to standardize our queries classes. 
 	 */
 	public static ArrayList<Row> getDataset(Object id) throws Exception{
-		return null;
+		return DatabaseTools.getQueryResult("SELECT * FROM mark_type WHERE id = ? ORDER BY description", id);
 	}
 	
 	/**
@@ -38,18 +38,28 @@ public class MarkTypeQuery {
 	 * @return ID of the new tuple formerly inserted.
 	 */
 	public static Long insert(Row row) throws Exception{
-		return null;
+		return (Long)DatabaseTools.executeUpdate(
+				"INSERT INTO mark_type (description) VALUES (?)",
+				row.getValueAsString("description")
+				);
 	}
 	
 	/**
 	 * Update a certain tuple.
 	 */
-	public static void update(Object id, Row row) throws Exception{
+	public static void update(Object id, Row row) throws Exception {
+		DatabaseTools.executeUpdate(
+				"UPDATE mark_type SET description = ? WHERE id = ?", 
+				row.getValueAsString("description"),
+				id
+				);
 	}
 	
 	/**
 	 * Delete a certain tuple.
 	 */
-	public static void delete(Object id) throws Exception{
+	public static void delete(Object id) throws Exception {
+		DatabaseTools.executeUpdate("DELETE FROM mark WHERE mark_type_id = ?", id);
+		DatabaseTools.executeUpdate("DELETE FROM mark_type WHERE id = ?", id);
 	}
 }
