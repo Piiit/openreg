@@ -12,7 +12,7 @@ import log.Log;
 public final class DatabaseConnection {
 	
 	public final static int LOGINTIMEOUT = 1;  //in seconds
-	public final static String URL = "dbc:postgresql://alcor.inf.unibz.it:5432/ds_group2?user=ds_group2&password=Iezedoo6";
+	public final static String URL = "jdbc:postgresql://alcor.inf.unibz.it:5432/ds_group2?user=ds_group2&password=Iezedoo6";
 
 	private static Connection connection = null;
 	
