@@ -1,5 +1,9 @@
 package gui.dialogs;
 
+import java.util.ArrayList;
+
+import log.Log;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -14,6 +18,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import database.Row;
+import database.query.AbilityDescriptionQuery;
 import database.query.MarkQuery;
 import database.query.MarkTypeQuery;
 import gui.GuiDialog;
@@ -24,6 +29,10 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 
 public class MarkDialog extends GuiDialog {
 
@@ -32,6 +41,9 @@ public class MarkDialog extends GuiDialog {
 	protected Row loadedData;
 	private Text txtNewMark;
 	private Combo combo;
+	private ScrolledComposite scrolledComposite;
+	private int markCount = 0;
+	private Table table;
 	
 	public MarkDialog(Shell parent) {
 		super(parent);
@@ -105,66 +117,10 @@ public class MarkDialog extends GuiDialog {
 		lblMandatoryFields.setText("* Mandatory Fields");
 		
 		combo = new Combo(shlDialog, SWT.READ_ONLY);
+		fd_label.top = new FormAttachment(combo, 274);
 		FormData fd_combo = new FormData();
 		fd_combo.left = new FormAttachment(0, 10);
 		combo.setLayoutData(fd_combo);
-		
-		Label lblMinimum = new Label(shlDialog, SWT.NONE);
-		FormData fd_lblMinimum = new FormData();
-		fd_lblMinimum.top = new FormAttachment(combo, 10);
-		fd_lblMinimum.left = new FormAttachment(label, 0, SWT.LEFT);
-		lblMinimum.setLayoutData(fd_lblMinimum);
-		lblMinimum.setText("Minimum >");
-		
-		Label lblMaximum = new Label(shlDialog, SWT.NONE);
-		FormData fd_lblMaximum = new FormData();
-		fd_lblMaximum.top = new FormAttachment(lblMinimum, 0, SWT.TOP);
-		fd_lblMaximum.right = new FormAttachment(label, 0, SWT.RIGHT);
-		lblMaximum.setLayoutData(fd_lblMaximum);
-		lblMaximum.setText("< Maximum");
-		
-		Group grpOrderOfMarks = new Group(shlDialog, SWT.NONE);
-		fd_label.top = new FormAttachment(grpOrderOfMarks, 6);
-		grpOrderOfMarks.setText("Order of marks...");
-		grpOrderOfMarks.setLayout(new GridLayout(5, false));
-		FormData fd_grpOrderOfMarks = new FormData();
-		fd_grpOrderOfMarks.right = new FormAttachment(label, 0, SWT.RIGHT);
-		fd_grpOrderOfMarks.bottom = new FormAttachment(100, -58);
-		fd_grpOrderOfMarks.left = new FormAttachment(0, 10);
-		grpOrderOfMarks.setLayoutData(fd_grpOrderOfMarks);
-		
-		Label label_1 = new Label(grpOrderOfMarks, SWT.NONE);
-		label_1.setText("(1)");
-		
-		txtNewMark = new Text(grpOrderOfMarks, SWT.BORDER);
-		GridData gd_txtNewMark = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
-		gd_txtNewMark.widthHint = 146;
-		txtNewMark.setLayoutData(gd_txtNewMark);
-		txtNewMark.setText("New mark");
-		
-		Spinner spinner = new Spinner(grpOrderOfMarks, SWT.BORDER);
-		spinner.setSelection(50);
-		
-		Link link_1 = new Link(grpOrderOfMarks, SWT.NONE);
-		link_1.setText("<a>Up</a>");
-		
-		Link link_2 = new Link(grpOrderOfMarks, SWT.NONE);
-		link_2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		link_2.setText("<a>Down</a>");
-		
-		Spinner spinner_1 = new Spinner(shlDialog, SWT.BORDER);
-		fd_grpOrderOfMarks.top = new FormAttachment(spinner_1, 11);
-		FormData fd_spinner_1 = new FormData();
-		fd_spinner_1.top = new FormAttachment(combo, 6);
-		fd_spinner_1.left = new FormAttachment(lblMinimum, 6);
-		spinner_1.setLayoutData(fd_spinner_1);
-		
-		Spinner spinner_2 = new Spinner(shlDialog, SWT.BORDER);
-		FormData fd_spinner_2 = new FormData();
-		fd_spinner_2.top = new FormAttachment(combo, 6);
-		fd_spinner_2.right = new FormAttachment(lblMaximum, -3);
-		spinner_2.setLayoutData(fd_spinner_2);
-		spinner_2.setSelection(100);
 		
 		Link link = new Link(shlDialog, SWT.NONE);
 		fd_combo.top = new FormAttachment(link, 3);
@@ -200,17 +156,65 @@ public class MarkDialog extends GuiDialog {
 			}
 		});
 		FormData fd_link_3 = new FormData();
-		fd_link_3.bottom = new FormAttachment(lblMaximum, -15);
+		fd_link_3.top = new FormAttachment(0, 32);
 		fd_link_3.right = new FormAttachment(label, 0, SWT.RIGHT);
 		link_3.setLayoutData(fd_link_3);
 		link_3.setText("<a>Rename</a>");
 		
+		table = new Table(shlDialog, SWT.BORDER | SWT.FULL_SELECTION);
+		FormData fd_table = new FormData();
+		fd_table.left = new FormAttachment(label, 0, SWT.LEFT);
+		fd_table.top = new FormAttachment(combo, 6);
+		fd_table.bottom = new FormAttachment(label, -6);
+		fd_table.right = new FormAttachment(100, -14);
+		table.setLayoutData(fd_table);
+		table.setHeaderVisible(true);
+		table.setLinesVisible(true);
+		
+		TableColumn tblclmnMark = new TableColumn(table, SWT.NONE);
+		tblclmnMark.setWidth(100);
+		tblclmnMark.setText("Mark");
+		
+		TableColumn tblclmnBound = new TableColumn(table, SWT.NONE);
+		tblclmnBound.setWidth(100);
+		tblclmnBound.setText("Bound");
+		
+		TableColumn tblclmnCommands = new TableColumn(table, SWT.NONE);
+		tblclmnCommands.setWidth(100);
+		tblclmnCommands.setText("Commands");
+		
 		update();
+	}
+
+	private void createMarkField(String text, int bound) {
+		Log.info("Creating " + text);
+		markCount++;
+		
+		TableItem ti = new TableItem(table, 0);
+		ti.setText("("+markCount+")");
+		
+		txtNewMark = new Text(scrolledComposite, SWT.BORDER);
+		txtNewMark.setText(text);
+		
+		Spinner spinner = new Spinner(scrolledComposite, SWT.BORDER);
+		spinner.setSelection(bound);
+		
+//		Link link_1 = new Link(grpOrderOfMarks, SWT.NONE);
+//		link_1.setText("<a>Up</a>");
+//		
+//		Link link_2 = new Link(grpOrderOfMarks, SWT.NONE);
+//		link_2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+//		link_2.setText("<a>Down</a>");
 	}
 
 
 	@Override
 	public void loadData(Object data) throws Exception {
+		ArrayList<Row> ab = MarkTypeQuery.getDataset(data);
+		if(ab.size() == 0) {
+			throw new Exception("No mark type with ID " + data.toString() + " found.");
+		}
+		loadedData = ab.get(0); 
 	}
 
 	@Override
@@ -257,6 +261,18 @@ public class MarkDialog extends GuiDialog {
 			if (loadedData != null){
 //				text.setText(loadedData.getValueAsStringNotNull("description"));
 				shlDialog.setText("Modify a mark or mark type");
+				
+				String typeString = loadedData.getValueAsStringNotNull("description");
+				combo.select(combo.indexOf(typeString));
+				
+				ArrayList<Row> marks = MarkQuery.getDataset(loadedData.getValueAsLong("id"));
+				for(Row mark : marks) {
+					createMarkField(
+							mark.getValueAsStringNotNull("representation"), 
+							(int)Math.round((double) mark.getValue("bound"))
+							);
+				}
+				
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

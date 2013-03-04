@@ -120,7 +120,7 @@ public class MarkModule extends GuiModule {
 				Long markTypeId = markType.getValueAsLong("id");
 				tableItem.setData(markTypeId);
 				
-				ArrayList<Row> marks = MarkQuery.getAllMarksFromType(markTypeId);
+				ArrayList<Row> marks = MarkQuery.getDataset(markTypeId);
 				String markList = "";
 				if(marks.size() > 0) {
 					for(Row mark : marks) {
