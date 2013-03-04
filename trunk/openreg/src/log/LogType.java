@@ -1,7 +1,7 @@
 package log;
 public enum LogType {
 
-	INFORMATION(1), WARNING(2), ERROR(3);
+	DEBUG(0), INFORMATION(1), WARNING(2), ERROR(3);
 
 	private final int index;
 

@@ -99,12 +99,10 @@ public class AbilityDescriptionModule extends GuiModule {
 		TableColumn tblclmnLevel = new TableColumn(table, SWT.NONE);
 		tblclmnLevel.setWidth(400);
 		tblclmnLevel.setText("Ability Description");
-		
-		reloadData();
 	}
 
 	@Override
-	public void reloadData() {
+	public void reloadData(Object filterId) {
 		table.removeAll();
 		try {
 			for(Row address : AbilityDescriptionQuery.getFullDataset()) {
@@ -120,12 +118,6 @@ public class AbilityDescriptionModule extends GuiModule {
 					"Unable to fetch data from your Database! See stdout for more information!\n\n" + e.getMessage()
 					);
 		}			
-	}
-
-	@Override
-	public void reloadData(Object o) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
