@@ -40,21 +40,16 @@ public class TeacherClassCourseQuery {
 				);
 	}
 
-	public static void update(Object id, Row row) throws Exception {
+	public static void update(Row newValues, Row updateValues) throws Exception {
 		DatabaseTools.executeUpdate(
-				"UPDATE teacher SET name = ?, surname = ?, login = ?, password = ?, " +
-				"birthday = ?, address_id = ?, phone_number = ?, picture = ?, " +
-				"notes = ? WHERE id = ?",
-				row.getValueAsString("name"),
-				row.getValueAsString("surname"),
-				row.getValueAsString("login"),
-				row.getValueAsString("password"),
-				row.getValueAsSimpleDate("birthday").toSqlDate(),
-				row.getValueAsLong("address_id"),
-				row.getValueAsString("phone_number"),
-				row.getValue("picture"),
-				row.getValueAsString("notes"),
-				(Long)id
+				"UPDATE teacher_class_course SET teacher_id = ?, class_id = ?, course_id = ? " +
+				"WHERE teacher_id = ? AND class_id = ? AND course_id = ?",
+				newValues.getValueAsLong("teacher_id"),
+				newValues.getValueAsLong("class_id"),
+				newValues.getValueAsLong("course_id"),
+				updateValues.getValueAsLong("teacher_id"),
+				updateValues.getValueAsLong("class_id"),
+				updateValues.getValueAsLong("course_id")
 				);
 	}
 

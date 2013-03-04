@@ -57,7 +57,6 @@ public class TeacherClassCourseDialog extends GuiDialog {
 	private ArrayList<Row> loadedCourses;
 	private ArrayList<Row> loadedTeacherClassCourse;
 	private Button buttonCancel;
-	private Button buttonSave;
 	private boolean dataSet = false;
 
 	/**
@@ -138,31 +137,8 @@ public class TeacherClassCourseDialog extends GuiDialog {
 				cancel();
 			}
 		});
-		buttonCancel.setText("Cancel");
-		buttonCancel.setBounds(302, 403, 103, 25);
-		
-		buttonSave = new Button(shlAssignTeacher, SWT.CENTER);
-		buttonSave.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-				try {
-					cancel();
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		});
-		buttonSave.setText("Save");
-		buttonSave.setBounds(411, 403, 111, 25);
-		
-		Combo combo = new Combo(shlAssignTeacher, SWT.NONE);
-		combo.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-			}
-		});
-		combo.setBounds(10, 338, 91, 23);
+		buttonCancel.setText("Done");
+		buttonCancel.setBounds(419, 403, 103, 25);
 		
 		createClassCombo();
 		setData();
@@ -229,9 +205,11 @@ public class TeacherClassCourseDialog extends GuiDialog {
 		combosCourses.get(combosCourses.size()-1).addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
+				int i = 0;
 				for (Combo combo : combosCourses) {
 					if (combo.equals(arg0.getSource()))
-						store(combo);
+						store(combo, i);
+					i++;
 				}
 			}
 		});
@@ -351,16 +329,17 @@ public class TeacherClassCourseDialog extends GuiDialog {
 //		shlAssignTeacher.dispose();
 	}
 	
-	private void store(Combo combo) {
+	private void store(Combo combo, int comboCourseIndex) {
 		String [] selection = listTeachers.getSelection();
 		if (selection.length >= 1){
 			long teacherId = Long.parseLong(listTeachers.getData(selection[0]).toString());
 			long classId;
 			try {
-			classId = Long.parseLong(
-					combosClasses.get(Integer.parseInt(combo.getToolTipText())).getData(
-					combosClasses.get(Integer.parseInt(combo.getToolTipText())).getItem(
-					combosClasses.get(Integer.parseInt(combo.getToolTipText())).getSelectionIndex())).toString());
+				int comboClassIndex = Integer.parseInt(combo.getToolTipText());
+				classId = Long.parseLong(
+					combosClasses.get(comboClassIndex).getData(
+					combosClasses.get(comboClassIndex).getItem(
+					combosClasses.get(comboClassIndex).getSelectionIndex())).toString());
 			} catch (Exception e) {
 				Log.error("No classId selected");
 				return;
@@ -373,10 +352,29 @@ public class TeacherClassCourseDialog extends GuiDialog {
 			newTeacherClassCourse.setValue("class_id", classId);
 			newTeacherClassCourse.setValue("course_id", courseId);
 			
-			try {
-				TeacherClassCourseQuery.insert(newTeacherClassCourse);
-			} catch (Exception e) {
-				comboDuplicateKeyExceptionHandling(combo);
+			boolean updateTuple = false;
+			Row updateRow = new Row();
+			if (loadedTeacherClassCourse.size() > comboCourseIndex){
+				Row updateValues = loadedTeacherClassCourse.get(comboCourseIndex);
+				updateRow.setValue("teacher_id", updateValues.getValueAsLong("teacher_id"));
+				updateRow.setValue("class_id", updateValues.getValueAsLong("class_id"));
+				updateRow.setValue("course_id", updateValues.getValueAsLong("course_id"));
+				updateTuple = true;
+			}
+				
+			if (!updateTuple){
+				try {
+					TeacherClassCourseQuery.insert(newTeacherClassCourse);
+				} catch (Exception e) {
+					comboDuplicateKeyExceptionHandling(combo);
+				}
+			} else {
+				try {
+					TeacherClassCourseQuery.update(newTeacherClassCourse, updateRow);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			
 		}
@@ -428,7 +426,6 @@ public class TeacherClassCourseDialog extends GuiDialog {
 		if (!dataSet && loadedTeacherClassCourse != null && loadedTeacherClassCourse.size() != 0){
 			setListData();
 			setComboData();
-			
 			dataSet = true;
 		}
 	}
