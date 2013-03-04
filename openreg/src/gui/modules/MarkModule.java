@@ -1,7 +1,6 @@
 package gui.modules;
 
 import java.util.ArrayList;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -16,15 +15,11 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
-
 import database.Row;
-import database.query.ClassQuery;
 import database.query.MarkQuery;
 import database.query.MarkTypeQuery;
-
 import gui.GuiModule;
 import gui.GuiTools;
-import gui.dialogs.ClassDialog;
 import gui.dialogs.MarkDialog;
 
 public class MarkModule extends GuiModule {
@@ -113,12 +108,10 @@ public class MarkModule extends GuiModule {
 		TableColumn tblclmnNotes = new TableColumn(table, SWT.LEFT);
 		tblclmnNotes.setWidth(273);
 		tblclmnNotes.setText("Marks");
-		
-		reloadData();
 	}
 	
 	@Override
-	public void reloadData() {
+	public void reloadData(Object filterId) {
 		table.removeAll();
 		final String markSeparator = "   ";
 		try {
@@ -147,12 +140,6 @@ public class MarkModule extends GuiModule {
 					"Unable to fetch data from your Database! See stdout for more information!\n\n" + e.getMessage()
 					);
 		}	
-	}
-
-	@Override
-	public void reloadData(Object o) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override

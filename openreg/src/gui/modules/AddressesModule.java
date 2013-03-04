@@ -113,12 +113,10 @@ public class AddressesModule extends GuiModule {
 		TableColumn tblclmnCountry = new TableColumn(table, SWT.NONE);
 		tblclmnCountry.setWidth(100);
 		tblclmnCountry.setText("Country");
-		
-		reloadData();
 	}
 
 	@Override
-	public void reloadData() {
+	public void reloadData(Object filterId) {
 		table.removeAll();
 		try {
 			for(Row address : AddressQuery.getFullDataset()) {
@@ -139,12 +137,6 @@ public class AddressesModule extends GuiModule {
 					"Unable to fetch data from your Database! See stdout for more information!\n\n" + e.getMessage()
 					);
 		}			
-	}
-
-	@Override
-	public void reloadData(Object o) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

@@ -1,6 +1,14 @@
 package log;
 
 public class Log {
+	
+	public static void debug(final String output) {
+		String debug = System.getenv("OPENREG_DEBUG");
+		if(debug != null && debug.equalsIgnoreCase("true")) {
+			print(output, LogType.DEBUG);
+		}
+	}
+	
 	public static void info(final String output) {
 		print(output, LogType.INFORMATION);
 	}

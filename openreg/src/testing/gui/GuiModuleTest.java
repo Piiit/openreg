@@ -29,12 +29,6 @@ public class GuiModuleTest {
 		}
 
 		@Override
-		public void reloadData() {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
 		public String getDescription() {
 			// TODO Auto-generated method stub
 			return null;
@@ -61,12 +55,6 @@ public class GuiModuleTest {
 		}
 
 		@Override
-		public void reloadData() {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
 		public String getDescription() {
 			// TODO Auto-generated method stub
 			return null;
@@ -90,12 +78,6 @@ public class GuiModuleTest {
 		@Override
 		public String getName() {
 			return "Test3";
-		}
-
-		@Override
-		public void reloadData() {
-			// TODO Auto-generated method stub
-			
 		}
 
 		@Override

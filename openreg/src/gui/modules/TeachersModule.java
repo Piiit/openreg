@@ -160,8 +160,6 @@ public class TeachersModule extends GuiModule {
 		TableColumn tblclmnPhoneNumber = new TableColumn(table, SWT.NONE);
 		tblclmnPhoneNumber.setWidth(100);
 		tblclmnPhoneNumber.setText("PhoneNumber");
-		
-		reloadData();
 	}
 
 	@Override
@@ -170,7 +168,7 @@ public class TeachersModule extends GuiModule {
 	}
 
 	@Override
-	public void reloadData() {
+	public void reloadData(Object filterId) {
 		table.removeAll();
 		int i = 1;
 		try {
@@ -198,11 +196,4 @@ public class TeachersModule extends GuiModule {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@Override
-	public void reloadData(Object o) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

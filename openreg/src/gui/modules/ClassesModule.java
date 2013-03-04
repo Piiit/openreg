@@ -111,12 +111,10 @@ public class ClassesModule extends GuiModule {
 		TableColumn tblclmnNotes = new TableColumn(table, SWT.LEFT);
 		tblclmnNotes.setWidth(200);
 		tblclmnNotes.setText("Notes");
-		
-		reloadData();
 	}
 
 	@Override
-	public void reloadData() {
+	public void reloadData(Object filterId) {
 		table.removeAll();
 		try {
 			for(Row thisClass : ClassQuery.getFullDataset()) {
@@ -145,11 +143,5 @@ public class ClassesModule extends GuiModule {
 	public String getDescription() {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public void reloadData(Object o) {
-		// TODO Auto-generated method stub
-		
 	}
 }

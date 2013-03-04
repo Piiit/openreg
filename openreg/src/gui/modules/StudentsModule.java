@@ -51,7 +51,7 @@ public class StudentsModule extends GuiModule {
 			public void widgetSelected(SelectionEvent arg0) {
 				StudentDialog addDialog = new StudentDialog(container.getShell());
 				addDialog.open();
-				reloadData(null);
+				reloadData();
 			}
 		});
 		tltmAdd.setText("Add");
@@ -67,7 +67,7 @@ public class StudentsModule extends GuiModule {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
 				Long classID = (Long)filterClass.getData(filterClass.getText());
-				Log.info("Class ID" + classID);
+				Log.debug("Class ID " + classID);
 				reloadData(classID);
 			}
 		});
@@ -85,7 +85,7 @@ public class StudentsModule extends GuiModule {
 					e.printStackTrace();
 				}
 				addDialog.open();
-				reloadData(null);
+				reloadData();
 			}
 		});
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -119,7 +119,7 @@ public class StudentsModule extends GuiModule {
 				
 				if(selected.size() == 0) {
 					GuiTools.showMessageBox(container.getShell(), "No students selected.");
-					reloadData(null);
+					reloadData();
 					return;
 				}
 				
@@ -136,7 +136,7 @@ public class StudentsModule extends GuiModule {
 						GuiTools.showMessageBox(container.getShell(), e.getMessage());
 					}
 				}
-				reloadData(null);
+				reloadData();
 			}
 		});
 	}
@@ -188,11 +188,4 @@ public class StudentsModule extends GuiModule {
 	public String getDescription() {
 		return null;
 	}
-
-	@Override
-	public void reloadData() {
-		// TODO Auto-generated method stub
-		
-	}
-
 }
