@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import database.Row;
+import database.query.TeacherClassCourseQuery;
 import database.query.TeacherQuery;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -68,6 +69,11 @@ public class TeachersModule extends GuiModule {
 				}
 				
 				for(Long teacherId : selected) {
+					try {
+						TeacherClassCourseQuery.deleteTeacher(teacherId);
+					} catch (Exception e) {
+						GuiTools.showMessageBox(container.getShell(), e.getMessage());
+					}
 					try {
 						TeacherQuery.delete(teacherId);
 					} catch (Exception e) {

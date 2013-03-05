@@ -61,4 +61,10 @@ public class TeacherClassCourseQuery {
 				row.getValueAsLong("course_id")).toString());
 	}
 
+	public static void deleteTeacher(long teacher_id) throws Exception {
+		DatabaseTools.executeUpdate("DELETE FROM teacher_class_course WHERE " +
+				"teacher_id = ?", 
+				teacher_id);
+	}
+
 }
