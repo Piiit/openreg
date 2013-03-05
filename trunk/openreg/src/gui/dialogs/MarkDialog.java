@@ -1,48 +1,43 @@
 package gui.dialogs;
 
 import java.util.ArrayList;
-
 import log.Log;
-
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
+
 import database.Row;
-import database.query.AbilityDescriptionQuery;
 import database.query.MarkQuery;
 import database.query.MarkTypeQuery;
 import gui.GuiDialog;
 import gui.GuiTools;
 import org.eclipse.swt.widgets.Link;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Combo;
-import org.eclipse.swt.widgets.Spinner;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.ProgressBar;
 
 public class MarkDialog extends GuiDialog {
 
 	protected Object result;
 	protected Shell shlDialog;
 	protected Row loadedData;
-	private Text txtNewMark;
 	private Combo combo;
-	private ScrolledComposite scrolledComposite;
-	private int markCount = 0;
 	private Table table;
 	
 	public MarkDialog(Shell parent) {
@@ -117,6 +112,19 @@ public class MarkDialog extends GuiDialog {
 		lblMandatoryFields.setText("* Mandatory Fields");
 		
 		combo = new Combo(shlDialog, SWT.READ_ONLY);
+		combo.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				String comboSelection = combo.getItem(combo.getSelectionIndex());
+				try {
+					loadData(combo.getData(comboSelection));
+					updateMarkFields();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
 		fd_label.top = new FormAttachment(combo, 274);
 		FormData fd_combo = new FormData();
 		fd_combo.left = new FormAttachment(0, 10);
@@ -161,7 +169,7 @@ public class MarkDialog extends GuiDialog {
 		link_3.setLayoutData(fd_link_3);
 		link_3.setText("<a>Rename</a>");
 		
-		table = new Table(shlDialog, SWT.BORDER | SWT.FULL_SELECTION);
+		table = new Table(shlDialog, SWT.BORDER | SWT.FULL_SELECTION | SWT.HIDE_SELECTION);
 		FormData fd_table = new FormData();
 		fd_table.left = new FormAttachment(label, 0, SWT.LEFT);
 		fd_table.top = new FormAttachment(combo, 6);
@@ -176,35 +184,63 @@ public class MarkDialog extends GuiDialog {
 		tblclmnMark.setText("Mark");
 		
 		TableColumn tblclmnBound = new TableColumn(table, SWT.NONE);
-		tblclmnBound.setWidth(100);
+		tblclmnBound.setWidth(60);
 		tblclmnBound.setText("Bound");
 		
 		TableColumn tblclmnCommands = new TableColumn(table, SWT.NONE);
-		tblclmnCommands.setWidth(100);
-		tblclmnCommands.setText("Commands");
+		tblclmnCommands.setWidth(41);
+		
+		TableColumn tableColumn = new TableColumn(table, SWT.NONE);
+		tableColumn.setWidth(40);
+		
+		TableColumn tableColumn_1 = new TableColumn(table, SWT.NONE);
+		tableColumn_1.setWidth(100);
 		
 		update();
 	}
 
 	private void createMarkField(String text, int bound) {
-		Log.info("Creating " + text);
-		markCount++;
+		Log.debug("Creating " + text);
 		
-		TableItem ti = new TableItem(table, 0);
-		ti.setText("("+markCount+")");
+		TableItem ti = new TableItem(table, SWT.NONE);
+		Image fake = new Image(table.getDisplay(), 1, 22);
+		ti.setImage(0, fake); 
 		
-		txtNewMark = new Text(scrolledComposite, SWT.BORDER);
-		txtNewMark.setText(text);
+		Text name = new Text(table, SWT.BORDER);
+		name.setText(text);
+		Spinner boundS = new Spinner(table, SWT.NONE);
+		boundS.setSelection(bound);
+		Link link_1 = new Link(table, 0);
+		link_1.setText("<a>Up</a>");
+		Link link_2 = new Link(table, 0);
+		link_2.setText("<a>Down</a>");
+		Link link_3 = new Link(table, 0);
+		link_3.setText("<a>Remove</a>");
 		
-		Spinner spinner = new Spinner(scrolledComposite, SWT.BORDER);
-		spinner.setSelection(bound);
-		
-//		Link link_1 = new Link(grpOrderOfMarks, SWT.NONE);
-//		link_1.setText("<a>Up</a>");
+		TableEditor editor1 = new TableEditor(table);
+		TableEditor editor2 = new TableEditor(table);
+		TableEditor editor3 = new TableEditor(table);
+		TableEditor editor4 = new TableEditor(table);
+		TableEditor editor5 = new TableEditor(table);
+        editor1.grabHorizontal = editor1.grabVertical = true;
+        editor2.grabHorizontal = editor2.grabVertical = true;
+        editor3.grabHorizontal = editor3.grabVertical = true;
+        editor4.grabHorizontal = editor4.grabVertical = true;
+        editor5.grabHorizontal = editor5.grabVertical = true;
+        editor1.minimumHeight = 25;
+        editor1.setEditor(name, ti, 0);
+        editor2.setEditor(boundS, ti, 1);
+        editor3.setEditor(link_1, ti, 2);
+        editor4.setEditor(link_2, ti, 3);
+        editor5.setEditor(link_3, ti, 4);
+        
+       
+//		txtNewMark = new Text(scrolledComposite, SWT.BORDER);
+//		txtNewMark.setText(text);
 //		
-//		Link link_2 = new Link(grpOrderOfMarks, SWT.NONE);
-//		link_2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-//		link_2.setText("<a>Down</a>");
+//		Spinner spinner = new Spinner(scrolledComposite, SWT.BORDER);
+//		spinner.setSelection(bound);
+		
 	}
 
 
@@ -265,18 +301,23 @@ public class MarkDialog extends GuiDialog {
 				String typeString = loadedData.getValueAsStringNotNull("description");
 				combo.select(combo.indexOf(typeString));
 				
-				ArrayList<Row> marks = MarkQuery.getDataset(loadedData.getValueAsLong("id"));
-				for(Row mark : marks) {
-					createMarkField(
-							mark.getValueAsStringNotNull("representation"), 
-							(int)Math.round((double) mark.getValue("bound"))
-							);
-				}
+				updateMarkFields();
 				
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+
+	private void updateMarkFields() throws Exception {
+		table.removeAll();
+		ArrayList<Row> marks = MarkQuery.getDataset(loadedData.getValueAsLong("id"));
+		for(Row mark : marks) {
+			createMarkField(
+					mark.getValueAsStringNotNull("representation"), 
+					(int)Math.round((double) mark.getValue("bound"))
+					);
 		}
 	}
 
