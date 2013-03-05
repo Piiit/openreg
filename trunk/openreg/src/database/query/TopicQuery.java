@@ -20,13 +20,10 @@ public class TopicQuery {
 	 * Note: Please keep they return value as it is, to standardize our queries classes. 
 	 */
 	public static ArrayList<Row> getDataset(Object id) throws Exception{
-		//return DatabaseTools.getQueryResult("SELECT * FROM topic WHERE id = ? ORDER BY description", (Long)id);
-		Log.info("Loading topic with ID " + id.toString());
 		return DatabaseTools.getQueryResult(
-				"SELECT to.id AS topic_id, * FROM  topic to " +
-				"INNER JOIN course co ON co.id = course_id " +
-				"WHERE to.id = ? " +
-				"ORDER BY to.description", (Long)id);
+				"SELECT t.id AS top_id, * FROM topic t " +
+				"INNER JOIN course co ON t.course_id = co.id " +
+				"WHERE t.id = ? ORDER BY description DESC", id);
 	}
 	
 	/**

@@ -143,11 +143,11 @@ public class TopicDialog extends GuiDialog {
 	
 	@Override
 	public void loadData(Object data) throws Exception {
-		ArrayList<Row> ab = TopicQuery.getDataset(data);
-		if(ab.size() == 0) {
+		ArrayList<Row> top = TopicQuery.getDataset(data);
+		if(top.size() == 0) {
 			throw new Exception("No topic description with ID " + data.toString() + " found.");
 		}
-		loadedDescription = ab.get(0); 
+		loadedDescription = top.get(0); 
 	}
 
 	@Override
@@ -178,7 +178,14 @@ public class TopicDialog extends GuiDialog {
 		try {
 			if (loadedDescription != null){
 				text.setText(loadedDescription.getValueAsStringNotNull("description"));
-				shlDialog.setText("Modify an topic description");
+				
+				String courseString = loadedDescription.getValueAsStringNotNull("description");
+				comboCourse.select(comboCourse.indexOf(courseString));
+				
+				String mainTopicString = loadedDescription.getValueAsStringNotNull("description");
+				comboMainTopic.select(comboCourse.indexOf(mainTopicString));
+				
+				shlDialog.setText("Modify a topic description");
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
