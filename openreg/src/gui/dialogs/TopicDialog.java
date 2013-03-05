@@ -1,6 +1,9 @@
 package gui.dialogs;
 
 import java.util.ArrayList;
+
+import log.Log;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -13,9 +16,11 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import database.Row;
+import database.query.CourseQuery;
 import database.query.TopicQuery;
 import gui.GuiDialog;
 import gui.GuiTools;
+import org.eclipse.swt.widgets.Combo;
 
 public class TopicDialog extends GuiDialog {
 
@@ -23,6 +28,8 @@ public class TopicDialog extends GuiDialog {
 	protected Shell shlDialog;
 	private Text text;
 	private Row loadedDescription;
+	private Combo comboCourse;
+	private Combo comboMainTopic;
 	
 	public TopicDialog(Shell parent) {
 		super(parent);
@@ -50,7 +57,7 @@ public class TopicDialog extends GuiDialog {
 	 */
 	private void createContents() {
 		shlDialog = new Shell(getParent(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
-		shlDialog.setSize(300, 142);
+		shlDialog.setSize(300, 276);
 		shlDialog.setText("Add a new topic description");
 		shlDialog.setLayout(new FormLayout());
 		
@@ -61,12 +68,6 @@ public class TopicDialog extends GuiDialog {
 		lblDescription.setLayoutData(fd_lblDescription);
 		lblDescription.setText("Description *");
 		
-		Label label = new Label(shlDialog, SWT.SEPARATOR | SWT.HORIZONTAL);
-		FormData fd_label = new FormData();
-		fd_label.left = new FormAttachment(lblDescription, 0, SWT.LEFT);
-		fd_label.right = new FormAttachment(100, -10);
-		label.setLayoutData(fd_label);
-		
 		Button btnSave = new Button(shlDialog, SWT.NONE);
 		btnSave.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -75,13 +76,12 @@ public class TopicDialog extends GuiDialog {
 			}
 		});
 		FormData fd_btnSave = new FormData();
-		fd_btnSave.top = new FormAttachment(label, 6);
-		fd_btnSave.right = new FormAttachment(100, -10);
+		fd_btnSave.bottom = new FormAttachment(100, -39);
 		btnSave.setLayoutData(fd_btnSave);
 		btnSave.setText("Save");
 		
 		Button btnCancel = new Button(shlDialog, SWT.NONE);
-		fd_btnSave.left = new FormAttachment(btnCancel, 6);
+		fd_btnSave.left = new FormAttachment(0, 209);
 		btnCancel.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
@@ -89,27 +89,54 @@ public class TopicDialog extends GuiDialog {
 			}
 		});
 		FormData fd_btnCancel = new FormData();
-		fd_btnCancel.top = new FormAttachment(label, 6);
-		fd_btnCancel.right = new FormAttachment(100, -91);
+		fd_btnCancel.top = new FormAttachment(btnSave, 0, SWT.TOP);
+		fd_btnCancel.right = new FormAttachment(btnSave, -6);
+		fd_btnCancel.left = new FormAttachment(0, 115);
 		btnCancel.setLayoutData(fd_btnCancel);
 		btnCancel.setText("Cancel");
 		
 		Label lblMandatoryFields = new Label(shlDialog, SWT.NONE);
-		fd_btnCancel.left = new FormAttachment(lblMandatoryFields, 6);
 		FormData fd_lblMandatoryFields = new FormData();
-		fd_lblMandatoryFields.top = new FormAttachment(label, 9);
+		fd_lblMandatoryFields.top = new FormAttachment(btnSave, 5, SWT.TOP);
 		fd_lblMandatoryFields.left = new FormAttachment(lblDescription, 0, SWT.LEFT);
 		lblMandatoryFields.setLayoutData(fd_lblMandatoryFields);
 		lblMandatoryFields.setText("* Mandatory Fields");
 		
 		text = new Text(shlDialog, SWT.BORDER);
-		fd_label.bottom = new FormAttachment(text, 19, SWT.BOTTOM);
-		fd_label.top = new FormAttachment(text, 6);
+		fd_btnSave.right = new FormAttachment(text, 0, SWT.RIGHT);
 		FormData fd_text = new FormData();
 		fd_text.left = new FormAttachment(0, 10);
 		fd_text.right = new FormAttachment(100, -10);
 		fd_text.top = new FormAttachment(lblDescription, 6);
 		text.setLayoutData(fd_text);
+		
+		comboCourse = new Combo(shlDialog, SWT.NONE);
+		FormData fd_comboCourse = new FormData();
+		fd_comboCourse.right = new FormAttachment(100, -10);
+		fd_comboCourse.left = new FormAttachment(0, 149);
+		comboCourse.setLayoutData(fd_comboCourse);
+		
+		comboMainTopic = new Combo(shlDialog, SWT.NONE);
+		fd_comboCourse.bottom = new FormAttachment(100, -146);
+		FormData fd_comboMainTopic = new FormData();
+		fd_comboMainTopic.right = new FormAttachment(btnSave, 0, SWT.RIGHT);
+		fd_comboMainTopic.top = new FormAttachment(comboCourse, 24);
+		fd_comboMainTopic.left = new FormAttachment(comboCourse, 0, SWT.LEFT);
+		comboMainTopic.setLayoutData(fd_comboMainTopic);
+		
+		Label lblSelectCourse = new Label(shlDialog, SWT.NONE);
+		FormData fd_lblSelectCourse = new FormData();
+		fd_lblSelectCourse.top = new FormAttachment(comboCourse, 0, SWT.TOP);
+		fd_lblSelectCourse.left = new FormAttachment(0, 10);
+		lblSelectCourse.setLayoutData(fd_lblSelectCourse);
+		lblSelectCourse.setText("Select course");
+		
+		Label lblSelectMainToptic = new Label(shlDialog, SWT.NONE);
+		FormData fd_lblSelectMainToptic = new FormData();
+		fd_lblSelectMainToptic.top = new FormAttachment(comboMainTopic, 0, SWT.TOP);
+		fd_lblSelectMainToptic.left = new FormAttachment(lblDescription, 0, SWT.LEFT);
+		lblSelectMainToptic.setLayoutData(fd_lblSelectMainToptic);
+		lblSelectMainToptic.setText("Select main toptic");
 
 		update();
 	}
@@ -126,13 +153,15 @@ public class TopicDialog extends GuiDialog {
 	@Override
 	public void store() {
 		try {
-			Row newDescription = new Row();
-			newDescription.setValue("description", GuiTools.nullIfEmptyTrimmed(text.getText()));
+			Row newTopic = new Row();
+			newTopic.setValue("description", GuiTools.nullIfEmptyTrimmed(text.getText()));
+			newTopic.setValue("course_id", comboCourse.getData(comboCourse.getText()));
+			newTopic.setValue("topic_id", comboMainTopic.getData(comboMainTopic.getText()));
 			
 			if(loadedDescription == null) {
-				TopicQuery.insert(newDescription);	
+				TopicQuery.insert(newTopic);	
 			} else {
-				TopicQuery.update(loadedDescription.getValueAsLong("id"), newDescription);
+				TopicQuery.update(loadedDescription.getValueAsLong("id"), newTopic);
 			}
 			
 			shlDialog.close();
@@ -144,6 +173,8 @@ public class TopicDialog extends GuiDialog {
 
 	@Override
 	public void update() {
+		updateCourseField();
+		updateMainTopicField();
 		try {
 			if (loadedDescription != null){
 				text.setText(loadedDescription.getValueAsStringNotNull("description"));
@@ -151,6 +182,32 @@ public class TopicDialog extends GuiDialog {
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private void updateCourseField() {
+		comboCourse.removeAll();
+		try {
+			for(Row co : CourseQuery.getFullDataset()) {
+				String courseString = co.getValueAsStringNotNull("name");
+				comboCourse.add(courseString);
+				comboCourse.setData(courseString, co.getValue("id"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void updateMainTopicField() {
+		comboMainTopic.removeAll();
+		try {
+			for(Row to : TopicQuery.getFullDataset()) {
+				String mainTopicString = to.getValueAsStringNotNull("description");
+				comboMainTopic.add(mainTopicString);
+				comboMainTopic.setData(mainTopicString, to.getValue("id"));
+			}
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
