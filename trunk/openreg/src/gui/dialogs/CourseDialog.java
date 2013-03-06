@@ -14,17 +14,20 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import database.Row;
 import database.query.AbilityDescriptionQuery;
+import database.query.CourseQuery;
 import gui.GuiDialog;
 import gui.GuiTools;
+import org.eclipse.swt.widgets.Spinner;
 
-public class AbilityDescriptionDialog extends GuiDialog {
+public class CourseDialog extends GuiDialog {
 
 	protected Object result;
 	protected Shell shlDialog;
 	private Text text;
-	private Row loadedDescription;
+	private Row loadedData;
+	private Text textCP;
 	
-	public AbilityDescriptionDialog(Shell parent) {
+	public CourseDialog(Shell parent) {
 		super(parent);
 	}
 
@@ -50,8 +53,8 @@ public class AbilityDescriptionDialog extends GuiDialog {
 	 */
 	private void createContents() {
 		shlDialog = new Shell(getParent(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
-		shlDialog.setSize(300, 142);
-		shlDialog.setText("Add a new ability description");
+		shlDialog.setSize(300, 200);
+		shlDialog.setText("Add a new course");
 		shlDialog.setLayout(new FormLayout());
 		
 		Label lblDescription = new Label(shlDialog, SWT.NONE);
@@ -59,15 +62,16 @@ public class AbilityDescriptionDialog extends GuiDialog {
 		fd_lblDescription.top = new FormAttachment(0, 10);
 		fd_lblDescription.left = new FormAttachment(0, 10);
 		lblDescription.setLayoutData(fd_lblDescription);
-		lblDescription.setText("Description *");
+		lblDescription.setText("Name *");
 		
 		Label label = new Label(shlDialog, SWT.SEPARATOR | SWT.HORIZONTAL);
 		FormData fd_label = new FormData();
 		fd_label.left = new FormAttachment(lblDescription, 0, SWT.LEFT);
-		fd_label.right = new FormAttachment(100, -10);
 		label.setLayoutData(fd_label);
 		
 		Button btnSave = new Button(shlDialog, SWT.NONE);
+		fd_label.bottom = new FormAttachment(btnSave, -6);
+		fd_label.right = new FormAttachment(btnSave, 0, SWT.RIGHT);
 		btnSave.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
@@ -75,12 +79,12 @@ public class AbilityDescriptionDialog extends GuiDialog {
 			}
 		});
 		FormData fd_btnSave = new FormData();
-		fd_btnSave.top = new FormAttachment(label, 6);
 		fd_btnSave.right = new FormAttachment(100, -10);
 		btnSave.setLayoutData(fd_btnSave);
 		btnSave.setText("Save");
 		
 		Button btnCancel = new Button(shlDialog, SWT.NONE);
+		fd_btnSave.top = new FormAttachment(btnCancel, 0, SWT.TOP);
 		fd_btnSave.left = new FormAttachment(btnCancel, 6);
 		btnCancel.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -89,7 +93,7 @@ public class AbilityDescriptionDialog extends GuiDialog {
 			}
 		});
 		FormData fd_btnCancel = new FormData();
-		fd_btnCancel.top = new FormAttachment(label, 6);
+		fd_btnCancel.bottom = new FormAttachment(100, -10);
 		fd_btnCancel.right = new FormAttachment(100, -91);
 		btnCancel.setLayoutData(fd_btnCancel);
 		btnCancel.setText("Cancel");
@@ -97,42 +101,57 @@ public class AbilityDescriptionDialog extends GuiDialog {
 		Label lblMandatoryFields = new Label(shlDialog, SWT.NONE);
 		fd_btnCancel.left = new FormAttachment(lblMandatoryFields, 6);
 		FormData fd_lblMandatoryFields = new FormData();
-		fd_lblMandatoryFields.top = new FormAttachment(label, 9);
+		fd_lblMandatoryFields.bottom = new FormAttachment(100, -10);
 		fd_lblMandatoryFields.left = new FormAttachment(lblDescription, 0, SWT.LEFT);
 		lblMandatoryFields.setLayoutData(fd_lblMandatoryFields);
 		lblMandatoryFields.setText("* Mandatory Fields");
 		
 		text = new Text(shlDialog, SWT.BORDER);
-		fd_label.bottom = new FormAttachment(text, 19, SWT.BOTTOM);
-		fd_label.top = new FormAttachment(text, 6);
+		fd_label.top = new FormAttachment(text, 72);
 		FormData fd_text = new FormData();
 		fd_text.left = new FormAttachment(0, 10);
 		fd_text.right = new FormAttachment(100, -10);
 		fd_text.top = new FormAttachment(lblDescription, 6);
 		text.setLayoutData(fd_text);
+		
+		Label lblCreditPoints = new Label(shlDialog, SWT.NONE);
+		FormData fd_lblCreditPoints = new FormData();
+		fd_lblCreditPoints.top = new FormAttachment(text, 6);
+		fd_lblCreditPoints.left = new FormAttachment(0, 10);
+		lblCreditPoints.setLayoutData(fd_lblCreditPoints);
+		lblCreditPoints.setText("Credit Points");
+		
+		textCP = new Text(shlDialog, SWT.BORDER);
+		FormData fd_textCP = new FormData();
+		fd_textCP.right = new FormAttachment(lblMandatoryFields, 0, SWT.RIGHT);
+		fd_textCP.top = new FormAttachment(lblCreditPoints, 6);
+		fd_textCP.left = new FormAttachment(lblDescription, 0, SWT.LEFT);
+		textCP.setLayoutData(fd_textCP);
 
 		update();
 	}
 	
 	@Override
 	public void loadData(Object data) throws Exception {
-		ArrayList<Row> ab = AbilityDescriptionQuery.getDataset(data);
+		ArrayList<Row> ab = CourseQuery.getDataset(data);
 		if(ab.size() == 0) {
-			throw new Exception("No ability description with ID " + data.toString() + " found.");
+			throw new Exception("No course with ID " + data.toString() + " found.");
 		}
-		loadedDescription = ab.get(0); 
+		loadedData = ab.get(0); 
 	}
 
 	@Override
 	public void store() {
 		try {
-			Row newDescription = new Row();
-			newDescription.setValue("description", GuiTools.nullIfEmptyTrimmed(text.getText()));
+			Row course = new Row();
+			course.setValue("name", GuiTools.nullIfEmptyTrimmed(text.getText()));
+			String cp = GuiTools.nullIfEmptyTrimmed(textCP.getText());
+			course.setValue("credit_points", (cp == null ? null : Integer.parseInt(cp)));
 			
-			if(loadedDescription == null) {
-				AbilityDescriptionQuery.insert(newDescription);	
+			if(loadedData == null) {
+				CourseQuery.insert(course);	
 			} else {
-				AbilityDescriptionQuery.update(loadedDescription.getValueAsLong("id"), newDescription);
+				CourseQuery.update(loadedData.getValueAsLong("id"), course);
 			}
 			
 			shlDialog.close();
@@ -145,9 +164,10 @@ public class AbilityDescriptionDialog extends GuiDialog {
 	@Override
 	public void update() {
 		try {
-			if (loadedDescription != null){
-				text.setText(loadedDescription.getValueAsStringNotNull("description"));
-				shlDialog.setText("Modify an ability description");
+			if (loadedData != null){
+				text.setText(loadedData.getValueAsStringNotNull("name"));
+				textCP.setText(loadedData.getValueAsStringNotNull("credit_points"));
+				shlDialog.setText("Modify a course");
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
