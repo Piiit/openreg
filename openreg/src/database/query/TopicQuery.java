@@ -21,9 +21,10 @@ public class TopicQuery {
 	 */
 	public static ArrayList<Row> getDataset(Object id) throws Exception{
 		return DatabaseTools.getQueryResult(
-				"SELECT t.id AS top_id, * FROM topic t " +
+				"SELECT t.id AS top_id, t.description AS sub_topic_description, * FROM topic t " +
 				"INNER JOIN course co ON t.course_id = co.id " +
-				"WHERE t.id = ? ORDER BY description DESC", id);
+				"INNER JOIN topic ttt ON t.course_id = ttt.course_id " +
+				"WHERE t.id = ? ORDER BY t.description DESC", id);
 	}
 	
 	/**
