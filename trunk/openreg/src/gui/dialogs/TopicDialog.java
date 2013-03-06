@@ -177,13 +177,13 @@ public class TopicDialog extends GuiDialog {
 		updateMainTopicField();
 		try {
 			if (loadedDescription != null){
-				text.setText(loadedDescription.getValueAsStringNotNull("description"));
+				text.setText(loadedDescription.getValueAsStringNotNull("sub_topic_description"));
 				
-				String courseString = loadedDescription.getValueAsStringNotNull("description");
+				String courseString = loadedDescription.getValueAsStringNotNull("name");
 				comboCourse.select(comboCourse.indexOf(courseString));
 				
 				String mainTopicString = loadedDescription.getValueAsStringNotNull("description");
-				comboMainTopic.select(comboCourse.indexOf(mainTopicString));
+				comboMainTopic.select(comboMainTopic.indexOf(mainTopicString));
 				
 				shlDialog.setText("Modify a topic description");
 			}
