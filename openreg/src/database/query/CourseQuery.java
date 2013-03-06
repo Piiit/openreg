@@ -19,7 +19,7 @@ public class CourseQuery {
 	 * Note: Please keep they return value as it is, to standardize our queries classes. 
 	 */
 	public static ArrayList<Row> getDataset(Object id) throws Exception{
-		return null;
+		return DatabaseTools.getQueryResult("SELECT * FROM course WHERE id = ?", id);
 	}
 	
 	/**
@@ -34,18 +34,28 @@ public class CourseQuery {
 	 * @return ID of the new tuple formerly inserted.
 	 */
 	public static Long insert(Row row) throws Exception{
-		return null;
+		return (Long)DatabaseTools.executeUpdate(
+				"INSERT INTO course (name, credit_points) VALUES (?, ?)",
+				row.getValueAsString("name"),
+				row.getValueAsInt("credit_points")
+				);
 	}
 	
 	/**
 	 * Update a certain tuple.
 	 */
-	public static void update(Object id, Row row) throws Exception{
+	public static void update(Object id, Row row) throws Exception {
+		DatabaseTools.executeUpdate(
+				"UPDATE course SET name = ?, credit_points = ? WHERE id = ?",
+				row.getValueAsString("name"),
+				row.getValueAsInt("credit_points"),
+				id);
 	}
 	
 	/**
 	 * Delete a certain tuple.
 	 */
-	public static void delete(Object id) throws Exception{
+	public static void delete(Object id) throws Exception {
+		DatabaseTools.executeUpdate("DELETE FROM course WHERE id = ?", id);
 	}
 }
