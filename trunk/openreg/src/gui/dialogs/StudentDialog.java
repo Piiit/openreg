@@ -365,6 +365,7 @@ public class StudentDialog extends GuiDialog {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			GuiTools.showMessageBox(shlAddStudent, e.getMessage());
 		}
 	}
 
@@ -381,6 +382,7 @@ public class StudentDialog extends GuiDialog {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			GuiTools.showMessageBox(shlAddStudent, e.getMessage());
 		}
 	}
 
@@ -394,6 +396,7 @@ public class StudentDialog extends GuiDialog {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			GuiTools.showMessageBox(shlAddStudent, e.getMessage());
 		}
 	}
 	

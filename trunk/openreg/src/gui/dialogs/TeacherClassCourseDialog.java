@@ -99,8 +99,8 @@ public class TeacherClassCourseDialog extends GuiDialog {
 					loadData(Long.parseLong(listTeachers.getData(s).toString()));
 					removeAndRecreateComboBoxes();
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
+					GuiTools.showMessageBox(shlAssignTeacher, e.getMessage());
 				}
 			}
 		});
@@ -161,8 +161,8 @@ public class TeacherClassCourseDialog extends GuiDialog {
 		try {
 			loadData(teacherIndex);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			GuiTools.showMessageBox(shlAssignTeacher, e.getMessage());
 		}
 		createClassCombo();
 		dataSet = false;
@@ -196,8 +196,8 @@ public class TeacherClassCourseDialog extends GuiDialog {
 									try {
 										store(i);
 									} catch (Exception e) {
-										// TODO Auto-generated catch block
 										e.printStackTrace();
+										GuiTools.showMessageBox(shlAssignTeacher, e.getMessage());
 									}
 								i++;
 							}
@@ -325,6 +325,7 @@ public class TeacherClassCourseDialog extends GuiDialog {
 			} catch (Exception e) {
 				e.printStackTrace();
 				// comboDuplicateKeyExceptionHandling(combo);
+				GuiTools.showMessageBox(shlAssignTeacher, e.getMessage());
 			}
 
 		}
@@ -401,8 +402,8 @@ public class TeacherClassCourseDialog extends GuiDialog {
 			try {
 				loadData(teacherIndex);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+				GuiTools.showMessageBox(shlAssignTeacher, e.getMessage());
 			}
 		}
 	}

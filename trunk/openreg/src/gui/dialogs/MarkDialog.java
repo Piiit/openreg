@@ -176,6 +176,7 @@ public class MarkDialog extends GuiDialog {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			GuiTools.showMessageBox(shlDialog, e.getMessage());
 		}
 	}
 

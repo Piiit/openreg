@@ -218,8 +218,8 @@ public class AddressDialog extends GuiDialog {
 				shlDialog.setText("Modify an address");
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			GuiTools.showMessageBox(shlDialog, e.getMessage());
 		}
 	}
 

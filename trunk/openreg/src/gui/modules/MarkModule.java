@@ -91,6 +91,7 @@ public class MarkModule extends GuiModule {
 					dialog.loadData(ti.getData());
 				} catch (Exception e) {
 					e.printStackTrace();
+					GuiTools.showMessageBox(container.getShell(), e.getMessage());
 				}
 				dialog.open();
 				reloadData();
