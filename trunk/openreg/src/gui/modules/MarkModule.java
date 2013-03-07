@@ -20,7 +20,7 @@ import database.query.MarkQuery;
 import database.query.MarkTypeQuery;
 import gui.GuiModule;
 import gui.GuiTools;
-import gui.dialogs.MarkDialog;
+import gui.dialogs.MarkListDialog;
 
 public class MarkModule extends GuiModule {
 
@@ -44,7 +44,7 @@ public class MarkModule extends GuiModule {
 		tltmAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				MarkDialog dialog = new MarkDialog(group.getShell());
+				MarkListDialog dialog = new MarkListDialog(group.getShell());
 				dialog.open();
 				reloadData();
 			}
@@ -58,12 +58,12 @@ public class MarkModule extends GuiModule {
 				ArrayList<Long> selected = GuiTools.getSelectedItems(table);
 				
 				if(selected.size() == 0) {
-					GuiTools.showMessageBox(container.getShell(), "No marks selected.");
+					GuiTools.showMessageBox(container.getShell(), "No mark types selected.");
 					reloadData();
 					return;
 				}
 				
-				int answer = GuiTools.showQuestionBox(container.getShell(), "Delete " + selected.size() + " marks?");
+				int answer = GuiTools.showQuestionBox(container.getShell(), "Delete " + selected.size() + " mark types?");
 				if(answer == SWT.NO) {
 					return;
 				}
@@ -85,12 +85,11 @@ public class MarkModule extends GuiModule {
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent arg0) {
-				MarkDialog dialog = new MarkDialog(container.getShell());
+				MarkListDialog dialog = new MarkListDialog(container.getShell());
 				try {
 					TableItem ti = table.getItem(table.getSelectionIndex());
 					dialog.loadData(ti.getData());
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				dialog.open();
@@ -120,7 +119,7 @@ public class MarkModule extends GuiModule {
 				Long markTypeId = markType.getValueAsLong("id");
 				tableItem.setData(markTypeId);
 				
-				ArrayList<Row> marks = MarkQuery.getDataset(markTypeId);
+				ArrayList<Row> marks = MarkQuery.getAllMarksOfType(markTypeId);
 				String markList = "";
 				if(marks.size() > 0) {
 					for(Row mark : marks) {

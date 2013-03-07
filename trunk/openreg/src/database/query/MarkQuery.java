@@ -23,8 +23,12 @@ public class MarkQuery {
 	 * Note: Please keep they return value as it is, to standardize our queries classes. 
 	 */
 	public static ArrayList<Row> getDataset(Object id) throws Exception{
+		return DatabaseTools.getQueryResult("SELECT * FROM mark m WHERE id = ? ", id);
+	}
+	
+	public static ArrayList<Row> getAllMarksOfType(Object id) throws Exception {
 		return DatabaseTools.getQueryResult(
-				"SELECT * FROM mark m " +
+				"SELECT *, m.id AS mark_id FROM mark m " +
 				"INNER JOIN mark_type mt ON m.mark_type_id = mt.id " +
 				"WHERE mark_type_id = ? " +
 				"ORDER BY bound DESC", 
@@ -43,18 +47,28 @@ public class MarkQuery {
 	 * @return ID of the new tuple formerly inserted.
 	 */
 	public static Long insert(Row row) throws Exception{
-		return null;
+		return (Long)DatabaseTools.executeUpdate(
+				"INSERT INTO mark (representation, bound, mark_type_id) VALUES (?, ?, ?)", 
+				row.getValueAsString("representation"),
+				row.getValue("bound"),
+				row.getValueAsLong("mark_type_id"));
 	}
 	
 	/**
 	 * Update a certain tuple.
 	 */
-	public static void update(Object id, Row row) throws Exception{
+	public static void update(Object id, Row row) throws Exception {
+		DatabaseTools.executeUpdate(
+				"UPDATE mark SET representation = ?, bound = ? WHERE id = ?",
+				row.getValueAsString("representation"),
+				row.getValue("bound"),
+				id);
 	}
 	
 	/**
 	 * Delete a certain tuple.
 	 */
-	public static void delete(Object id) throws Exception{
+	public static void delete(Object id) throws Exception {
+		DatabaseTools.executeUpdate("DELETE FROM mark WHERE id = ?", id);
 	}
 }
