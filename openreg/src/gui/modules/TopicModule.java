@@ -88,8 +88,8 @@ public class TopicModule extends GuiModule {
 					TableItem ti = table.getItem(table.getSelectionIndex());
 					topic.loadData(ti.getData());
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
+					GuiTools.showMessageBox(container.getShell(), e.getMessage());
 				}
 				topic.open();
 				reloadData();

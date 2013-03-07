@@ -170,8 +170,8 @@ public class CourseDialog extends GuiDialog {
 				shlDialog.setText("Modify a course");
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			GuiTools.showMessageBox(shlDialog, e.getMessage());
 		}
 	}
 

@@ -81,8 +81,8 @@ public class StudentsModule extends GuiModule {
 					TableItem ti = table.getItem(table.getSelectionIndex());
 					addDialog.loadData(ti.getData());
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
+					GuiTools.showMessageBox(container.getShell(), e.getMessage());
 				}
 				addDialog.open();
 				reloadData();

@@ -188,8 +188,8 @@ public class TopicDialog extends GuiDialog {
 				shlDialog.setText("Modify a topic description");
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			GuiTools.showMessageBox(shlDialog, e.getMessage());
 		}
 	}
 	
@@ -203,6 +203,7 @@ public class TopicDialog extends GuiDialog {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			GuiTools.showMessageBox(shlDialog, e.getMessage());
 		}
 	}
 	
@@ -216,6 +217,7 @@ public class TopicDialog extends GuiDialog {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			GuiTools.showMessageBox(shlDialog, e.getMessage());
 		}
 	}
 

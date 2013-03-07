@@ -278,8 +278,8 @@ public class TeacherDialog extends GuiDialog {
 			}
 			updateAddressFields();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			GuiTools.showMessageBox(shlAddTeacher, e.getMessage());
 		}
 	}
 
@@ -349,11 +349,10 @@ public class TeacherDialog extends GuiDialog {
 				try {
 					AddressQuery.delete(addressId);
 				} catch (Exception e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
+					GuiTools.showMessageBox(shlAddTeacher, e.getMessage());
 				}
 			}
-
 			GuiTools.showMessageBox(shlAddTeacher, e.getMessage());
 		}
 	}

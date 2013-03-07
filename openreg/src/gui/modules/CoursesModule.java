@@ -88,8 +88,8 @@ public class CoursesModule extends GuiModule {
 					TableItem ti = table.getItem(table.getSelectionIndex());
 					dialog.loadData(ti.getData());
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
+					GuiTools.showMessageBox(container.getShell(), e.getMessage());
 				}
 				dialog.open();
 				reloadData();

@@ -23,7 +23,6 @@ import database.query.TeacherClassCourseQuery;
 import database.query.TeacherQuery;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.widgets.Label;
 
 public class TeachersModule extends GuiModule {
 	private Table table;
@@ -71,10 +70,6 @@ public class TeachersModule extends GuiModule {
 				for(Long teacherId : selected) {
 					try {
 						TeacherClassCourseQuery.deleteTeacher(teacherId);
-					} catch (Exception e) {
-						GuiTools.showMessageBox(container.getShell(), e.getMessage());
-					}
-					try {
 						TeacherQuery.delete(teacherId);
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -105,8 +100,8 @@ public class TeachersModule extends GuiModule {
 					try {
 						addDialog.loadData();
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
+						GuiTools.showMessageBox(container.getShell(), e.getMessage());
 					}
 				} else if (selected.size() > 1){
 					GuiTools.showMessageBox(container.getShell(), "Only one Teacher relationship can be mapped!");
@@ -115,8 +110,8 @@ public class TeachersModule extends GuiModule {
 					try {
 						addDialog.loadData(selected.get(0));
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
+						GuiTools.showMessageBox(container.getShell(), e.getMessage());
 					}
 				}
 				addDialog.open();
@@ -134,8 +129,8 @@ public class TeachersModule extends GuiModule {
 					TableItem ti = table.getItem(table.getSelectionIndex());
 					addDialog.loadData(ti.getData());
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					//e.printStackTrace();
+					e.printStackTrace();
+					GuiTools.showMessageBox(container.getShell(), e.getMessage());
 				}
 				addDialog.open();
 				reloadData();

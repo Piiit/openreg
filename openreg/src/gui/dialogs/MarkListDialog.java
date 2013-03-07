@@ -92,8 +92,8 @@ public class MarkListDialog extends GuiDialog {
 					loadData(combo.getData(comboSelection));
 					updateMarksTable();
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
+					GuiTools.showMessageBox(shlDialog, e.getMessage());
 				}
 			}
 		});
@@ -128,8 +128,8 @@ public class MarkListDialog extends GuiDialog {
 					String comboSelection = combo.getItem(combo.getSelectionIndex());
 					dialog.loadData(combo.getData(comboSelection));
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
+					GuiTools.showMessageBox(shlDialog, e.getMessage());
 				}
 				dialog.open();
 				updateMarkTypeField();
@@ -151,6 +151,7 @@ public class MarkListDialog extends GuiDialog {
 					dialog.loadData(ti.getData());
 				} catch (Exception e) {
 					e.printStackTrace();
+					GuiTools.showMessageBox(shlDialog, e.getMessage());
 				}
 				dialog.open();
 				updateMarksTable();
@@ -217,6 +218,7 @@ public class MarkListDialog extends GuiDialog {
 					dialog.setMarkType((Long)combo.getData(comboSelection));
 				} catch (Exception e) {
 					e.printStackTrace();
+					GuiTools.showMessageBox(shlDialog, e.getMessage());
 				}
 				dialog.open();
 				updateMarksTable();
@@ -256,6 +258,7 @@ public class MarkListDialog extends GuiDialog {
 			combo.select(selected);
 		} catch (Exception e) {
 			e.printStackTrace();
+			GuiTools.showMessageBox(shlDialog, e.getMessage());
 		}
 	}
 
@@ -276,6 +279,7 @@ public class MarkListDialog extends GuiDialog {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			GuiTools.showMessageBox(shlDialog, e.getMessage());
 		}
 	}
 
@@ -286,6 +290,7 @@ public class MarkListDialog extends GuiDialog {
 			marks = MarkQuery.getAllMarksOfType(loadedData.getValueAsLong("id"));
 		} catch (Exception e) {
 			e.printStackTrace();
+			GuiTools.showMessageBox(shlDialog, e.getMessage());
 		}
 		for(Row mark : marks) {
 			TableItem ti = new TableItem(table, SWT.NONE);

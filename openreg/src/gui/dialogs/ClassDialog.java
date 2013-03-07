@@ -189,8 +189,8 @@ public class ClassDialog extends GuiDialog {
 				classNotes.setText(loadedClass.getValueAsStringNotNull("notes"));
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			GuiTools.showMessageBox(shlAddANew, e.getMessage());
 		}
 	}
 
