@@ -21,10 +21,27 @@ public class TopicQuery {
 	 */
 	public static ArrayList<Row> getDataset(Object id) throws Exception{
 		return DatabaseTools.getQueryResult(
+				
+				"SELECT t.id, t.description, t.course_id, t.topic_id, co.name, " +
+				"t2.description AS main_topic_description " +
+				"FROM topic t LEFT JOIN course co ON t.course_id = co.id " +
+				"LEFT JOIN topic t2 ON t.topic_id = t2.topic_id " +
+				"WHERE t.id = ? ORDER BY t.description DESC", id);
+	}
+	
+	/**
+	 * Selecting specific tuples by id, returning an ArrayList
+	 * Note: Please keep they return value as it is, to standardize our queries classes. 
+	 */
+	public static ArrayList<Row> getCourseDataset(Object id) throws Exception{
+		return DatabaseTools.getQueryResult("SELECT * FROM topic WHERE course_id = ?", id);
+		/*
+		return DatabaseTools.getQueryResult(
 				"SELECT t.id AS top_id, t.description AS sub_topic_description, * FROM topic t " +
 				"INNER JOIN course co ON t.course_id = co.id " +
-				"INNER JOIN topic ttt ON t.course_id = ttt.course_id " +
-				"WHERE t.id = ? ORDER BY t.description DESC", id);
+				"INNER JOIN topic t2 ON t.course_id = t2.course_id " +
+				"WHERE t.course_id = ? ORDER BY t.description DESC", id);
+		*/
 	}
 	
 	/**
@@ -32,6 +49,11 @@ public class TopicQuery {
 	 */
 	public static ArrayList<Row> getFullDataset() throws Exception{
 		return DatabaseTools.getQueryResult("SELECT * FROM topic ORDER BY description");
+		/*return DatabaseTools.getQueryResult(
+				"SELECT t.id AS top_id, t.description AS sub_topic_description, * FROM topic t " +
+				"INNER JOIN course co ON t.course_id = co.id " +
+				"INNER JOIN topic t2 ON t.course_id = t2.course_id ORDER BY t.description DESC");
+		*/
 	}
 	
 	/**
@@ -64,8 +86,6 @@ public class TopicQuery {
 	 * Delete a certain tuple.
 	 */
 	public static void delete(Object id) throws Exception{
-		DatabaseTools.executeUpdate("DELETE FROM weighassessment WHERE topic_id = ?", (Long)id);
-		DatabaseTools.executeUpdate("DELETE FROM assessment WHERE topic_id = ?", (Long)id);
 		DatabaseTools.executeUpdate("DELETE FROM topic WHERE id = ?", (Long)id);
 	}
 

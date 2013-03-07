@@ -1,6 +1,9 @@
 package gui.modules;
 
 import java.util.ArrayList;
+
+import log.Log;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -8,6 +11,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Table;
@@ -16,6 +20,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import database.Row;
+import database.query.CourseQuery;
 import database.query.TopicQuery;
 import gui.GuiModule;
 import gui.GuiTools;
@@ -24,6 +29,8 @@ import gui.dialogs.TopicDialog;
 public class TopicModule extends GuiModule {
 
 	private Table table;
+	private ToolItem tltmFilter;
+	private Combo filterTopic;
 	
 	/**
 	 * @wbp.parser.entryPoint
@@ -79,6 +86,19 @@ public class TopicModule extends GuiModule {
 		});
 		tltmRemove.setText("Remove");
 		
+		filterTopic = new Combo(toolBar, SWT.READ_ONLY);
+		tltmFilter = new ToolItem(toolBar, SWT.SEPARATOR);
+		tltmFilter.setControl(filterTopic);
+		tltmFilter.setWidth(100);
+		filterTopic.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				Long classID = (Long)filterTopic.getData(filterTopic.getText());
+				Log.debug("Class ID " + classID);
+				reloadData(classID);
+			}
+		});
+		
 		table = new Table(group, SWT.BORDER | SWT.CHECK | SWT.FULL_SELECTION);
 		table.addMouseListener(new MouseAdapter() {
 			@Override
@@ -105,15 +125,30 @@ public class TopicModule extends GuiModule {
 	}
 
 	@Override
-	public void reloadData(Object filterId) {
+	public void reloadData(Object id) {
 		table.removeAll();
-		try {
-			for(Row topic : TopicQuery.getFullDataset()) {
+		filterTopic.removeAll();
+		try {			
+			ArrayList<Row> dataset = (id == null ? TopicQuery.getFullDataset() : TopicQuery.getCourseDataset(id));
+			for(Row topic : dataset) {
 				TableItem tableItem = new TableItem(table, SWT.NONE);
 				tableItem.setData(topic.getValueAsLong("id"));
+				
 				tableItem.setText(new String[] {
-						topic.getValueAsStringNotNull("description")
-						});
+					topic.getValueAsStringNotNull("description")
+				});
+			}
+			
+			String courseString = "Show all";
+			filterTopic.add(courseString);
+			filterTopic.select(filterTopic.indexOf(courseString));
+			for(Row co : CourseQuery.getFullDataset()) {
+				courseString = co.getValueAsStringNotNull("name");
+				filterTopic.add(courseString);
+				filterTopic.setData(courseString, co.getValue("id"));
+				if(id != null && id.equals(co.getValue("id"))) {
+					filterTopic.select(filterTopic.indexOf(courseString));
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
