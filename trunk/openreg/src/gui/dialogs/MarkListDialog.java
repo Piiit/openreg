@@ -112,6 +112,7 @@ public class MarkListDialog extends GuiDialog {
 				updateMarkTypeField();
 			}
 		});
+		
 		FormData fd_link = new FormData();
 		fd_link.bottom = new FormAttachment(100, -351);
 		fd_link.left = new FormAttachment(label, 0, SWT.LEFT);
