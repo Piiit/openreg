@@ -23,6 +23,9 @@ import database.query.TopicQuery;
 import gui.GuiDialog;
 import gui.GuiTools;
 import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Link;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 
 public class AssessmentDialog extends GuiDialog {
 
@@ -32,6 +35,7 @@ public class AssessmentDialog extends GuiDialog {
 	private Row loadedDescription;
 	private Combo comboType;
 	private Combo comboTopic;
+	private Text text_1;
 	
 	public AssessmentDialog(Shell parent) {
 		super(parent);
@@ -59,7 +63,7 @@ public class AssessmentDialog extends GuiDialog {
 	 */
 	private void createContents() {
 		shlDialog = new Shell(getParent(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
-		shlDialog.setSize(300, 276);
+		shlDialog.setSize(301, 312);
 		shlDialog.setText("Add a new assessment description");
 		shlDialog.setLayout(new FormLayout());
 		
@@ -78,11 +82,11 @@ public class AssessmentDialog extends GuiDialog {
 			}
 		});
 		FormData fd_btnSave = new FormData();
-		fd_btnSave.bottom = new FormAttachment(100, -39);
 		btnSave.setLayoutData(fd_btnSave);
 		btnSave.setText("Save");
 		
 		Button btnCancel = new Button(shlDialog, SWT.NONE);
+		fd_btnSave.top = new FormAttachment(btnCancel, 0, SWT.TOP);
 		fd_btnSave.left = new FormAttachment(0, 209);
 		btnCancel.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -91,13 +95,13 @@ public class AssessmentDialog extends GuiDialog {
 			}
 		});
 		FormData fd_btnCancel = new FormData();
-		fd_btnCancel.top = new FormAttachment(btnSave, 0, SWT.TOP);
 		fd_btnCancel.right = new FormAttachment(btnSave, -6);
-		fd_btnCancel.left = new FormAttachment(0, 115);
+		fd_btnCancel.bottom = new FormAttachment(100, -21);
 		btnCancel.setLayoutData(fd_btnCancel);
 		btnCancel.setText("Cancel");
 		
 		Label lblMandatoryFields = new Label(shlDialog, SWT.NONE);
+		fd_btnCancel.left = new FormAttachment(lblMandatoryFields, 6);
 		FormData fd_lblMandatoryFields = new FormData();
 		fd_lblMandatoryFields.top = new FormAttachment(btnSave, 5, SWT.TOP);
 		fd_lblMandatoryFields.left = new FormAttachment(lblDescription, 0, SWT.LEFT);
@@ -115,30 +119,63 @@ public class AssessmentDialog extends GuiDialog {
 		comboType = new Combo(shlDialog, SWT.NONE);
 		FormData fd_comboType = new FormData();
 		fd_comboType.right = new FormAttachment(100, -10);
-		fd_comboType.left = new FormAttachment(0, 149);
+		fd_comboType.top = new FormAttachment(text, 38);
 		comboType.setLayoutData(fd_comboType);
 		
 		comboTopic = new Combo(shlDialog, SWT.NONE);
-		fd_comboType.bottom = new FormAttachment(100, -146);
 		FormData fd_comboTopic = new FormData();
-		fd_comboTopic.right = new FormAttachment(btnSave, 0, SWT.RIGHT);
-		fd_comboTopic.top = new FormAttachment(comboType, 24);
-		fd_comboTopic.left = new FormAttachment(comboType, 0, SWT.LEFT);
+		fd_comboTopic.right = new FormAttachment(100, -10);
+		fd_comboTopic.top = new FormAttachment(comboType, 12);
 		comboTopic.setLayoutData(fd_comboTopic);
 		
 		Label lblSelectType = new Label(shlDialog, SWT.NONE);
+		fd_comboType.left = new FormAttachment(lblSelectType, 36);
 		FormData fd_lblSelectType = new FormData();
 		fd_lblSelectType.top = new FormAttachment(comboType, 0, SWT.TOP);
-		fd_lblSelectType.left = new FormAttachment(0, 10);
+		fd_lblSelectType.left = new FormAttachment(lblDescription, 0, SWT.LEFT);
 		lblSelectType.setLayoutData(fd_lblSelectType);
 		lblSelectType.setText("Select type");
 		
 		Label lblSelectMainToptic = new Label(shlDialog, SWT.NONE);
+		fd_comboTopic.left = new FormAttachment(lblSelectMainToptic, 32);
 		FormData fd_lblSelectMainToptic = new FormData();
 		fd_lblSelectMainToptic.top = new FormAttachment(comboTopic, 0, SWT.TOP);
 		fd_lblSelectMainToptic.left = new FormAttachment(lblDescription, 0, SWT.LEFT);
 		lblSelectMainToptic.setLayoutData(fd_lblSelectMainToptic);
 		lblSelectMainToptic.setText("Select topic");
+		
+		Link link = new Link(shlDialog, SWT.NONE);
+		link.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent arg0) {
+				AssessmentTypeDialog dialog = new AssessmentTypeDialog(shlDialog);
+				dialog.open();
+				updateTypeField();
+				updateTopicField();
+			}
+		});
+		FormData fd_link = new FormData();
+		fd_link.left = new FormAttachment(0, 10);
+		fd_link.right = new FormAttachment(100, -10);
+		fd_link.bottom = new FormAttachment(comboType, -17);
+		fd_link.top = new FormAttachment(text, 6);
+		link.setLayoutData(fd_link);
+		link.setText("<a>Add a new Assessment Type</a>");
+		
+		text_1 = new Text(shlDialog, SWT.BORDER);
+		FormData fd_text_1 = new FormData();
+		fd_text_1.bottom = new FormAttachment(100, -94);
+		fd_text_1.top = new FormAttachment(comboTopic, 10);
+		fd_text_1.left = new FormAttachment(comboType, 0, SWT.LEFT);
+		fd_text_1.right = new FormAttachment(100, -10);
+		text_1.setLayoutData(fd_text_1);
+		
+		Label lblNotes = new Label(shlDialog, SWT.NONE);
+		FormData fd_lblNotes = new FormData();
+		fd_lblNotes.top = new FormAttachment(text_1, 3, SWT.TOP);
+		fd_lblNotes.left = new FormAttachment(0, 10);
+		lblNotes.setLayoutData(fd_lblNotes);
+		lblNotes.setText("Notes");
 
 		update();
 	}
@@ -159,7 +196,7 @@ public class AssessmentDialog extends GuiDialog {
 			newAssessment.setValue("description", GuiTools.nullIfEmptyTrimmed(text.getText()));
 			newAssessment.setValue("assessment_type_id", comboType.getData(comboType.getText()));
 			newAssessment.setValue("topic_id", comboTopic.getData(comboTopic.getText()));
-			newAssessment.setValue("notes", comboTopic.getData(text.getText()));
+			newAssessment.setValue("notes", GuiTools.nullIfEmptyTrimmed(text_1.getText()));
 			
 			if(loadedDescription == null) {
 				AssessmentQuery.insert(newAssessment);	
@@ -181,6 +218,7 @@ public class AssessmentDialog extends GuiDialog {
 		try {
 			if (loadedDescription != null){
 				text.setText(loadedDescription.getValueAsStringNotNull("assessment_description"));
+				text_1.setText(loadedDescription.getValueAsStringNotNull("notes"));
 				
 				String typeString = loadedDescription.getValueAsStringNotNull("assessment_type_description");
 				comboType.select(comboType.indexOf(typeString));

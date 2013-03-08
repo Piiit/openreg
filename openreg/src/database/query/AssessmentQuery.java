@@ -14,7 +14,7 @@ public class AssessmentQuery {
 
 	public static ArrayList<Row> getDataset(Object id) throws Exception {
 		return DatabaseTools.getQueryResult(
-				"SELECT a.id AS assessment_id, " +
+				"SELECT a.id AS assessment_id, a.notes, " +
 				"a.description AS assessment_description, " +
 				"ast.description AS assessment_type_description, " +
 				"t.description AS topic_description FROM assessment a " +
@@ -26,7 +26,7 @@ public class AssessmentQuery {
 	public static ArrayList<Row> getFullDataset() throws Exception {
 		
 		return DatabaseTools.getQueryResult(
-				"SELECT a.id AS assessment_id, " +
+				"SELECT a.id AS assessment_id, a.notes, " +
 				"a.description AS assessment_description, " +
 				"ast.description AS assessment_type_description, " +
 				"t.description AS topic_description FROM assessment a " +
@@ -42,7 +42,7 @@ public class AssessmentQuery {
 	public static ArrayList<Row> getTypeDataset(Object id) throws Exception{
 		
 		return DatabaseTools.getQueryResult(
-				"SELECT a.id AS assessment_id, " +
+				"SELECT a.id AS assessment_id, a.notes, " +
 				"a.description AS assessment_description, " +
 				"ast.description AS assessment_type_description, " +
 				"t.description AS topic_description FROM assessment a " +
@@ -58,7 +58,7 @@ public class AssessmentQuery {
 					row.getValueAsLong("assessment_type_id"),
 					row.getValueAsLong("topic_id"),
 					row.getValueAsString("description"),
-					row.getValueAsString("description")
+					row.getValueAsString("notes")
 				);
 	}
 

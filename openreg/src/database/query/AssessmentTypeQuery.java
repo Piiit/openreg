@@ -49,7 +49,7 @@ public class AssessmentTypeQuery {
 
 	public static void delete(Object id) throws Exception {
 		DatabaseTools.executeUpdate("DELETE FROM assessment WHERE assessment_type_id = ?", id);
-		DatabaseTools.executeUpdate("DELETE FROM assement_type WHERE id = ?", id);
+		DatabaseTools.executeUpdate("DELETE FROM assessment_type WHERE id = ?", id);
 	}
 
 }
