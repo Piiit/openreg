@@ -13,11 +13,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import database.Row;
-import database.query.AbilityDescriptionQuery;
 import database.query.CourseQuery;
 import gui.GuiDialog;
 import gui.GuiTools;
-import org.eclipse.swt.widgets.Spinner;
 
 public class CourseDialog extends GuiDialog {
 
