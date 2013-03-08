@@ -79,9 +79,6 @@ public class AddressesModule extends GuiModule {
 		});
 		tltmRemove.setText("Remove");
 		
-		ToolItem tltmShowAll = new ToolItem(toolBar, SWT.DROP_DOWN);
-		tltmShowAll.setText("Show all");
-		
 		table = new Table(group, SWT.BORDER | SWT.CHECK | SWT.FULL_SELECTION);
 		table.addMouseListener(new MouseAdapter() {
 			@Override
