@@ -1,6 +1,7 @@
 package gui.modules;
 
 import gui.GuiModule;
+import gui.dialogs.AssessmentDialog;
 import gui.dialogs.TeacherClassCourseDialog;
 import gui.GuiTools;
 import gui.dialogs.TeacherDialog;
@@ -47,7 +48,10 @@ public class AssessmentModule extends GuiModule {
 		tltmAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				
+
+				AssessmentDialog assessmentDialog = new AssessmentDialog(group.getShell());
+				assessmentDialog.open();
+				reloadData();
 			}
 		});
 		tltmAdd.setText("Add");
@@ -56,7 +60,28 @@ public class AssessmentModule extends GuiModule {
 		tltmRemove.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
+				ArrayList<Long> selected = GuiTools.getSelectedItems(table);
 				
+				if(selected.size() == 0) {
+					GuiTools.showMessageBox(container.getShell(), "No Assessments selected.");
+					reloadData();
+					return;
+				}
+				
+				int answer = GuiTools.showQuestionBox(container.getShell(), "Delete " + selected.size() + " assessments?");
+				if(answer == SWT.NO) {
+					return;
+				}
+
+				for(Long assessmentId : selected) {
+					try {
+						AssessmentQuery.delete(assessmentId);
+					} catch (Exception e) {
+						e.printStackTrace();
+						GuiTools.showMessageBox(container.getShell(), e.getMessage());
+					}
+				}
+				reloadData();
 			}
 		});
 		tltmRemove.setText("Remove");
@@ -65,7 +90,17 @@ public class AssessmentModule extends GuiModule {
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent arg0) {
-				
+				AssessmentDialog assessment = new AssessmentDialog(container.getShell());
+				try {
+					TableItem ti = table.getItem(table.getSelectionIndex());
+					
+					assessment.loadData(ti.getData());
+				} catch (Exception e) {
+					e.printStackTrace();
+					GuiTools.showMessageBox(container.getShell(), e.getMessage());
+				}
+				assessment.open();
+				reloadData();
 			}
 		});
 		GridData gd_table = new GridData(SWT.FILL, SWT.TOP, true, true, 1, 1);
@@ -101,14 +136,14 @@ public class AssessmentModule extends GuiModule {
 		table.removeAll();
 		int i = 1;
 		try {
-			for(Row teacher : AssessmentQuery.getFullDataset()) {
+			for(Row assessment : AssessmentQuery.getFullDataset()) {
 				TableItem tableItem = new TableItem(table, SWT.NONE);
-				tableItem.setData(teacher.getValueAsLong("assessment_id"));
+				tableItem.setData(assessment.getValueAsLong("assessment_id"));
 				tableItem.setText(new String[] {
 						Integer.toString(i++), 
-						teacher.getValueAsString("assessment_description"),
-						teacher.getValueAsString("assessment_type_description"),
-						teacher.getValueAsString("topic_description")
+						assessment.getValueAsString("assessment_description"),
+						assessment.getValueAsString("assessment_type_description"),
+						assessment.getValueAsString("topic_description")
 						});
 			}
 		} catch (Exception e) {
