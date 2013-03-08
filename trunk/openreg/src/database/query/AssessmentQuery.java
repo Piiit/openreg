@@ -18,18 +18,19 @@ public class AssessmentQuery {
 				"a.description AS assessment_description, " +
 				"ast.description AS assessment_type_description, " +
 				"t.description AS topic_description FROM assessment a " +
-				"LEFT JOIN assessment_type ast ON a.id = ast.id " +
+				"LEFT JOIN assessment_type ast ON a.assessment_type_id = ast.id " +
 				"LEFT JOIN topic t ON a.topic_id = t.id " +
 				"WHERE a.id = ? ORDER BY a.description DESC", id);
 	}
 
 	public static ArrayList<Row> getFullDataset() throws Exception {
+		
 		return DatabaseTools.getQueryResult(
 				"SELECT a.id AS assessment_id, " +
 				"a.description AS assessment_description, " +
 				"ast.description AS assessment_type_description, " +
 				"t.description AS topic_description FROM assessment a " +
-				"INNER JOIN assessment_type ast ON a.id = ast.id " +
+				"INNER JOIN assessment_type ast ON a.assessment_type_id = ast.id " +
 				"INNER JOIN topic t ON a.topic_id = t.id");
 	
 	}
@@ -38,8 +39,17 @@ public class AssessmentQuery {
 	 * Selecting specific tuples by id, returning an ArrayList
 	 * Note: Please keep they return value as it is, to standardize our queries classes. 
 	 */
-	public static ArrayList<Row> getCourseDataset(Object id) throws Exception{
-		return DatabaseTools.getQueryResult("SELECT * FROM assessment WHERE course_id = ?", id);
+	public static ArrayList<Row> getTypeDataset(Object id) throws Exception{
+		
+		return DatabaseTools.getQueryResult(
+				"SELECT a.id AS assessment_id, " +
+				"a.description AS assessment_description, " +
+				"ast.description AS assessment_type_description, " +
+				"t.description AS topic_description FROM assessment a " +
+				"INNER JOIN assessment_type ast ON a.assessment_type_id = ast.id " +
+				"INNER JOIN topic t ON a.topic_id = t.id " +
+				"WHERE assessment_type_id = ?", id);
+		
 	}
 
 	public static Long insert(Row row) throws Exception {

@@ -2,9 +2,7 @@ package gui.modules;
 
 import gui.GuiModule;
 import gui.dialogs.AssessmentDialog;
-import gui.dialogs.TeacherClassCourseDialog;
 import gui.GuiTools;
-import gui.dialogs.TeacherDialog;
 import java.util.ArrayList;
 import log.Log;
 import org.eclipse.swt.SWT;
@@ -12,6 +10,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.TableItem;
@@ -21,15 +20,16 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import database.Row;
 import database.query.AssessmentQuery;
-import database.query.TeacherClassCourseQuery;
-import database.query.TeacherQuery;
+import database.query.AssessmentTypeQuery;
+
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Label;
 
 public class AssessmentModule extends GuiModule {
 	private Table table;
-
+	private ToolItem tltmFilter;
+	private Combo filterType;
 	/**
 	 * @wbp.parser.entryPoint
 	 */
@@ -72,7 +72,6 @@ public class AssessmentModule extends GuiModule {
 				if(answer == SWT.NO) {
 					return;
 				}
-
 				for(Long assessmentId : selected) {
 					try {
 						AssessmentQuery.delete(assessmentId);
@@ -103,6 +102,20 @@ public class AssessmentModule extends GuiModule {
 				reloadData();
 			}
 		});
+		
+		filterType = new Combo(toolBar, SWT.READ_ONLY);
+		tltmFilter = new ToolItem(toolBar, SWT.SEPARATOR);
+		tltmFilter.setControl(filterType);
+		tltmFilter.setWidth(100);
+		filterType.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				Long typeID = (Long)filterType.getData(filterType.getText());
+				Log.debug("Type ID " + typeID);
+				reloadData(typeID);
+			}
+		});
+		
 		GridData gd_table = new GridData(SWT.FILL, SWT.TOP, true, true, 1, 1);
 		gd_table.heightHint = 293;
 		table.setLayoutData(gd_table);
@@ -132,11 +145,13 @@ public class AssessmentModule extends GuiModule {
 	}
 
 	@Override
-	public void reloadData(Object filterId) {
+	public void reloadData(Object id) {
 		table.removeAll();
+		filterType.removeAll();
 		int i = 1;
-		try {
-			for(Row assessment : AssessmentQuery.getFullDataset()) {
+		try {	
+			ArrayList<Row> dataset = (id == null ? AssessmentQuery.getFullDataset() : AssessmentQuery.getTypeDataset(id));
+			for(Row assessment : dataset) {
 				TableItem tableItem = new TableItem(table, SWT.NONE);
 				tableItem.setData(assessment.getValueAsLong("assessment_id"));
 				tableItem.setText(new String[] {
@@ -145,6 +160,17 @@ public class AssessmentModule extends GuiModule {
 						assessment.getValueAsString("assessment_type_description"),
 						assessment.getValueAsString("topic_description")
 						});
+			}
+			String typeString = "Show all";
+			filterType.add(typeString);
+			filterType.select(filterType.indexOf(typeString));
+			for(Row co : AssessmentTypeQuery.getFullDataset()) {
+				typeString = co.getValueAsStringNotNull("description");
+				filterType.add(typeString);
+				filterType.setData(typeString, co.getValue("id"));
+				if(id != null && id.equals(co.getValue("id"))) {
+					filterType.select(filterType.indexOf(typeString));
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
