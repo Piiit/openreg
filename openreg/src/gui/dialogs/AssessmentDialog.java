@@ -60,7 +60,7 @@ public class AssessmentDialog extends GuiDialog {
 	private void createContents() {
 		shlDialog = new Shell(getParent(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
 		shlDialog.setSize(300, 276);
-		shlDialog.setText("Add a new topic description");
+		shlDialog.setText("Add a new assessment description");
 		shlDialog.setLayout(new FormLayout());
 		
 		Label lblDescription = new Label(shlDialog, SWT.NONE);
@@ -159,6 +159,7 @@ public class AssessmentDialog extends GuiDialog {
 			newAssessment.setValue("description", GuiTools.nullIfEmptyTrimmed(text.getText()));
 			newAssessment.setValue("assessment_type_id", comboType.getData(comboType.getText()));
 			newAssessment.setValue("topic_id", comboTopic.getData(comboTopic.getText()));
+			newAssessment.setValue("notes", comboTopic.getData(text.getText()));
 			
 			if(loadedDescription == null) {
 				AssessmentQuery.insert(newAssessment);	
