@@ -9,7 +9,7 @@ ds_group2
 
 INSERT INTO ability_description (description) VALUES ('Dyskalkulie');
 INSERT INTO ability_description (description) VALUES ('Legasthenie');
-INSERT INTO ability_description (description) VALUES ('FamiliÃ¤re Probleme');
+INSERT INTO ability_description (description) VALUES ('Familiäre Probleme');
 INSERT INTO ability_description (description) VALUES ('ADS');
 INSERT INTO address (street, no, zip_code, city, country) VALUES ('Boznerstr.', '14', '39100', 'Bozen', 'Italy');
 INSERT INTO address (street, no, zip_code, city, country) VALUES ('Meranerstr.', '10', '39011', 'Lana', 'Italy');
@@ -25,13 +25,13 @@ INSERT INTO address (street, no, zip_code, city, country) VALUES ('Rossistr.', '
 INSERT INTO address (street, no, zip_code, city, country) VALUES ('Kirchweg', '7', '39010', 'Riffian', 'Italy');
 INSERT INTO assessment_type (description) VALUES ('Frage');
 INSERT INTO assessment_type (description) VALUES ('Schularbeit');
-INSERT INTO assessment_type (description) VALUES ('MÃ¼ndliche PrÃ¼fung');
+INSERT INTO assessment_type (description) VALUES ('Mündliche Prüfung');
 INSERT INTO assessment_type (description) VALUES ('Test');
 INSERT INTO assessment_type (description) VALUES ('Gruppenarbeit');
 INSERT INTO assessment_type (description) VALUES ('Vortrag');
 INSERT INTO assessment_type (description) VALUES ('Zeugnisnote (1. Semester)');
 INSERT INTO assessment_type (description) VALUES ('Zeugnisnote (2. Semester)');
-INSERT INTO assessment_type (description) VALUES ('FÃ¤higkeit');
+INSERT INTO assessment_type (description) VALUES ('Fähigkeit');
 INSERT INTO assessment_type (description) VALUES ('Fertigkeit');
 INSERT INTO course (name, credit_points) VALUES ('Mathematik', NULL);
 INSERT INTO course (name, credit_points) VALUES ('Naturkunde', NULL);
@@ -55,12 +55,12 @@ INSERT INTO topic (description, course_id, topic_id) VALUES ('Quadratische Gleic
 INSERT INTO topic (description, course_id, topic_id) VALUES ('Gleichungssysteme', 1, 1);
 INSERT INTO topic (description, course_id, topic_id) VALUES ('Sedimentgesteine', 7, 7);
 INSERT INTO topic (description, course_id, topic_id) VALUES ('Irregular verbs', 4, 4);
-INSERT INTO topic (description, course_id, topic_id) VALUES ('NatÃ¼rliche Zahlen', 1, NULL);
+INSERT INTO topic (description, course_id, topic_id) VALUES ('Natürliche Zahlen', 1, NULL);
 INSERT INTO assessment (assessment_type_id, topic_id, description, notes) VALUES (1, 15, 'Koordinatensystem', NULL);
 INSERT INTO assessment (assessment_type_id, topic_id, description, notes) VALUES (2, 15, '1. Schularbeit', NULL);
 INSERT INTO assessment (assessment_type_id, topic_id, description, notes) VALUES (1, 15, 'Diagramme zeichnen', NULL);
-INSERT INTO assessment (assessment_type_id, topic_id, description, notes) VALUES (1, 15, 'VorgÃ¤nger und Nachfolger', NULL);
-INSERT INTO assessment (assessment_type_id, topic_id, description, notes) VALUES (1, 15, 'RÃ¶mische Zahlen', NULL);
+INSERT INTO assessment (assessment_type_id, topic_id, description, notes) VALUES (1, 15, 'Vorgänger und Nachfolger', NULL);
+INSERT INTO assessment (assessment_type_id, topic_id, description, notes) VALUES (1, 15, 'Römische Zahlen', NULL);
 INSERT INTO assessment (assessment_type_id, topic_id, description, notes) VALUES (1, 15, 'Zehnerpotenzen', NULL);
 INSERT INTO assessment (assessment_type_id, topic_id, description, notes) VALUES (3, 15, '1x1', NULL);
 INSERT INTO class (level, stream, notes) VALUES ('1', 'A', NULL);
@@ -91,7 +91,7 @@ INSERT INTO student (name, surname, birthday, address_id, class_id, phonenumber,
 INSERT INTO student (name, surname, birthday, address_id, class_id, phonenumber, enrolment_year, ability_description_id, picture, notes) VALUES ('Wanda', 'Stock', '1995-11-21', 6, 1, '12434734737', 2012, NULL, NULL, NULL);
 INSERT INTO student (name, surname, birthday, address_id, class_id, phonenumber, enrolment_year, ability_description_id, picture, notes) VALUES ('Jean', 'Darmerie', '1995-12-12', 7, 2, '21131435', 2012, 3, NULL, NULL);
 INSERT INTO student (name, surname, birthday, address_id, class_id, phonenumber, enrolment_year, ability_description_id, picture, notes) VALUES ('Phil', 'Stifte', '1995-11-30', 8, 2, '3536526', 2012, NULL, NULL, NULL);
-INSERT INTO student (name, surname, birthday, address_id, class_id, phonenumber, enrolment_year, ability_description_id, picture, notes) VALUES ('Gitta', 'StÃ¤be', '1995-11-11', 9, 2, '5615134626', 2012, NULL, NULL, NULL);
+INSERT INTO student (name, surname, birthday, address_id, class_id, phonenumber, enrolment_year, ability_description_id, picture, notes) VALUES ('Gitta', 'Stäbe', '1995-11-11', 9, 2, '5615134626', 2012, NULL, NULL, NULL);
 INSERT INTO student (name, surname, birthday, address_id, class_id, phonenumber, enrolment_year, ability_description_id, picture, notes) VALUES ('Ruth', 'Schen', '1995-01-09', 10, 1, '34557453686', 2012, 4, NULL, NULL);
 INSERT INTO student (name, surname, birthday, address_id, class_id, phonenumber, enrolment_year, ability_description_id, picture, notes) VALUES ('Arno', 'Nym', '1995-03-01', 11, 2, '4532645', 2012, NULL, NULL, NULL);
 INSERT INTO student (name, surname, birthday, address_id, class_id, phonenumber, enrolment_year, ability_description_id, picture, notes) VALUES ('Lilli', 'Putana', '1995-04-12', 12, 1, '423543523', 2012, NULL, NULL, NULL);
