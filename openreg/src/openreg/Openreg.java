@@ -8,6 +8,7 @@ import gui.SWTTools;
 import gui.modules.AbilityDescriptionModule;
 import gui.modules.AddressesModule;
 import gui.modules.AssessmentModule;
+import gui.modules.AssessmentStudentModule;
 import gui.modules.AssessmentTypeModule;
 import gui.modules.ClassesModule;
 import gui.modules.CoursesModule;
@@ -46,6 +47,7 @@ public class Openreg {
 		gmListAdmin.add(new AssessmentModule());
 		gmListAdmin.add(new AssessmentTypeModule());
 		gmListAdmin.add(new GradeModule());
+		gmListAdmin.add(new AssessmentStudentModule());
 		
 		
 		GuiModuleList gmListReport = new GuiModuleList(GuiModuleType.Reports);
