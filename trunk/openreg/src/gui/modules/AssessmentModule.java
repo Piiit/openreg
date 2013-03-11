@@ -22,10 +22,8 @@ import org.eclipse.swt.widgets.TableColumn;
 import database.Row;
 import database.query.AssessmentQuery;
 import database.query.AssessmentTypeQuery;
-
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.widgets.Label;
 
 public class AssessmentModule extends GuiModule {
 	private Table table;

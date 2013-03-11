@@ -1,9 +1,6 @@
 package gui.dialogs;
 
 import java.util.ArrayList;
-
-import log.Log;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -18,7 +15,6 @@ import org.eclipse.swt.widgets.Text;
 import database.Row;
 import database.query.AssessmentQuery;
 import database.query.AssessmentTypeQuery;
-import database.query.CourseQuery;
 import database.query.TopicQuery;
 import gui.GuiDialog;
 import gui.GuiTools;
@@ -202,7 +198,7 @@ public class AssessmentDialog extends GuiDialog {
 			newAssessment.setValue("notes", GuiTools.nullIfEmptyTrimmed(text_1.getText()));
 			
 			if(loadedDescription == null) {
-				AssessmentQuery.insert(newAssessment);	
+				result = AssessmentQuery.insert(newAssessment);	
 			} else {
 				AssessmentQuery.update(loadedDescription.getValueAsLong("assessment_id"), newAssessment);
 			}

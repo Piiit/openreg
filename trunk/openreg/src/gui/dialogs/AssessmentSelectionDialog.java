@@ -17,7 +17,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import database.Row;
-import database.query.AddressQuery;
 import database.query.AssessmentQuery;
 
 public class AssessmentSelectionDialog extends GuiDialog {
