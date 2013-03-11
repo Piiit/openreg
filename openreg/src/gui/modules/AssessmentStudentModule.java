@@ -153,8 +153,8 @@ public class AssessmentStudentModule extends GuiModule {
 						Integer.toString(i++),
 						assStudent.getValueAsString("student_id"),
 						assStudent.getValueAsString("name") + " " + assStudent.getValueAsString("surname"),
-						assStudent.getValueAsString("weighted_assessment_main_id"),
-						assStudent.getValueAsString("weighted_assessment_sub_id"),
+						assStudent.getValueAsString("main_description"),
+						assStudent.getValueAsString("sub_description"),
 						assStudent.getValueAsString("mark")
 						});
 			}
