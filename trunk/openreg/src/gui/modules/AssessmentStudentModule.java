@@ -56,7 +56,7 @@ public class AssessmentStudentModule extends GuiModule {
 		tltmRemove.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				/*ArrayList<Long> selected = GuiTools.getSelectedItems(table);
+				ArrayList<Long> selected = GuiTools.getSelectedItems(table);
 				if(selected.size() == 0) {
 					GuiTools.showMessageBox(container.getShell(), "No teachers selected.");
 					return;
@@ -67,15 +67,14 @@ public class AssessmentStudentModule extends GuiModule {
 					return;
 				}
 				
-				for(Long teacherId : selected) {
+				for(Long assStudent : selected) {
 					try {
-						TeacherClassCourseQuery.deleteTeacher(teacherId);
-						TeacherQuery.delete(teacherId);
+						AssessmentStudentQuery.delete(assStudent);
 					} catch (Exception e) {
 						e.printStackTrace();
 						GuiTools.showMessageBox(container.getShell(), e.getMessage());
 					}
-				}*/
+				}
 				reloadData();
 			}
 		});
