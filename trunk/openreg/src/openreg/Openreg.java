@@ -11,6 +11,7 @@ import gui.modules.AssessmentModule;
 import gui.modules.AssessmentTypeModule;
 import gui.modules.ClassesModule;
 import gui.modules.CoursesModule;
+import gui.modules.GradeModule;
 import gui.modules.MarkModule;
 import gui.modules.StudentsModule;
 import gui.modules.TeachersModule;
@@ -44,6 +45,7 @@ public class Openreg {
 		gmListAdmin.add(new TopicModule());
 		gmListAdmin.add(new AssessmentModule());
 		gmListAdmin.add(new AssessmentTypeModule());
+		gmListAdmin.add(new GradeModule());
 		
 		
 		GuiModuleList gmListReport = new GuiModuleList(GuiModuleType.Reports);
