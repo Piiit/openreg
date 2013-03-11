@@ -11,6 +11,20 @@ public class AssessmentQuery {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public static ArrayList<Row> getAncestors(Object id) throws Exception {
+		return DatabaseTools.getQueryResult(
+				"SELECT * FROM weighted_assessment " +
+				"INNER JOIN assessment ON main_assessment_id = id " +
+				"WHERE sub_assessment_id = ? ORDER BY description", id);
+	}
+	
+	public static ArrayList<Row> getSubAssessments(Object id) throws Exception {
+		return DatabaseTools.getQueryResult(
+				"SELECT * FROM weighted_assessment " +
+				"INNER JOIN assessment ON sub_assessment_id = id " +
+				"WHERE main_assessment_id = ? ORDER BY description", id);
+	}
 
 	public static ArrayList<Row> getDataset(Object id) throws Exception {
 		return DatabaseTools.getQueryResult(
@@ -30,8 +44,8 @@ public class AssessmentQuery {
 				"a.description AS assessment_description, " +
 				"ast.description AS assessment_type_description, " +
 				"t.description AS topic_description FROM assessment a " +
-				"INNER JOIN assessment_type ast ON a.assessment_type_id = ast.id " +
-				"INNER JOIN topic t ON a.topic_id = t.id");
+				"LEFT JOIN assessment_type ast ON a.assessment_type_id = ast.id " +
+				"LEFT JOIN topic t ON a.topic_id = t.id");
 	
 	}
 	
