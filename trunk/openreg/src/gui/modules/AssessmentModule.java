@@ -1,6 +1,7 @@
 package gui.modules;
 
 import gui.GuiModule;
+import gui.dialogs.AssessmentBundleDialog;
 import gui.dialogs.AssessmentDialog;
 import gui.GuiTools;
 import java.util.ArrayList;
@@ -104,6 +105,17 @@ public class AssessmentModule extends GuiModule {
 		});
 		
 		filterType = new Combo(toolBar, SWT.READ_ONLY);
+		
+		ToolItem tltmCombine = new ToolItem(toolBar, SWT.NONE);
+		tltmCombine.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				AssessmentBundleDialog dialog = new AssessmentBundleDialog(group.getShell());
+				dialog.open();
+				reloadData();
+			}
+		});
+		tltmCombine.setText("Combine");
 		tltmFilter = new ToolItem(toolBar, SWT.SEPARATOR);
 		tltmFilter.setControl(filterType);
 		tltmFilter.setWidth(100);
