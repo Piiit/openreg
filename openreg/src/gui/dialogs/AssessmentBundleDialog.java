@@ -1,8 +1,6 @@
 package gui.dialogs;
 
 import java.util.ArrayList;
-
-import log.Log;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -16,7 +14,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
 import database.Row;
 import database.query.AssessmentQuery;
-import database.query.AssessmentTypeQuery;
 import database.query.WeightedAssessmentQuery;
 import gui.GuiDialog;
 import gui.GuiTools;
@@ -24,6 +21,8 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Link;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 
 public class AssessmentBundleDialog extends GuiDialog {
 
@@ -113,6 +112,21 @@ public class AssessmentBundleDialog extends GuiDialog {
 		combo.setLayoutData(fd_combo);
 		
 		table = new Table(shlDialog, SWT.BORDER | SWT.CHECK | SWT.FULL_SELECTION);
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDoubleClick(MouseEvent arg0) {
+				AssessmentWeightDialog dialog = new AssessmentWeightDialog(shlDialog);
+				try {
+					TableItem ti = table.getItem(table.getSelectionIndex());
+					dialog.loadData(GuiTools.getIdFromCombo(combo), ti.getData());
+				} catch (Exception e) {
+					e.printStackTrace();
+					GuiTools.showMessageBox(shlDialog, e.getMessage());
+				}
+				dialog.open();
+				updateSubAssessmentTable();
+			}
+		});
 		FormData fd_table = new FormData();
 		fd_table.right = new FormAttachment(label, 0, SWT.RIGHT);
 		fd_table.left = new FormAttachment(0, 10);
@@ -155,6 +169,7 @@ public class AssessmentBundleDialog extends GuiDialog {
 		Link link_1 = new Link(shlDialog, SWT.NONE);
 		link_1.addSelectionListener(new SelectionAdapter() {
 			@Override
+			@SuppressWarnings("unchecked")
 			public void widgetSelected(SelectionEvent arg0) {
 				AssessmentSelectionDialog dialog = new AssessmentSelectionDialog(shlDialog);
 				dialog.open();
@@ -211,6 +226,20 @@ public class AssessmentBundleDialog extends GuiDialog {
 		link_2.setText("<a>Remove</a>");
 		
 		Link link_3 = new Link(shlDialog, SWT.NONE);
+		link_3.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				AssessmentDialog dialog = new AssessmentDialog(shlDialog);
+				dialog.open();
+				Long id = (Long)dialog.result;
+				if(id != null) {
+					Long mainId = GuiTools.getIdFromCombo(combo);
+					insertSubAssessment(mainId, id, 1);
+				}
+				updateSubAssessmentTable();
+				updateMainAssessmentField(null);
+			}
+		});
 		fd_link_2.left = new FormAttachment(link_3, 6);
 		FormData fd_link_3 = new FormData();
 		fd_link_3.bottom = new FormAttachment(link_1, 0, SWT.BOTTOM);
@@ -284,6 +313,7 @@ public class AssessmentBundleDialog extends GuiDialog {
 		try {
 			updateMainAssessmentField(null);
 			updateAncestorField();
+			updateSubAssessmentTable();
 		} catch (Exception e) {
 			e.printStackTrace();
 			GuiTools.showMessageBox(shlDialog, e.getMessage());
@@ -356,6 +386,9 @@ public class AssessmentBundleDialog extends GuiDialog {
 					combo.select(i);
 				}
 				i++;
+			}
+			if(id == null) {
+				combo.select(0);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

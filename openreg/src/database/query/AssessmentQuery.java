@@ -1,7 +1,6 @@
 package database.query;
 
 import java.util.ArrayList;
-import log.Log;
 import database.DatabaseTools;
 import database.Row;
 

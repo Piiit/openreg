@@ -7,6 +7,12 @@ import database.Row;
 
 public class WeightedAssessmentQuery {
 	
+	public static ArrayList<Row> getDataset(Object mainId, Object subId) throws Exception {
+		return DatabaseTools.getQueryResult(
+				"SELECT * FROM weighted_assessment " + 
+				"WHERE main_assessment_id = ? AND sub_assessment_id = ?", mainId, subId);
+	}
+	
 	public static ArrayList<Row> getAncestors(Object id) throws Exception {
 		return DatabaseTools.getQueryResult(
 				"SELECT * FROM weighted_assessment " +
@@ -37,4 +43,14 @@ public class WeightedAssessmentQuery {
 				mainId, 
 				subId);
 	} 
+	
+	public static void update(Long mainId, Long subId, Row row) throws Exception{
+		DatabaseTools.executeUpdate(
+				"UPDATE weighted_assessment SET weight = ? " +
+				"WHERE main_assessment_id = ? AND sub_assessment_id = ?", 
+				Double.parseDouble(row.getValueAsString("weight")),
+				mainId,
+				subId
+				);
+	}
 }
