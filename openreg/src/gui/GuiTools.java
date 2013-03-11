@@ -3,6 +3,7 @@ package gui;
 import java.util.ArrayList;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
@@ -24,6 +25,16 @@ public class GuiTools {
 		return text;
 	}
 	
+	public static Long getIdFromCombo(Combo combo) {
+		try {
+			String comboSelection = combo.getItem(combo.getSelectionIndex());
+			Long id = (Long)combo.getData(comboSelection);
+			return id;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
 	public static ArrayList<Long> getSelectedItems(Table table) {
 		TableItem tableItems[] = table.getItems();
 		ArrayList<Long> selected = new ArrayList<Long>();
@@ -37,7 +48,7 @@ public class GuiTools {
 	
 	public static void showMessageBox(Shell shell, String message) {
 		MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION | SWT.OK);
-		messageBox.setMessage(message);
+		messageBox.setMessage(message == null ? "[Error without description!]" : message);
 		messageBox.setText(shell.getText());
 		messageBox.open();
 	}

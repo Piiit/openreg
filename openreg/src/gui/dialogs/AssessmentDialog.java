@@ -182,6 +182,9 @@ public class AssessmentDialog extends GuiDialog {
 	
 	@Override
 	public void loadData(Object data) throws Exception {
+		if(data == null) {
+			throw new Exception("Set a valid data ID to load this dialog!");
+		}
 		ArrayList<Row> top = AssessmentQuery.getDataset(data);
 		if(top.size() == 0) {
 			throw new Exception("No topic description with ID " + data.toString() + " found.");

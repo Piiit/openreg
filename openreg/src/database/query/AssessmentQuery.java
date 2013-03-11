@@ -12,20 +12,6 @@ public class AssessmentQuery {
 		return null;
 	}
 	
-	public static ArrayList<Row> getAncestors(Object id) throws Exception {
-		return DatabaseTools.getQueryResult(
-				"SELECT * FROM weighted_assessment " +
-				"INNER JOIN assessment ON main_assessment_id = id " +
-				"WHERE sub_assessment_id = ? ORDER BY description", id);
-	}
-	
-	public static ArrayList<Row> getSubAssessments(Object id) throws Exception {
-		return DatabaseTools.getQueryResult(
-				"SELECT * FROM weighted_assessment " +
-				"INNER JOIN assessment ON sub_assessment_id = id " +
-				"WHERE main_assessment_id = ? ORDER BY description", id);
-	}
-
 	public static ArrayList<Row> getDataset(Object id) throws Exception {
 		return DatabaseTools.getQueryResult(
 				"SELECT a.id AS assessment_id, a.notes, " +
