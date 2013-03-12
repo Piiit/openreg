@@ -25,7 +25,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 
-public class GradeDialog extends GuiDialog {
+public class GradeSubDialog extends GuiDialog {
 
 	protected Object result;
 	protected Shell shlDialog;
@@ -33,7 +33,7 @@ public class GradeDialog extends GuiDialog {
 	private Combo combo;
 	private Table table;
 	
-	public GradeDialog(Shell parent) {
+	public GradeSubDialog(Shell parent) {
 		super(parent);
 	}
 
@@ -91,7 +91,7 @@ public class GradeDialog extends GuiDialog {
 				String comboSelection = combo.getItem(combo.getSelectionIndex());
 				try {
 					loadData(combo.getData(comboSelection));
-					updateStudentsTable();
+					updateSubAssessmentTable();
 				} catch (Exception e) {
 					e.printStackTrace();
 					GuiTools.showMessageBox(shlDialog, e.getMessage());
@@ -147,7 +147,7 @@ public class GradeDialog extends GuiDialog {
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent arg0) {
-				GradeSubDialog dialog = new GradeSubDialog(shlDialog);
+				MarkDialog dialog = new MarkDialog(shlDialog);
 				try {
 					TableItem ti = table.getItem(table.getSelectionIndex());
 					dialog.loadData(ti.getData());
@@ -156,7 +156,7 @@ public class GradeDialog extends GuiDialog {
 					GuiTools.showMessageBox(shlDialog, e.getMessage());
 				}
 				dialog.open();
-				updateStudentsTable();
+				updateSubAssessmentTable();
 			}
 		});
 		FormData fd_table = new FormData();
@@ -183,7 +183,7 @@ public class GradeDialog extends GuiDialog {
 				
 				if(selected.size() == 0) {
 					GuiTools.showMessageBox(shlDialog, "No marks selected.");
-					updateStudentsTable();
+					updateSubAssessmentTable();
 					return;
 				}
 				
@@ -200,7 +200,7 @@ public class GradeDialog extends GuiDialog {
 						GuiTools.showMessageBox(shlDialog, e.getMessage());
 					}
 				}
-				updateStudentsTable();
+				updateSubAssessmentTable();
 			}
 		});
 		fd_table.bottom = new FormAttachment(link_1, -6);
@@ -223,7 +223,7 @@ public class GradeDialog extends GuiDialog {
 					GuiTools.showMessageBox(shlDialog, e.getMessage());
 				}
 				dialog.open();
-				updateStudentsTable();
+				updateSubAssessmentTable();
 			}
 		});
 		FormData fd_link_2 = new FormData();
@@ -276,7 +276,7 @@ public class GradeDialog extends GuiDialog {
 				String typeString = loadedData.getValueAsStringNotNull("description");
 				combo.select(combo.indexOf(typeString));
 				
-				updateStudentsTable();
+				updateSubAssessmentTable();
 				
 			}
 		} catch (Exception e) {
@@ -285,21 +285,21 @@ public class GradeDialog extends GuiDialog {
 		}
 	}
 
-	private void updateStudentsTable() {
+	private void updateSubAssessmentTable() {
 		table.removeAll();
-		ArrayList<Row> students = null;
+		ArrayList<Row> sub_assessments = null;
 		try {
-			students = GradeQuery.getStudentDataset();
+			sub_assessments = GradeQuery.getSubAssessmentDataset();
 		} catch (Exception e) {
 			e.printStackTrace();
 			GuiTools.showMessageBox(shlDialog, e.getMessage());
 		}
-		for(Row stud : students) {
+		for(Row sub_ass : sub_assessments) {
 			TableItem ti = new TableItem(table, SWT.NONE);
-			ti.setData(stud.getValueAsLong("id"));
+			ti.setData(sub_ass.getValueAsLong("student_id"));
 			ti.setText(new String[] {
-					stud.getValueAsStringNotNull("name"), 
-					stud.getValueAsStringNotNull("surname")
+					sub_ass.getValueAsStringNotNull("description"), 
+					sub_ass.getValueAsStringNotNull("representation")
 			});
 		}
 	}
