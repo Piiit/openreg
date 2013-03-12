@@ -35,6 +35,30 @@ public class GradeQuery {
 	
 	}
 	
+	public static ArrayList<Row> getStudentDataset() throws Exception {
+		
+		return DatabaseTools.getQueryResult(
+				"SELECT DISTINCT s.id, s.name, s.surname, " +
+				"ass_s.weighted_assessment_main_id, ass_s.student_id, " +
+				"wa.main_assessment_id FROM student s " +
+				"LEFT JOIN assessment_student ass_s ON s.id  = ass_s.student_id " +
+				"LEFT JOIN weighted_assessment wa ON ass_s.weighted_assessment_main_id  = wa.main_assessment_id");
+	
+	}
+	
+	public static ArrayList<Row> getSubAssessmentDataset() throws Exception {
+		
+		return DatabaseTools.getQueryResult(
+				"SELECT ass_s.weighted_assessment_main_id, " +
+				"ass_s.weighted_assessment_sub_id, " +
+				"ass_s.student_id, ass_s.mark_id, " +
+				"ass.description, " +
+				"ma.representation FROM assessment_student ass_s " +
+				"LEFT JOIN mark ma ON ma.id  = ass_s.mark_id " +
+				"LEFT JOIN assessment ass ON ass.id  = ass_s.weighted_assessment_sub_id");
+	
+	}
+	
 	/**
 	 * Selecting specific tuples by id, returning an ArrayList
 	 * Note: Please keep they return value as it is, to standardize our queries classes. 
