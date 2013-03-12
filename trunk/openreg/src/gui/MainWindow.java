@@ -93,7 +93,7 @@ public class MainWindow {
 			int i = 0;
 			for(final GuiModule module : gmList.getModules()) {
 				Link li = new Link(composite, SWT.NONE);
-				li.setBounds(5, 5+20*i, 155, 15);
+				li.setBounds(5, 5+20*i, 200, 15);
 				li.setText("<a>" + module.getName() + "</a>");
 				module.createContent(compositeCenter);
 				li.addSelectionListener(new SelectionAdapter() {
@@ -112,6 +112,12 @@ public class MainWindow {
 		shlRegisterForTeachers.addControlListener(new ControlAdapter() {
 			@Override
 			public void controlResized(ControlEvent arg0) {
+				if(currentModule != null) {
+					currentModule.container.setVisible(true);
+				}
+			}
+			@Override
+			public void controlMoved(ControlEvent arg0) {
 				if(currentModule != null) {
 					currentModule.container.setVisible(true);
 				}

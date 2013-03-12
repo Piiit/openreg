@@ -156,8 +156,11 @@ public class AssessmentBundleDialog extends GuiDialog {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
 				AssessmentDialog dialog = new AssessmentDialog(shlDialog);
-				dialog.open();
-				updateMainAssessmentField(null);
+				Long mainAssessmentId = (Long)dialog.open();
+				if(mainAssessmentId == null) {
+					mainAssessmentId = GuiTools.getIdFromCombo(combo);
+				}
+				updateMainAssessmentField(mainAssessmentId);
 			}
 		});
 		FormData fd_link = new FormData();
@@ -232,12 +235,11 @@ public class AssessmentBundleDialog extends GuiDialog {
 				AssessmentDialog dialog = new AssessmentDialog(shlDialog);
 				dialog.open();
 				Long id = (Long)dialog.result;
+				Long mainId = GuiTools.getIdFromCombo(combo);
 				if(id != null) {
-					Long mainId = GuiTools.getIdFromCombo(combo);
 					insertSubAssessment(mainId, id, 1);
 				}
-				updateSubAssessmentTable();
-				updateMainAssessmentField(null);
+				updateMainAssessmentField(mainId);
 			}
 		});
 		fd_link_2.left = new FormAttachment(link_3, 6);
@@ -252,8 +254,6 @@ public class AssessmentBundleDialog extends GuiDialog {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
 				updateMainAssessmentField(GuiTools.getIdFromCombo(combo_1));
-				updateAncestorField();
-				updateSubAssessmentTable();
 			}
 		});
 		FormData fd_combo_1 = new FormData();
@@ -280,15 +280,16 @@ public class AssessmentBundleDialog extends GuiDialog {
 		linkModify.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
+				Long selected = GuiTools.getIdFromCombo(combo);
 				try {
 					AssessmentDialog dialog = new AssessmentDialog(shlDialog);
-					dialog.loadData(GuiTools.getIdFromCombo(combo));
+					dialog.loadData(selected);
 					dialog.open();
 				} catch (Exception e) {
 					e.printStackTrace();
 					GuiTools.showMessageBox(shlDialog, e.getMessage());
 				}
-				update();
+				updateMainAssessmentField(selected);
 			}
 		});
 		FormData fd_linkModify = new FormData();
@@ -389,7 +390,9 @@ public class AssessmentBundleDialog extends GuiDialog {
 			}
 			if(id == null) {
 				combo.select(0);
-			}
+			} 
+			updateAncestorField();
+			updateSubAssessmentTable();
 		} catch (Exception e) {
 			e.printStackTrace();
 			GuiTools.showMessageBox(shlDialog, e.getMessage());

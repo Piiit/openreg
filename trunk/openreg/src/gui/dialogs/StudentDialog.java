@@ -30,6 +30,8 @@ import database.query.ClassQuery;
 import database.query.StudentQuery;
 import org.eclipse.swt.widgets.Link;
 import log.Log;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 
 public class StudentDialog extends GuiDialog {
 
@@ -82,6 +84,13 @@ public class StudentDialog extends GuiDialog {
 		shlAddStudent.setLayout(new FormLayout());
 		
 		Canvas canvas = new Canvas(shlAddStudent, SWT.BORDER);
+		canvas.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDoubleClick(MouseEvent arg0) {
+				Log.info("Image selection has not been implemented yet!");
+				GuiTools.showMessageBox(shlAddStudent, "Image selection has not been implemented yet!");
+			}
+		});
 		canvas.setBackground(SWTResourceManager.getColor(255, 255, 240));
 		canvas.setToolTipText("Click to add an image");
 		FormData fd_canvas = new FormData();

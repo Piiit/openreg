@@ -129,7 +129,7 @@ public class GradeModule extends GuiModule {
 			}
 		});
 		
-		GridData gd_table = new GridData(SWT.FILL, SWT.TOP, true, true, 1, 1);
+		GridData gd_table = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 		gd_table.heightHint = 293;
 		table.setLayoutData(gd_table);
 		table.setHeaderVisible(true);

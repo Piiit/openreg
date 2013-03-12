@@ -5,7 +5,6 @@ import gui.dialogs.TeacherClassCourseDialog;
 import gui.GuiTools;
 import gui.dialogs.TeacherDialog;
 import java.util.ArrayList;
-import log.Log;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -81,15 +80,6 @@ public class TeachersModule extends GuiModule {
 		});
 		tltmRemove.setText("Remove");
 		
-		ToolItem tltmFilter = new ToolItem(toolBar, SWT.DROP_DOWN);
-		tltmFilter.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-				Log.info("Filter not implemented yet");
-			}
-		});
-		tltmFilter.setText("All classes");
-		
 		ToolItem tltmJoinTeacher = new ToolItem(toolBar, SWT.NONE);
 		tltmJoinTeacher.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -136,7 +126,7 @@ public class TeachersModule extends GuiModule {
 				reloadData();
 			}
 		});
-		GridData gd_table = new GridData(SWT.FILL, SWT.TOP, true, true, 1, 1);
+		GridData gd_table = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 		gd_table.heightHint = 293;
 		table.setLayoutData(gd_table);
 		table.setHeaderVisible(true);
