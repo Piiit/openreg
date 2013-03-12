@@ -19,6 +19,8 @@ import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import data.SimpleDate;
@@ -76,6 +78,13 @@ public class TeacherDialog extends GuiDialog {
 		shlAddTeacher.setLayout(new FormLayout());
 		
 		Canvas canvas = new Canvas(shlAddTeacher, SWT.BORDER);
+		canvas.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDoubleClick(MouseEvent arg0) {
+				Log.info("Image selection has not been implemented yet!");
+				GuiTools.showMessageBox(shlAddTeacher, "Image selection has not been implemented yet!");
+			}
+		});
 		canvas.setBackground(SWTResourceManager.getColor(255, 255, 240));
 		canvas.setToolTipText("Click to add an image");
 		FormData fd_canvas = new FormData();

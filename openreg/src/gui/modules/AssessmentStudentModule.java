@@ -1,7 +1,6 @@
 package gui.modules;
 
 import gui.GuiModule;
-import gui.dialogs.TeacherClassCourseDialog;
 import gui.GuiTools;
 import gui.dialogs.TeacherDialog;
 import java.util.ArrayList;
@@ -20,8 +19,6 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import database.Row;
 import database.query.AssessmentStudentQuery;
-import database.query.TeacherClassCourseQuery;
-import database.query.TeacherQuery;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 
@@ -105,7 +102,7 @@ public class AssessmentStudentModule extends GuiModule {
 				reloadData();
 			}
 		});
-		GridData gd_table = new GridData(SWT.FILL, SWT.TOP, true, true, 1, 1);
+		GridData gd_table = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 		gd_table.heightHint = 293;
 		table.setLayoutData(gd_table);
 		table.setHeaderVisible(true);
