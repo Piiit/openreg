@@ -39,6 +39,7 @@ public class GradeModule extends GuiModule {
 	 */
 	@Override
 	public void createContent(Composite parent) {
+		
 		final Group group = new Group(parent, SWT.NONE);
 		group.setText(this.getName());
 		group.setLayout(new GridLayout(1, false));
@@ -48,60 +49,12 @@ public class GradeModule extends GuiModule {
 		ToolBar toolBar = new ToolBar(group, SWT.FLAT | SWT.RIGHT);
 		toolBar.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		
-		/*
-		 * Add
-		 *
-		ToolItem tltmAdd = new ToolItem(toolBar, SWT.NONE);
-		tltmAdd.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-
-				GradeDialog gradeDialog = new GradeDialog(group.getShell());
-				gradeDialog.open();
-				reloadData();
-			}
-		});
-		tltmAdd.setText("Add");
-		*/
-		
-		/*
-		 * Remove
-		 *
-		ToolItem tltmRemove = new ToolItem(toolBar, SWT.NONE);
-		tltmRemove.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-				ArrayList<Long> selected = GuiTools.getSelectedItems(table);
-				
-				if(selected.size() == 0) {
-					GuiTools.showMessageBox(container.getShell(), "No Grades selected.");
-					reloadData();
-					return;
-				}
-				
-				int answer = GuiTools.showQuestionBox(container.getShell(), "Delete " + selected.size() + " Grades?");
-				if(answer == SWT.NO) {
-					return;
-				}
-				for(Long gradeId : selected) {
-					try {
-						GradeQuery.delete(gradeId);
-					} catch (Exception e) {
-						e.printStackTrace();
-						GuiTools.showMessageBox(container.getShell(), e.getMessage());
-					}
-				}
-				reloadData();
-			}
-		});
-		tltmRemove.setText("Remove");
-		*/
-		
 		table = new Table(group, SWT.BORDER | SWT.CHECK | SWT.FULL_SELECTION);
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent arg0) {
 				GradeDialog grade = new GradeDialog(container.getShell());
+				
 				try {
 					TableItem ti = table.getItem(table.getSelectionIndex());	
 					grade.loadData(ti.getData());
@@ -145,11 +98,11 @@ public class GradeModule extends GuiModule {
 		
 		TableColumn tblclmnGradeType = new TableColumn(table, SWT.NONE);
 		tblclmnGradeType.setWidth(100);
-		tblclmnGradeType.setText("Grade Type");
+		tblclmnGradeType.setText("Date");
 		
 		TableColumn tblclmnTopic = new TableColumn(table, SWT.NONE);
 		tblclmnTopic.setWidth(100);
-		tblclmnTopic.setText("Topic");
+		tblclmnTopic.setText("Notes");
 	}
 
 	@Override
@@ -166,12 +119,12 @@ public class GradeModule extends GuiModule {
 			ArrayList<Row> dataset = (id == null ? GradeQuery.getFullDataset() : GradeQuery.getCourseDataset(id));
 			for(Row grade : dataset) {
 				TableItem tableItem = new TableItem(table, SWT.NONE);
-				tableItem.setData(grade.getValueAsLong("assessment_id"));
+				tableItem.setData(grade.getValueAsLong("student_id"));
 				tableItem.setText(new String[] {
 						Integer.toString(i++), 
-						grade.getValueAsString("assessment_description"),
-						grade.getValueAsString("assessment_type_description"),
-						grade.getValueAsString("topic_description")
+						grade.getValueAsString("description"),
+						grade.getValueAsString("date"),
+						grade.getValueAsString("notes")
 						});
 			}
 			String typeString = "Show all";
