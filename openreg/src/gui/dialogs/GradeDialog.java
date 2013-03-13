@@ -13,6 +13,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
 import database.Row;
+import database.query.ClassQuery;
 import database.query.GradeQuery;
 import database.query.MarkQuery;
 import database.query.MarkTypeQuery;
@@ -70,7 +71,7 @@ public class GradeDialog extends GuiDialog {
 		label.setLayoutData(fd_label);
 		
 		Button btnSave = new Button(shlDialog, SWT.NONE);
-		fd_label.bottom = new FormAttachment(btnSave, -6);
+		fd_label.bottom = new FormAttachment(btnSave, -17);
 		btnSave.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
@@ -81,7 +82,7 @@ public class GradeDialog extends GuiDialog {
 		fd_btnSave.top = new FormAttachment(0, 340);
 		fd_btnSave.right = new FormAttachment(100, -14);
 		btnSave.setLayoutData(fd_btnSave);
-		btnSave.setText("OK");
+		btnSave.setText("Done");
 		fd_btnSave.left = new FormAttachment(0, 258);
 		
 		combo = new Combo(shlDialog, SWT.READ_ONLY);
@@ -98,52 +99,14 @@ public class GradeDialog extends GuiDialog {
 				}
 			}
 		});
-		fd_label.top = new FormAttachment(combo, 274);
 		FormData fd_combo = new FormData();
+		fd_combo.right = new FormAttachment(100, -240);
 		fd_combo.left = new FormAttachment(0, 10);
 		combo.setLayoutData(fd_combo);
 		
-		Link link = new Link(shlDialog, SWT.NONE);
-		fd_combo.top = new FormAttachment(link, 3);
-		link.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-				MarkTypeDialog dialog = new MarkTypeDialog(shlDialog);
-				dialog.open();
-				updateMarkTypeField();
-			}
-		});
-		
-		FormData fd_link = new FormData();
-		fd_link.bottom = new FormAttachment(100, -351);
-		fd_link.left = new FormAttachment(label, 0, SWT.LEFT);
-		link.setLayoutData(fd_link);
-		link.setText("Create a <a>new type</a> or choose one from the list...");
-		
-		Link link_3 = new Link(shlDialog, SWT.NONE);
-		fd_combo.right = new FormAttachment(link_3, -6);
-		link_3.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-				MarkTypeDialog dialog = new MarkTypeDialog(shlDialog);
-				try {
-					String comboSelection = combo.getItem(combo.getSelectionIndex());
-					dialog.loadData(combo.getData(comboSelection));
-				} catch (Exception e) {
-					e.printStackTrace();
-					GuiTools.showMessageBox(shlDialog, e.getMessage());
-				}
-				dialog.open();
-				updateMarkTypeField();
-			}
-		});
-		FormData fd_link_3 = new FormData();
-		fd_link_3.top = new FormAttachment(0, 32);
-		fd_link_3.right = new FormAttachment(label, 0, SWT.RIGHT);
-		link_3.setLayoutData(fd_link_3);
-		link_3.setText("<a>Rename</a>");
-		
 		table = new Table(shlDialog, SWT.BORDER | SWT.CHECK | SWT.FULL_SELECTION | SWT.HIDE_SELECTION);
+		fd_label.top = new FormAttachment(table, 27);
+		fd_combo.bottom = new FormAttachment(100, -325);
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent arg0) {
@@ -160,86 +123,34 @@ public class GradeDialog extends GuiDialog {
 			}
 		});
 		FormData fd_table = new FormData();
-		fd_table.top = new FormAttachment(combo, 6);
+		fd_table.top = new FormAttachment(0, 53);
 		fd_table.left = new FormAttachment(0, 10);
 		fd_table.right = new FormAttachment(100, -14);
 		table.setLayoutData(fd_table);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 		
+		TableColumn tblclmnName = new TableColumn(table, SWT.NONE);
+		tblclmnName.setWidth(100);
+		tblclmnName.setText("Name");
+		
+		TableColumn tblclmnSurname = new TableColumn(table, SWT.NONE);
+		tblclmnSurname.setWidth(100);
+		tblclmnSurname.setText("Surname");
+		fd_table.bottom = new FormAttachment(100, -78);
+		
 		TableColumn tblclmnMark = new TableColumn(table, SWT.NONE);
-		tblclmnMark.setWidth(100);
+		tblclmnMark.setWidth(50);
 		tblclmnMark.setText("Mark");
-		
-		TableColumn tblclmnBound = new TableColumn(table, SWT.NONE);
-		tblclmnBound.setWidth(60);
-		tblclmnBound.setText("Bound");
-		
-		Link link_1 = new Link(shlDialog, SWT.NONE);
-		link_1.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-				ArrayList<Long> selected = GuiTools.getSelectedItems(table);
-				
-				if(selected.size() == 0) {
-					GuiTools.showMessageBox(shlDialog, "No marks selected.");
-					updateStudentsTable();
-					return;
-				}
-				
-				int answer = GuiTools.showQuestionBox(shlDialog, "Delete " + selected.size() + " marks?");
-				if(answer == SWT.NO) {
-					return;
-				}
-
-				for(Long markId : selected) {
-					try {
-						MarkQuery.delete(markId);
-					} catch (Exception e) {
-						e.printStackTrace();
-						GuiTools.showMessageBox(shlDialog, e.getMessage());
-					}
-				}
-				updateStudentsTable();
-			}
-		});
-		fd_table.bottom = new FormAttachment(link_1, -6);
-		FormData fd_link_1 = new FormData();
-		fd_link_1.bottom = new FormAttachment(label, -6);
-		fd_link_1.left = new FormAttachment(0, 10);
-		link_1.setLayoutData(fd_link_1);
-		link_1.setText("<a>Remove</a>");
-		
-		Link link_2 = new Link(shlDialog, SWT.NONE);
-		link_2.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-				MarkDialog dialog = new MarkDialog(shlDialog);
-				try {
-					String comboSelection = combo.getItem(combo.getSelectionIndex());
-					dialog.setMarkType((Long)combo.getData(comboSelection));
-				} catch (Exception e) {
-					e.printStackTrace();
-					GuiTools.showMessageBox(shlDialog, e.getMessage());
-				}
-				dialog.open();
-				updateStudentsTable();
-			}
-		});
-		FormData fd_link_2 = new FormData();
-		fd_link_2.top = new FormAttachment(table, 6);
-		fd_link_2.left = new FormAttachment(link_1, 6);
-		link_2.setLayoutData(fd_link_2);
-		link_2.setText("<a>Add</a>");
 		
 		update();
 	}
 
 	@Override
 	public void loadData(Object data) throws Exception {
-		ArrayList<Row> ab = MarkTypeQuery.getDataset(data);
+		ArrayList<Row> ab = GradeQuery.getStudentDataset(data);
 		if(ab.size() == 0) {
-			throw new Exception("No mark type with ID " + data.toString() + " found.");
+			throw new Exception("No assessment ID " + data.toString() + " found.");
 		}
 		loadedData = ab.get(0); 
 	}
@@ -248,19 +159,23 @@ public class GradeDialog extends GuiDialog {
 	public void store() {
 	}
 	
-	private void updateMarkTypeField() {
-		//TODO if a new type has been added this jumps to a wrong position...
-		int selected = combo.getSelectionIndex();
-		combo.removeAll();
+	private void updateMarkTypeField(Object id) {
+
+		String classString = "Show all";
+		combo.add(classString);
+		combo.select(combo.indexOf(classString));
 		try {
-			for(Row row : MarkTypeQuery.getFullDataset()) {
-				combo.add(row.getValueAsStringNotNull("description"));
-				combo.setData(row.getValueAsStringNotNull("description"), row.getValueAsLong("id"));
+			for(Row cl : ClassQuery.getFullDataset()) {
+				classString = cl.getValueAsStringNotNull("level") + cl.getValueAsStringNotNull("stream");
+				combo.add(classString);
+				combo.setData(classString, cl.getValue("id"));
+				if(id != null && id.equals(cl.getValue("id"))) {
+					combo.select(combo.indexOf(classString));
+				}
 			}
-			combo.select(selected);
 		} catch (Exception e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-			GuiTools.showMessageBox(shlDialog, e.getMessage());
 		}
 	}
 
@@ -268,11 +183,11 @@ public class GradeDialog extends GuiDialog {
 	public void update() {
 		try {
 			
-			updateMarkTypeField();
+			updateMarkTypeField(null);
 			
 			if (loadedData != null){
-				shlDialog.setText("Modify a mark or mark type");
 				
+				shlDialog.setText("Select the student you want to grade");
 				String typeString = loadedData.getValueAsStringNotNull("description");
 				combo.select(combo.indexOf(typeString));
 				
@@ -289,7 +204,7 @@ public class GradeDialog extends GuiDialog {
 		table.removeAll();
 		ArrayList<Row> students = null;
 		try {
-			students = GradeQuery.getStudentDataset();
+			students = GradeQuery.getStudentDataset(loadedData.getValueAsLong("id"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			GuiTools.showMessageBox(shlDialog, e.getMessage());
@@ -299,7 +214,8 @@ public class GradeDialog extends GuiDialog {
 			ti.setData(stud.getValueAsLong("id"));
 			ti.setText(new String[] {
 					stud.getValueAsStringNotNull("name"), 
-					stud.getValueAsStringNotNull("surname")
+					stud.getValueAsStringNotNull("surname"),
+					stud.getValueAsStringNotNull("representation")
 			});
 		}
 	}
