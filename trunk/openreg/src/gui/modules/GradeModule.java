@@ -116,7 +116,7 @@ public class GradeModule extends GuiModule {
 		filterType.removeAll();
 		int i = 1;
 		try {	
-			ArrayList<Row> dataset = (id == null ? GradeQuery.getFullDataset() : GradeQuery.getCourseDataset(id));
+			ArrayList<Row> dataset = (id == null ? GradeQuery.getFullDataset() : GradeQuery.getDataset(id));
 			for(Row grade : dataset) {
 				TableItem tableItem = new TableItem(table, SWT.NONE);
 				tableItem.setData(grade.getValueAsLong("student_id"));

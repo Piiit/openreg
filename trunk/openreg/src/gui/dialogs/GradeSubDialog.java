@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
 import database.Row;
+import database.query.ClassQuery;
 import database.query.GradeQuery;
 import database.query.MarkQuery;
 import database.query.MarkTypeQuery;
@@ -34,13 +35,14 @@ public class GradeSubDialog extends GuiDialog {
 	protected Shell shlDialog;
 	protected Row loadedData;
 	private Table table;
-	
+
 	public GradeSubDialog(Shell parent) {
 		super(parent);
 	}
 
 	/**
 	 * Open the dialog.
+	 * 
 	 * @return the result
 	 */
 	public Object open() {
@@ -60,16 +62,17 @@ public class GradeSubDialog extends GuiDialog {
 	 * Create contents of the dialog.
 	 */
 	private void createContents() {
-		shlDialog = new Shell(getParent(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
+		shlDialog = new Shell(getParent(), SWT.DIALOG_TRIM
+				| SWT.APPLICATION_MODAL);
 		shlDialog.setSize(346, 400);
 		shlDialog.setText("Add a new mark");
 		shlDialog.setLayout(new FormLayout());
-		
+
 		Label label = new Label(shlDialog, SWT.SEPARATOR | SWT.HORIZONTAL);
 		FormData fd_label = new FormData();
 		fd_label.right = new FormAttachment(100, -10);
 		label.setLayoutData(fd_label);
-		
+
 		Button btnSave = new Button(shlDialog, SWT.NONE);
 		fd_label.bottom = new FormAttachment(100, -59);
 		btnSave.addSelectionListener(new SelectionAdapter() {
@@ -84,8 +87,9 @@ public class GradeSubDialog extends GuiDialog {
 		btnSave.setLayoutData(fd_btnSave);
 		btnSave.setText("Done");
 		fd_btnSave.left = new FormAttachment(0, 262);
-		
-		table = new Table(shlDialog, SWT.BORDER | SWT.FULL_SELECTION | SWT.HIDE_SELECTION);
+
+		table = new Table(shlDialog, SWT.BORDER | SWT.FULL_SELECTION
+				| SWT.HIDE_SELECTION);
 		fd_label.top = new FormAttachment(table, 6);
 		fd_label.left = new FormAttachment(table, 0, SWT.LEFT);
 		table.addMouseListener(new MouseAdapter() {
@@ -110,47 +114,47 @@ public class GradeSubDialog extends GuiDialog {
 		table.setLayoutData(fd_table);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
-		
+
 		TableColumn tblclmnMark = new TableColumn(table, SWT.NONE);
 		tblclmnMark.setWidth(100);
 		tblclmnMark.setText("Description");
-		
+
 		TableColumn tblclmnBound = new TableColumn(table, SWT.NONE);
 		tblclmnBound.setWidth(60);
 		tblclmnBound.setText("Differentiated");
 		fd_table.bottom = new FormAttachment(100, -78);
-		
+
 		TableColumn tblclmnPoints = new TableColumn(table, SWT.NONE);
 		tblclmnPoints.setWidth(100);
 		tblclmnPoints.setText("Mark");
-		
+
 		update();
 	}
 
 	@Override
 	public void loadData(Object data) throws Exception {
 		ArrayList<Row> ab = MarkTypeQuery.getDataset(data);
-		if(ab.size() == 0) {
-			throw new Exception("No mark type with ID " + data.toString() + " found.");
+		if (ab.size() == 0) {
+			throw new Exception("No mark type with ID " + data.toString()
+					+ " found.");
 		}
-		loadedData = ab.get(0); 
+		loadedData = ab.get(0);
 	}
 
 	@Override
 	public void store() {
+
 	}
-	
 
 	@Override
 	public void update() {
 		try {
-			
-			
-			if (loadedData != null){
-				
+
+			if (loadedData != null) {
+
 				shlDialog.setText("Enter Grades for Sub Assessments");
 				updateSubGradeTable();
-				
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -159,7 +163,7 @@ public class GradeSubDialog extends GuiDialog {
 	}
 
 	private void updateSubGradeTable() {
-		
+
 		table.removeAll();
 		ArrayList<Row> sub_assessments = null;
 		try {
@@ -168,21 +172,20 @@ public class GradeSubDialog extends GuiDialog {
 			e.printStackTrace();
 			GuiTools.showMessageBox(shlDialog, e.getMessage());
 		}
-		for(Row sub_ass : sub_assessments) {
-			
+		for (Row sub_ass : sub_assessments) {
+
 			TableItem ti = new TableItem(table, SWT.NONE);
-			
+
 			TableEditor editor = new TableEditor(table);
 			Text text = new Text(table, SWT.NONE);
-		    text.setText("");
-		    editor.grabHorizontal = true;
-		    editor.setEditor(text, ti, 2);
-		      
+			text.setText("");
+			editor.grabHorizontal = true;
+			editor.setEditor(text, ti, 2);
+
 			ti.setData(sub_ass.getValueAsLong("student_id"));
 			ti.setText(new String[] {
-					sub_ass.getValueAsStringNotNull("description"), 
-					sub_ass.getValueAsStringNotNull("differentiated_evaluation")
-			});
+					sub_ass.getValueAsStringNotNull("description"),
+					sub_ass.getValueAsStringNotNull("differentiated_evaluation") });
 		}
 	}
 

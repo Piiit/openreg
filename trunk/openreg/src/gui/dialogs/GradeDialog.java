@@ -31,7 +31,6 @@ public class GradeDialog extends GuiDialog {
 	protected Object result;
 	protected Shell shlDialog;
 	protected Row loadedData;
-	private Combo combo;
 	private Table table;
 	
 	public GradeDialog(Shell parent) {
@@ -85,28 +84,8 @@ public class GradeDialog extends GuiDialog {
 		btnSave.setText("Done");
 		fd_btnSave.left = new FormAttachment(0, 258);
 		
-		combo = new Combo(shlDialog, SWT.READ_ONLY);
-		combo.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-				String comboSelection = combo.getItem(combo.getSelectionIndex());
-				try {
-					loadData(combo.getData(comboSelection));
-					updateStudentsTable();
-				} catch (Exception e) {
-					e.printStackTrace();
-					GuiTools.showMessageBox(shlDialog, e.getMessage());
-				}
-			}
-		});
-		FormData fd_combo = new FormData();
-		fd_combo.right = new FormAttachment(100, -240);
-		fd_combo.left = new FormAttachment(0, 10);
-		combo.setLayoutData(fd_combo);
-		
 		table = new Table(shlDialog, SWT.BORDER | SWT.CHECK | SWT.FULL_SELECTION | SWT.HIDE_SELECTION);
 		fd_label.top = new FormAttachment(table, 27);
-		fd_combo.bottom = new FormAttachment(100, -325);
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent arg0) {
@@ -123,7 +102,7 @@ public class GradeDialog extends GuiDialog {
 			}
 		});
 		FormData fd_table = new FormData();
-		fd_table.top = new FormAttachment(0, 53);
+		fd_table.top = new FormAttachment(0, 10);
 		fd_table.left = new FormAttachment(0, 10);
 		fd_table.right = new FormAttachment(100, -14);
 		table.setLayoutData(fd_table);
@@ -159,38 +138,14 @@ public class GradeDialog extends GuiDialog {
 	public void store() {
 	}
 	
-	private void updateMarkTypeField(Object id) {
-
-		String classString = "Show all";
-		combo.add(classString);
-		combo.select(combo.indexOf(classString));
-		try {
-			for(Row cl : ClassQuery.getFullDataset()) {
-				classString = cl.getValueAsStringNotNull("level") + cl.getValueAsStringNotNull("stream");
-				combo.add(classString);
-				combo.setData(classString, cl.getValue("id"));
-				if(id != null && id.equals(cl.getValue("id"))) {
-					combo.select(combo.indexOf(classString));
-				}
-			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 
 	@Override
 	public void update() {
 		try {
 			
-			updateMarkTypeField(null);
-			
 			if (loadedData != null){
 				
 				shlDialog.setText("Select the student you want to grade");
-				String typeString = loadedData.getValueAsStringNotNull("description");
-				combo.select(combo.indexOf(typeString));
-				
 				updateStudentsTable();
 				
 			}

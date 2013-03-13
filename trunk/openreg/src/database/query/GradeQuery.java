@@ -14,13 +14,15 @@ public class GradeQuery {
 	
 	public static ArrayList<Row> getDataset(Object id) throws Exception {
 		return DatabaseTools.getQueryResult(
-				"SELECT a.id AS assessment_id, a.notes, " +
-				"a.description AS assessment_description, " +
-				"ast.description AS assessment_type_description, " +
-				"t.description AS topic_description FROM assessment a " +
-				"LEFT JOIN assessment_type ast ON a.assessment_type_id = ast.id " +
-				"LEFT JOIN topic t ON a.topic_id = t.id " +
-				"WHERE a.id = ? ORDER BY a.description DESC", id);
+				"SELECT DISTINCT ass.id, ass.description, ass.notes, " +
+				"ass_s.weighted_assessment_main_id, ass_s.student_id, ass_s.date, " +
+				"wa.main_assessment_id FROM assessment_student ass_s " +
+				"LEFT JOIN weighted_assessment wa ON ass_s.weighted_assessment_main_id = wa.main_assessment_id " +
+				"LEFT JOIN assessment ass ON wa.main_assessment_id = ass.id " +
+				"LEFT JOIN topic t ON t.id = ass.topic_id " +
+				"LEFT JOIN course co ON co.id = t.course_id " +
+				"WHERE wa.sub_assessment_id IS NOT NULL AND t.topic_id = ?" ,id);
+	
 	}
 
 	public static ArrayList<Row> getFullDataset() throws Exception {
@@ -77,22 +79,6 @@ public class GradeQuery {
 	
 	}
 	
-	/**
-	 * Selecting specific tuples by id, returning an ArrayList
-	 * Note: Please keep they return value as it is, to standardize our queries classes. 
-	 */
-	public static ArrayList<Row> getCourseDataset(Object id) throws Exception{
-		
-		return DatabaseTools.getQueryResult(
-				"SELECT a.id AS assessment_id, a.notes, " +
-				"a.description AS assessment_description, " +
-				"ast.description AS assessment_type_description, " +
-				"t.description AS topic_description, t.course_id FROM assessment a " +
-				"INNER JOIN assessment_type ast ON a.assessment_type_id = ast.id " +
-				"INNER JOIN topic t ON a.topic_id = t.id " +
-				"WHERE course_id = ?", id);
-		
-	}
 
 	public static Long insert(Row row) throws Exception {
 		return (Long)DatabaseTools.executeUpdate(
