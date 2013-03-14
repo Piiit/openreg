@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import database.Row;
-import database.query.AssessmentStudentQuery;
+import database.query.GradeQuery;
 import database.query.WeightedAssessmentQuery;
 import gui.GuiDialog;
 import gui.GuiTools;
@@ -120,7 +120,7 @@ public class AssessmentMarkDialog extends GuiDialog {
 	}
 	
 	public void loadData(Object mainId, Object subId, Object studentId) throws Exception {
-		ArrayList<Row> ab = AssessmentStudentQuery.getDataset(mainId, subId, studentId);
+		ArrayList<Row> ab = GradeQuery.getDataset(mainId, subId, studentId);
 		if(ab.size() == 0) {
 			throw new Exception("No assessment weight with ID " + 
 					mainId.toString() + ":" + subId.toString() + " found.");
@@ -135,7 +135,7 @@ public class AssessmentMarkDialog extends GuiDialog {
 			newMark.setValue("mark", GuiTools.nullIfEmptyTrimmed(text.getText()));
 			
 			if(loadedData != null) {
-				AssessmentStudentQuery.update(
+				GradeQuery.update(
 						loadedData.getValueAsLong("weighted_assessment_main_id"),
 						loadedData.getValueAsLong("weighted_assessment_sub_id"),
 						loadedData.getValueAsLong("student_id"),

@@ -12,97 +12,108 @@ public class GradeQuery {
 		return null;
 	}
 	
+	
+
 	public static ArrayList<Row> getDataset(Object id) throws Exception {
-		return DatabaseTools.getQueryResult(
-				"SELECT DISTINCT ass.id, ass.description, ass.notes, " +
-				"ass_s.weighted_assessment_main_id, ass_s.student_id, ass_s.date, " +
-				"wa.main_assessment_id FROM assessment_student ass_s " +
-				"LEFT JOIN weighted_assessment wa ON ass_s.weighted_assessment_main_id = wa.main_assessment_id " +
-				"LEFT JOIN assessment ass ON wa.main_assessment_id = ass.id " +
-				"LEFT JOIN topic t ON t.id = ass.topic_id " +
-				"LEFT JOIN course co ON co.id = t.course_id " +
-				"WHERE wa.sub_assessment_id IS NOT NULL AND t.topic_id = ?" ,id);
-	
+		Log.info("Loading student with ID " + id.toString());
+		return DatabaseTools.getQueryResult("SELECT ass.id AS assessment_student_id, a1.description AS main_description," +
+				"a2.description AS sub_description, mark.representation, * FROM assessment_student ass " +
+				"INNER JOIN student on student_id = student.id " + 
+				"INNER JOIN weighted_assessment wa ON weighted_assessment_main_id = wa.main_assessment_id " +
+				"AND weighted_assessment_sub_id = wa.sub_assessment_id " +
+				"INNER JOIN assessment a1 ON weighted_assessment_main_id = a1.id " + 
+				"INNER JOIN assessment a2 ON weighted_assessment_sub_id = a2.id " +
+				"inner join student_main_assignment_view smav on smav.student_id = ass.student_id " +
+				"and smav.id = ass.weighted_assessment_sub_id " +
+				"inner join mark on ass.mark_id = mark.id " +
+				"WHERE ass.id = ? ", (Long)id);
 	}
-
+	
 	public static ArrayList<Row> getFullDataset() throws Exception {
-		
-		return DatabaseTools.getQueryResult(
-				"SELECT DISTINCT ass.id, ass.description, ass.notes, " +
-				"ass_s.weighted_assessment_main_id, ass_s.student_id, ass_s.date, " +
-				"wa.main_assessment_id FROM assessment_student ass_s " +
-				"LEFT JOIN weighted_assessment wa ON ass_s.weighted_assessment_main_id = wa.main_assessment_id " +
-				"LEFT JOIN assessment ass ON wa.main_assessment_id = ass.id " +
-				"WHERE wa.sub_assessment_id IS NOT NULL");
-	
+		return DatabaseTools.getQueryResult("SELECT ass.id AS assessment_student_id, a1.description AS main_description," +
+				"a2.description AS sub_description, mark.representation, * FROM assessment_student ass " +
+				"INNER JOIN student on student_id = student.id " + 
+				"INNER JOIN weighted_assessment wa ON weighted_assessment_main_id = wa.main_assessment_id " +
+				"AND weighted_assessment_sub_id = wa.sub_assessment_id " +
+				"INNER JOIN assessment a1 ON weighted_assessment_main_id = a1.id " + 
+				"INNER JOIN assessment a2 ON weighted_assessment_sub_id = a2.id " +
+				"inner join student_main_assignment_view smav on smav.student_id = ass.student_id " +
+				"and smav.id = ass.weighted_assessment_sub_id " +
+				"inner join mark on ass.mark_id = mark.id");
 	}
 	
-	public static ArrayList<Row> getStudentDataset() throws Exception {
-		
-		return DatabaseTools.getQueryResult(
-				"SELECT DISTINCT s.id, s.name, s.surname, s.class_id, " +
-				"ass_s.weighted_assessment_main_id, ass_s.student_id, ma.representation, " +
-				"wa.main_assessment_id FROM student s " +
-				"LEFT JOIN assessment_student ass_s ON s.id  = ass_s.student_id " +
-				"LEFT JOIN mark ma ON ma.id = ass_s.mark_id " +
-				"LEFT JOIN class cla ON cla.id = s.class_id " +
-				"LEFT JOIN weighted_assessment wa ON ass_s.weighted_assessment_main_id = wa.main_assessment_id ");
-	
+	public static ArrayList<Row> getFullDataset1(Object id) throws Exception {
+		return DatabaseTools.getQueryResult("SELECT ass.id AS assessment_student_id, a1.description AS main_description," +
+				"a2.id as assessment_id, a2.description AS assessment_description, mark.representation, * FROM assessment_student ass " +
+				"INNER JOIN student on student_id = student.id and student_id = ?" + 
+				"INNER JOIN weighted_assessment wa ON weighted_assessment_main_id = wa.main_assessment_id " +
+				"AND weighted_assessment_sub_id = wa.sub_assessment_id " +
+				"INNER JOIN assessment a1 ON weighted_assessment_main_id = a1.id " + 
+				"INNER JOIN assessment a2 ON weighted_assessment_sub_id = a2.id " +
+				"inner join student_main_assignment_view smav on smav.student_id = ass.student_id " +
+//				"and smav.id = ass.weighted_assessment_sub_id " +
+				"inner join mark on ass.mark_id = mark.id ", (Long) id);
 	}
-	
-	public static ArrayList<Row> getStudentDataset(Object id) throws Exception {
 		
-		return DatabaseTools.getQueryResult(
-				"SELECT DISTINCT s.id, s.name, s.surname, s.class_id, " +
-				"ass_s.weighted_assessment_main_id, ass_s.student_id, ma.representation, " +
-				"wa.main_assessment_id FROM student s " +
-				"LEFT JOIN assessment_student ass_s ON s.id  = ass_s.student_id " +
-				"LEFT JOIN mark ma ON ma.id = ass_s.mark_id " +
-				"LEFT JOIN class cla ON cla.id = s.class_id " +
-				"LEFT JOIN weighted_assessment wa ON ass_s.weighted_assessment_main_id = wa.main_assessment_id " +
-				"WHERE s.id = ?", id);
-	
-	}
-	
-	public static ArrayList<Row> getSubAssessmentDataset(Object id) throws Exception {
-		
-		return DatabaseTools.getQueryResult(
-				"SELECT ass_s.weighted_assessment_main_id, ass_s.differentiated_evaluation," +
-				"ass_s.weighted_assessment_sub_id, " +
-				"ass_s.student_id, ass_s.mark_id, " +
-				"ass.description, " +
-				"ma.representation FROM assessment_student ass_s " +
-				"LEFT JOIN mark ma ON ma.id  = ass_s.mark_id " +
-				"LEFT JOIN student s ON ass_s.student_id = s.id " +
-				"LEFT JOIN assessment ass ON ass.id  = ass_s.weighted_assessment_sub_id " +
-				"WHERE s.id = ?", id);
-	
-	}
-	
-
 	public static Long insert(Row row) throws Exception {
 		return (Long)DatabaseTools.executeUpdate(
-				"INSERT INTO assessment (assessment_type_id, topic_id, description, notes) VALUES (?, ?, ?, ?)",
-					row.getValueAsLong("assessment_type_id"),
-					row.getValueAsLong("topic_id"),
-					row.getValueAsString("description"),
-					row.getValueAsString("notes")
+				"INSERT INTO assessment_student (student_id, weighted_assessment_main_id, weighted_assessment_sub_id, " +
+				"mark_id, mark, date, differntiated_evaluation, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+				row.getValueAsLong("student_id"),
+				row.getValueAsLong("weighted_assessment_main_id"),
+				row.getValueAsLong("weighted_assessment_sub_id"),
+				row.getValueAsLong("mark_id"),
+				Double.parseDouble(row.getValueAsString("mark")),
+				row.getValueAsSimpleDate("date").toSqlDate(),
+				row.getValue("differntiated_evaluation"),
+				row.getValueAsString("notes")
 				);
 	}
+	
+	public static ArrayList<Row> getSubAssessments(Object assessmentId, Object studentId) throws Exception {
+		return DatabaseTools.getQueryResult(
+				"SELECT * FROM weighted_assessment " +
+				"INNER JOIN assessment ON sub_assessment_id = id " +
+				"INNER JOIN assessment_student ON sub_assessment_id = weighted_assessment_sub_id " +
+				"WHERE weighted_assessment_main_id = ? " +
+				"AND student_id = ? ORDER BY description", assessmentId, studentId);
+	}
 
+	public static ArrayList<Row> getDataset(Object mainId, Object subId, Object studentId) throws Exception {
+		return DatabaseTools.getQueryResult(
+				"SELECT * FROM assessment_student " + 
+				"WHERE weighted_assessment_main_id = ? AND weighted_assessment_sub_id = ? " +
+				"AND student_id = ?", mainId, subId, studentId);
+	}
+	
+	public static void update(Long mainId, Long subId, Long studentId, Row row) throws Exception{
+		DatabaseTools.executeUpdate(
+				"UPDATE assessment_student SET mark = ? " +
+				"WHERE weighted_assessment_main_id = ? AND weighted_assessment_sub_id = ? AND student_id = ?", 
+				Double.parseDouble(row.getValueAsString("mark")),
+				mainId,
+				subId,
+				studentId
+				);
+	}
+	
 	public static void update(Object id, Row row) throws Exception {
 		DatabaseTools.executeUpdate(
-				"UPDATE assessment SET assessment_type_id = ?, topic_id = ?, description = ?, notes = ? WHERE id = ?", 
-					row.getValueAsLong("assessment_type_id"),
-					row.getValueAsLong("topic_id"),
-					row.getValueAsString("description"),
-					row.getValueAsString("notes"),
-					id
-				);
+				"UPDATE assessment_student SET mark = ? " +
+				"WHERE id = ?",
+				row.getValueAsLong("student_id"),
+				row.getValueAsLong("weighted_assessment_main_id"),
+				row.getValueAsLong("weighted_assessment_sub_id"),
+				row.getValueAsLong("mark_id"),
+				Double.parseDouble(row.getValueAsString("mark")),
+				row.getValueAsSimpleDate("date").toSqlDate(),
+				row.getValue("differntiated_evaluation"),
+				row.getValueAsString("notes"),
+				(Long)id);
 	}
 
 	public static void delete(Object id) throws Exception {
-		DatabaseTools.executeUpdate("DELETE FROM assessment WHERE id = ?", (Long)id);
+		DatabaseTools.executeUpdate("DELETE FROM assessment_student WHERE id = ?", (Long)id);
 	}
-
+	
 }
