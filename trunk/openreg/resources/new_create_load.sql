@@ -56,8 +56,7 @@ CREATE TABLE assessment_student (
     date date NOT NULL,
     differentiated_evaluation boolean,
     notes character varying,
-    CONSTRAINT assessment_student_mark_check CHECK (((mark >= (0)::double precision) AND (mark <= (100)::double precision))),
-    CONSTRAINT mark_id_or_mark_not_both CHECK ((((mark_id IS NULL) AND (mark IS NOT NULL)) OR ((mark_id IS NOT NULL) AND (mark IS NULL))))
+    CONSTRAINT assessment_student_mark_check CHECK (((mark >= (0)::double precision) AND (mark <= (100)::double precision)))
 );
 CREATE SEQUENCE assessment_student_id_seq
     START WITH 1
