@@ -2,6 +2,7 @@ package gui.modules;
 
 import gui.GuiModule;
 import gui.GuiTools;
+import gui.dialogs.AssessmentStudentDialog;
 import gui.dialogs.TeacherDialog;
 import java.util.ArrayList;
 import log.Log;
@@ -43,7 +44,8 @@ public class AssessmentStudentModule extends GuiModule {
 		tltmAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				
+				AssessmentStudentDialog dialog = new AssessmentStudentDialog(group.getShell());
+				dialog.open();
 				reloadData();
 			}
 		});
@@ -121,12 +123,8 @@ public class AssessmentStudentModule extends GuiModule {
 		tblclmnName.setText("Name");
 		
 		TableColumn tblclmnMainDescription = new TableColumn(table, SWT.NONE);
-		tblclmnMainDescription.setWidth(100);
+		tblclmnMainDescription.setWidth(225);
 		tblclmnMainDescription.setText("Assessment Main Description");
-		
-		TableColumn tblclmnSubDescription = new TableColumn(table, SWT.NONE);
-		tblclmnSubDescription.setWidth(100);
-		tblclmnSubDescription.setText("Assessment Sub Description");
 		
 		TableColumn tblclmnMark = new TableColumn(table, SWT.NONE);
 		tblclmnMark.setWidth(100);
@@ -151,8 +149,7 @@ public class AssessmentStudentModule extends GuiModule {
 						assStudent.getValueAsString("student_id"),
 						assStudent.getValueAsString("name") + " " + assStudent.getValueAsString("surname"),
 						assStudent.getValueAsString("main_description"),
-						assStudent.getValueAsString("sub_description"),
-						assStudent.getValueAsString("mark")
+						assStudent.getValueAsString("representation")
 						});
 			}
 		} catch (Exception e) {

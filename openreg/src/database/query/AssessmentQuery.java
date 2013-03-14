@@ -16,7 +16,9 @@ public class AssessmentQuery {
 				"SELECT a.id AS assessment_id, a.notes, " +
 				"a.description AS assessment_description, " +
 				"ast.description AS assessment_type_description, " +
-				"t.description AS topic_description FROM assessment a " +
+				"t.description AS topic_description, " +
+				"a.priority as priority " +
+				"FROM assessment a " +
 				"LEFT JOIN assessment_type ast ON a.assessment_type_id = ast.id " +
 				"LEFT JOIN topic t ON a.topic_id = t.id " +
 				"WHERE a.id = ? ORDER BY a.description DESC", id);
@@ -28,10 +30,10 @@ public class AssessmentQuery {
 				"SELECT a.id AS assessment_id, a.notes, " +
 				"a.description AS assessment_description, " +
 				"ast.description AS assessment_type_description, " +
-				"t.description AS topic_description FROM assessment a " +
+				"t.description AS topic_description, " +
+				"a.priority as priority FROM assessment a " +
 				"LEFT JOIN assessment_type ast ON a.assessment_type_id = ast.id " +
-				"LEFT JOIN topic t ON a.topic_id = t.id");
-	
+				"LEFT JOIN topic t ON a.topic_id = t.id ");
 	}
 	
 	/**
@@ -53,20 +55,22 @@ public class AssessmentQuery {
 
 	public static Long insert(Row row) throws Exception {
 		return (Long)DatabaseTools.executeUpdate(
-				"INSERT INTO assessment (assessment_type_id, topic_id, description, notes) VALUES (?, ?, ?, ?)",
+				"INSERT INTO assessment (assessment_type_id, topic_id, description, priority, notes) VALUES (?, ?, ?, ?, ?)",
 					row.getValueAsLong("assessment_type_id"),
 					row.getValueAsLong("topic_id"),
 					row.getValueAsString("description"),
+					row.getValueAsInt("priority"),
 					row.getValueAsString("notes")
 				);
 	}
 
 	public static void update(Object id, Row row) throws Exception {
 		DatabaseTools.executeUpdate(
-				"UPDATE assessment SET assessment_type_id = ?, topic_id = ?, description = ?, notes = ? WHERE id = ?", 
+				"UPDATE assessment SET assessment_type_id = ?, topic_id = ?, description = ?, priority = ?, notes = ? WHERE id = ?", 
 					row.getValueAsLong("assessment_type_id"),
 					row.getValueAsLong("topic_id"),
 					row.getValueAsString("description"),
+					row.getValueAsInt("priority"),
 					row.getValueAsString("notes"),
 					id
 				);

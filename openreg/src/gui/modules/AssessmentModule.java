@@ -141,12 +141,16 @@ public class AssessmentModule extends GuiModule {
 		tblclmnDescription.setText("Description");
 		
 		TableColumn tblclmnAssessmentType = new TableColumn(table, SWT.NONE);
-		tblclmnAssessmentType.setWidth(100);
+		tblclmnAssessmentType.setWidth(129);
 		tblclmnAssessmentType.setText("Assessment Type");
 		
 		TableColumn tblclmnTopic = new TableColumn(table, SWT.NONE);
 		tblclmnTopic.setWidth(100);
 		tblclmnTopic.setText("Topic");
+		
+		TableColumn tblclmnPriority = new TableColumn(table, SWT.NONE);
+		tblclmnPriority.setWidth(100);
+		tblclmnPriority.setText("Priority");
 	}
 
 	@Override
@@ -168,7 +172,8 @@ public class AssessmentModule extends GuiModule {
 						Integer.toString(i++), 
 						assessment.getValueAsString("assessment_description"),
 						assessment.getValueAsString("assessment_type_description"),
-						assessment.getValueAsString("topic_description")
+						assessment.getValueAsString("topic_description"),
+						assessment.getValueAsString("priority"),
 						});
 			}
 			String typeString = "Show all";

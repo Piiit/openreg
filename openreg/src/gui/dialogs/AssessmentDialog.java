@@ -31,6 +31,7 @@ public class AssessmentDialog extends GuiDialog {
 	private Row loadedDescription;
 	private Combo comboType;
 	private Combo comboTopic;
+	private Combo comboPriority;
 	private Text text_1;
 	
 	public AssessmentDialog(Shell parent) {
@@ -160,8 +161,8 @@ public class AssessmentDialog extends GuiDialog {
 		
 		text_1 = new Text(shlDialog, SWT.BORDER);
 		FormData fd_text_1 = new FormData();
-		fd_text_1.bottom = new FormAttachment(100, -94);
-		fd_text_1.top = new FormAttachment(comboTopic, 10);
+		fd_text_1.top = new FormAttachment(comboTopic, 52);
+		fd_text_1.bottom = new FormAttachment(btnSave, -6);
 		fd_text_1.left = new FormAttachment(comboType, 0, SWT.LEFT);
 		fd_text_1.right = new FormAttachment(100, -10);
 		text_1.setLayoutData(fd_text_1);
@@ -169,9 +170,23 @@ public class AssessmentDialog extends GuiDialog {
 		Label lblNotes = new Label(shlDialog, SWT.NONE);
 		FormData fd_lblNotes = new FormData();
 		fd_lblNotes.top = new FormAttachment(text_1, 3, SWT.TOP);
-		fd_lblNotes.left = new FormAttachment(0, 10);
+		fd_lblNotes.left = new FormAttachment(lblDescription, 0, SWT.LEFT);
 		lblNotes.setLayoutData(fd_lblNotes);
 		lblNotes.setText("Notes");
+		
+		comboPriority = new Combo(shlDialog, SWT.NONE);
+		FormData fd_comboPriority = new FormData();
+		fd_comboPriority.right = new FormAttachment(btnSave, 0, SWT.RIGHT);
+		fd_comboPriority.top = new FormAttachment(comboTopic, 12);
+		fd_comboPriority.left = new FormAttachment(comboType, 0, SWT.LEFT);
+		comboPriority.setLayoutData(fd_comboPriority);
+		
+		Label lblSelectPriority = new Label(shlDialog, SWT.NONE);
+		lblSelectPriority.setText("Select priority");
+		FormData fd_lblSelectPriority = new FormData();
+		fd_lblSelectPriority.top = new FormAttachment(comboPriority, 0, SWT.TOP);
+		fd_lblSelectPriority.left = new FormAttachment(lblDescription, 0, SWT.LEFT);
+		lblSelectPriority.setLayoutData(fd_lblSelectPriority);
 
 		update();
 	}
@@ -195,6 +210,7 @@ public class AssessmentDialog extends GuiDialog {
 			newAssessment.setValue("description", GuiTools.nullIfEmptyTrimmed(text.getText()));
 			newAssessment.setValue("assessment_type_id", comboType.getData(comboType.getText()));
 			newAssessment.setValue("topic_id", comboTopic.getData(comboTopic.getText()));
+			newAssessment.setValue("priority", Integer.parseInt(comboPriority.getData(comboPriority.getText()).toString()));
 			newAssessment.setValue("notes", GuiTools.nullIfEmptyTrimmed(text_1.getText()));
 			
 			if(loadedDescription == null) {
@@ -214,6 +230,7 @@ public class AssessmentDialog extends GuiDialog {
 	public void update() {
 		updateTypeField();
 		updateTopicField();
+		updatePriorityField();
 		try {
 			if (loadedDescription != null){
 				text.setText(loadedDescription.getValueAsStringNotNull("assessment_description"));
@@ -254,6 +271,23 @@ public class AssessmentDialog extends GuiDialog {
 				String topicString = to.getValueAsStringNotNull("description");
 				comboTopic.add(topicString);
 				comboTopic.setData(topicString, to.getValue("id"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			GuiTools.showMessageBox(shlDialog, e.getMessage());
+		}
+	}
+	
+	private void updatePriorityField() {
+		comboTopic.removeAll();
+		String [][] values = {{"High", "2"},
+				{"Main, combine in High", "1"},
+				{"Low, combine in Main", "0"}
+				};
+		try {
+			for (int i = 0; i < values.length; i++) {
+				comboPriority.add(values[i][0]);
+				comboPriority.setData(values[i][0], values[i][1]);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
