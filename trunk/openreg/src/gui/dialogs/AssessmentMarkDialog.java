@@ -131,14 +131,15 @@ public class AssessmentMarkDialog extends GuiDialog {
 	@Override
 	public void store() {
 		try {
-			Row newWeight = new Row();
-			newWeight.setValue("weight", GuiTools.nullIfEmptyTrimmed(text.getText()));
+			Row newMark = new Row();
+			newMark.setValue("mark", GuiTools.nullIfEmptyTrimmed(text.getText()));
 			
 			if(loadedData != null) {
-				WeightedAssessmentQuery.update(
-						loadedData.getValueAsLong("main_assessment_id"),
-						loadedData.getValueAsLong("sub_assessment_id"),
-						newWeight);
+				AssessmentStudentQuery.update(
+						loadedData.getValueAsLong("weighted_assessment_main_id"),
+						loadedData.getValueAsLong("weighted_assessment_sub_id"),
+						loadedData.getValueAsLong("student_id"),
+						newMark);
 			}
 			
 			shlDialog.close();
