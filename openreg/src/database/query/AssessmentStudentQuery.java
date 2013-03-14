@@ -85,20 +85,20 @@ public class AssessmentStudentQuery {
 				"AND student_id = ?", mainId, subId, studentId);
 	}
 	
-	public static void update(Long mainId, Long subId, Row row) throws Exception{
+	public static void update(Long mainId, Long subId, Long studentId, Row row) throws Exception{
 		DatabaseTools.executeUpdate(
 				"UPDATE assessment_student SET mark = ? " +
-				"WHERE main_assessment_id = ? AND sub_assessment_id = ?", 
-				Double.parseDouble(row.getValueAsString("weight")),
+				"WHERE weighted_assessment_main_id = ? AND weighted_assessment_sub_id = ? AND student_id = ?", 
+				Double.parseDouble(row.getValueAsString("mark")),
 				mainId,
-				subId
+				subId,
+				studentId
 				);
 	}
 	
 	public static void update(Object id, Row row) throws Exception {
 		DatabaseTools.executeUpdate(
-				"UPDATE assessment_student SET student_id = ?, weighted_assessment_main_id = ?, weighted_assessment_sub_id = ?, " +
-				"mark_id = ?, mark = ?, date = ?, differntiated_evaluation = ?, notes = ?, " +
+				"UPDATE assessment_student SET mark = ? " +
 				"WHERE id = ?",
 				row.getValueAsLong("student_id"),
 				row.getValueAsLong("weighted_assessment_main_id"),
