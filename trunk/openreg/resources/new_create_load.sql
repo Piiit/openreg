@@ -203,7 +203,7 @@ ALTER TABLE ONLY topic ALTER COLUMN id SET DEFAULT nextval('topic_id_seq'::regcl
 INSERT INTO ability_description (id, description) VALUES (1, 'Dyskalkulie');
 INSERT INTO ability_description (id, description) VALUES (2, 'Legasthenie');
 INSERT INTO ability_description (id, description) VALUES (4, 'ADS');
-INSERT INTO ability_description (id, description) VALUES (3, 'Familiäre Probleme');
+INSERT INTO ability_description (id, description) VALUES (3, 'Familiaere Probleme');
 SELECT pg_catalog.setval('ability_description_id_seq', 6, true);
 INSERT INTO address (id, street, no, zip_code, city, country) VALUES (1, 'Boznerstr.', '14', '39100', 'Bozen', 'Italy');
 INSERT INTO address (id, street, no, zip_code, city, country) VALUES (3, 'Winkelweg', '4', '39012', 'Meran', 'Italy');
@@ -312,7 +312,7 @@ INSERT INTO student (id, name, surname, birthday, address_id, class_id, phonenum
 INSERT INTO student (id, name, surname, birthday, address_id, class_id, phonenumber, enrolment_year, ability_description_id, picture, notes) VALUES (10, 'Lilli', 'Putana', '1995-04-12', 12, 1, '423543523', 2012, NULL, NULL, NULL);
 INSERT INTO student (id, name, surname, birthday, address_id, class_id, phonenumber, enrolment_year, ability_description_id, picture, notes) VALUES (11, 'Franz', 'Hofbauer', '1995-04-22', 2, 1, '12345678', 2012, NULL, NULL, NULL);
 INSERT INTO student (id, name, surname, birthday, address_id, class_id, phonenumber, enrolment_year, ability_description_id, picture, notes) VALUES (8, 'Ruth', 'Schen', '1995-01-09', 4, 1, '34557453686', 2012, NULL, NULL, NULL);
-INSERT INTO student (id, name, surname, birthday, address_id, class_id, phonenumber, enrolment_year, ability_description_id, picture, notes) VALUES (7, 'Gitta', 'Staebe', '1995-11-11', 5, 2, '5615134626', 2012, NULL, NULL, NULL);
+INSERT INTO student (id, name, surname, birthday, address_id, class_id, phonenumber, enrolment_year, ability_description_id, picture, notes) VALUES (7, 'Gitta', 'Stäbe', '1995-11-11', 5, 2, '5615134626', 2012, NULL, NULL, NULL);
 SELECT pg_catalog.setval('student_id_seq', 16, true);
 INSERT INTO teacher (id, name, surname, login, password, birthday, address_id, phone_number, picture, notes) VALUES (1, 'Hons', 'Gun Taylor', 'hons', 'yui888', '1991-04-22', 2, '7654332', NULL, NULL);
 INSERT INTO teacher (id, name, surname, login, password, birthday, address_id, phone_number, picture, notes) VALUES (2, 'Patrizio', 'Albero', 'palbero', '12.45-+~.1', '1992-05-17', 1, '1234567', NULL, NULL);
@@ -427,3 +427,7 @@ ALTER TABLE ONLY weighted_assessment
     ADD CONSTRAINT weighted_assessment_main_assessment_id_fkey FOREIGN KEY (main_assessment_id) REFERENCES assessment(id);
 ALTER TABLE ONLY weighted_assessment
     ADD CONSTRAINT weighted_assessment_sub_assessment_id_fkey FOREIGN KEY (sub_assessment_id) REFERENCES assessment(id);
+create or replace view assview AS
+select weighted_assessment_main_id, weighted_assessment_sub_id from assessment_student
+where mark_id is not null 
+group by weighted_assessment_main_id, weighted_assessment_sub_id;
