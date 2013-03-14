@@ -107,6 +107,7 @@ CREATE TABLE IF NOT EXISTS weighted_assessment
   main_assessment_id bigint NOT NULL REFERENCES assessment,
   sub_assessment_id bigint NOT NULL REFERENCES assessment,
   weight float NOT NULL CHECK (weight > 0 AND weight <= 100),
+  CHECK (sub_assessment_id != main_assessment_id),
   PRIMARY KEY (main_assessment_id, sub_assessment_id)
 );
 
