@@ -50,8 +50,8 @@ public class MainWindow {
 	 */
 	protected void createContents() {
 		shlRegisterForTeachers = new Shell();
-		shlRegisterForTeachers.setMinimumSize(new Point(640, 480));
-		shlRegisterForTeachers.setSize(640, 480);
+		shlRegisterForTeachers.setMinimumSize(new Point(800, 600));
+		shlRegisterForTeachers.setSize(800, 600);
 		shlRegisterForTeachers.setText("Register for teachers");
 		shlRegisterForTeachers.setLayout(new BorderLayout(0, 0));
 		

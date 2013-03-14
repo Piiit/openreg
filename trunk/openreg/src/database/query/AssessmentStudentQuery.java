@@ -11,6 +11,10 @@ public class AssessmentStudentQuery {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+//	select weighted_assessment_main_id, weighted_assessment_sub_id, a1.description as main_description, a2.description as sub_description from assview
+//	inner join assessment a1 on a1.id = weighted_assessment_main_id
+//	inner join assessment a2 on a2.id = weighted_assessment_sub_id
 
 	public static ArrayList<Row> getDataset(Object id) throws Exception {
 		Log.info("Loading teacher with ID " + id.toString());
