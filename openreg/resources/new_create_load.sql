@@ -35,7 +35,9 @@ CREATE TABLE assessment (
     assessment_type_id bigint NOT NULL,
     topic_id bigint,
     description character varying,
-    notes character varying
+    priority integer,
+    notes character varying,
+    CONSTRAINT priority_check CHECK (priority >= 0 AND priority < 3)
 );
 CREATE SEQUENCE assessment_id_seq
     START WITH 1
@@ -217,19 +219,19 @@ INSERT INTO address (id, street, no, zip_code, city, country) VALUES (2, 'Merane
 INSERT INTO address (id, street, no, zip_code, city, country) VALUES (4, 'Zollstr.', '23', '39011', 'Lana', 'Italy');
 INSERT INTO address (id, street, no, zip_code, city, country) VALUES (5, 'Musterstr.', '10', '39010', 'Frangart', 'Italy');
 SELECT pg_catalog.setval('address_id_seq', 19, true);
-INSERT INTO assessment (id, assessment_type_id, topic_id, description, notes) VALUES (2, 2, 15, '1. Schularbeit', NULL);
-INSERT INTO assessment (id, assessment_type_id, topic_id, description, notes) VALUES (6, 1, 15, 'Zehnerpotenzen', NULL);
-INSERT INTO assessment (id, assessment_type_id, topic_id, description, notes) VALUES (7, 3, 15, '1x1', NULL);
-INSERT INTO assessment (id, assessment_type_id, topic_id, description, notes) VALUES (11, 12, NULL, '(all)', NULL);
-INSERT INTO assessment (id, assessment_type_id, topic_id, description, notes) VALUES (3, 1, 15, 'Zeichne Diagramme', NULL);
-INSERT INTO assessment (id, assessment_type_id, topic_id, description, notes) VALUES (1, 1, 15, 'Erstelle ein Koordinatensysteme', NULL);
-INSERT INTO assessment (id, assessment_type_id, topic_id, description, notes) VALUES (14, 6, 7, 'Talk about The Queen', NULL);
-INSERT INTO assessment (id, assessment_type_id, topic_id, description, notes) VALUES (9, 1, 5, 'Wann begann der 2. Weltkrieg?', NULL);
-INSERT INTO assessment (id, assessment_type_id, topic_id, description, notes) VALUES (5, 1, 15, 'RÃ¶mische Zahlen', NULL);
-INSERT INTO assessment (id, assessment_type_id, topic_id, description, notes) VALUES (8, 2, 5, 'Test zum 2. Weltkrieg', NULL);
-INSERT INTO assessment (id, assessment_type_id, topic_id, description, notes) VALUES (4, 1, 15, 'VorgÃ¤nger und Nachfolger', NULL);
-INSERT INTO assessment (id, assessment_type_id, topic_id, description, notes) VALUES (10, 7, NULL, '1. Semester - Mathematik', NULL);
-INSERT INTO assessment (id, assessment_type_id, topic_id, description, notes) VALUES (13, 7, NULL, '2. Semester - Mathematik', NULL);
+INSERT INTO assessment (id, assessment_type_id, topic_id, description, priority, notes) VALUES (2, 2, 15, '1. Schularbeit', 1, NULL);
+INSERT INTO assessment (id, assessment_type_id, topic_id, description, priority, notes) VALUES (6, 1, 15, 'Zehnerpotenzen', 0, NULL);
+INSERT INTO assessment (id, assessment_type_id, topic_id, description, priority, notes) VALUES (7, 3, 15, '1x1', 0, NULL);
+INSERT INTO assessment (id, assessment_type_id, topic_id, description, priority, notes) VALUES (11, 12, NULL, '(all)', 0, NULL);
+INSERT INTO assessment (id, assessment_type_id, topic_id, description, priority, notes) VALUES (3, 1, 15, 'Zeichne Diagramme', 0, NULL);
+INSERT INTO assessment (id, assessment_type_id, topic_id, description, priority, notes) VALUES (1, 1, 15, 'Erstelle ein Koordinatensysteme', 0, NULL);
+INSERT INTO assessment (id, assessment_type_id, topic_id, description, priority, notes) VALUES (14, 6, 7, 'Talk about The Queen', 0, NULL);
+INSERT INTO assessment (id, assessment_type_id, topic_id, description, priority, notes) VALUES (9, 1, 5, 'Wann begann der 2. Weltkrieg?', 0, NULL);
+INSERT INTO assessment (id, assessment_type_id, topic_id, description, priority, notes) VALUES (5, 1, 15, 'Römische Zahlen', 0, NULL);
+INSERT INTO assessment (id, assessment_type_id, topic_id, description, priority, notes) VALUES (8, 2, 5, 'Test zum 2. Weltkrieg', 0, NULL);
+INSERT INTO assessment (id, assessment_type_id, topic_id, description, priority, notes) VALUES (4, 1, 15, 'Vorgänger und Nachfolger', 0, NULL);
+INSERT INTO assessment (id, assessment_type_id, topic_id, description, priority, notes) VALUES (10, 7, NULL, '1. Semester - Mathematik', 2, NULL);
+INSERT INTO assessment (id, assessment_type_id, topic_id, description, priority, notes) VALUES (13, 7, NULL, '2. Semester - Mathematik', 2, NULL);
 SELECT pg_catalog.setval('assessment_id_seq', 24, true);
 INSERT INTO assessment_student (id, student_id, weighted_assessment_main_id, weighted_assessment_sub_id, mark_id, mark, date, differentiated_evaluation, notes) VALUES (1, 1, 2, 1, NULL, 3, '2000-05-05', NULL, NULL);
 INSERT INTO assessment_student (id, student_id, weighted_assessment_main_id, weighted_assessment_sub_id, mark_id, mark, date, differentiated_evaluation, notes) VALUES (2, 1, 2, 3, NULL, 5, '2000-05-05', NULL, NULL);
@@ -251,8 +253,8 @@ INSERT INTO assessment_type (id, description) VALUES (5, 'Gruppenarbeit');
 INSERT INTO assessment_type (id, description) VALUES (6, 'Vortrag');
 INSERT INTO assessment_type (id, description) VALUES (10, 'Fertigkeit');
 INSERT INTO assessment_type (id, description) VALUES (7, 'Zeugnisnote');
-INSERT INTO assessment_type (id, description) VALUES (3, 'MÃ¼ndliche PrÃ¼fung');
-INSERT INTO assessment_type (id, description) VALUES (9, 'FÃ¤higkeit');
+INSERT INTO assessment_type (id, description) VALUES (3, 'Mündliche Prüfung');
+INSERT INTO assessment_type (id, description) VALUES (9, 'Fähigkeit');
 INSERT INTO assessment_type (id, description) VALUES (13, 'Hausaufgabe');
 INSERT INTO assessment_type (id, description) VALUES (12, '_ROOT_');
 SELECT pg_catalog.setval('assessment_type_id_seq', 13, true);
@@ -338,7 +340,7 @@ INSERT INTO topic (id, description, course_id, topic_id) VALUES (11, 'Quadratisc
 INSERT INTO topic (id, description, course_id, topic_id) VALUES (12, 'Gleichungssysteme', 1, 1);
 INSERT INTO topic (id, description, course_id, topic_id) VALUES (13, 'Sedimentgesteine', 7, 7);
 INSERT INTO topic (id, description, course_id, topic_id) VALUES (14, 'Irregular verbs', 4, 4);
-INSERT INTO topic (id, description, course_id, topic_id) VALUES (15, 'NatÃ¼rliche Zahlen', 1, NULL);
+INSERT INTO topic (id, description, course_id, topic_id) VALUES (15, 'Natürliche Zahlen', 1, NULL);
 INSERT INTO topic (id, description, course_id, topic_id) VALUES (8, 'Holocaust', 6, 5);
 INSERT INTO topic (id, description, course_id, topic_id) VALUES (9, 'Pearl Harbor', 6, 5);
 SELECT pg_catalog.setval('topic_id_seq', 15, true);
@@ -427,7 +429,11 @@ ALTER TABLE ONLY weighted_assessment
     ADD CONSTRAINT weighted_assessment_main_assessment_id_fkey FOREIGN KEY (main_assessment_id) REFERENCES assessment(id);
 ALTER TABLE ONLY weighted_assessment
     ADD CONSTRAINT weighted_assessment_sub_assessment_id_fkey FOREIGN KEY (sub_assessment_id) REFERENCES assessment(id);
-create or replace view assview AS
-select weighted_assessment_main_id, weighted_assessment_sub_id from assessment_student
-where mark_id is not null 
-group by weighted_assessment_main_id, weighted_assessment_sub_id;
+
+CREATE OR REPLACE VIEW student_main_assignment_view AS 
+ SELECT a.id, a2.student_id, a.description
+   FROM assessment a
+   JOIN assessment_student a1 ON a1.weighted_assessment_main_id = a.id
+   JOIN assessment_student a2 ON a2.weighted_assessment_sub_id = a.id
+  GROUP BY a.id, a2.student_id
+  ORDER BY a2.student_id;
