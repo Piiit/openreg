@@ -12,7 +12,6 @@ import gui.modules.GradeModule;
 import gui.modules.AssessmentTypeModule;
 import gui.modules.ClassesModule;
 import gui.modules.CoursesModule;
-import gui.modules.GradeModule;
 import gui.modules.MarkModule;
 import gui.modules.StudentsModule;
 import gui.modules.TeachersModule;

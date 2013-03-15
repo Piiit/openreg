@@ -14,7 +14,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import database.Row;
 import database.query.GradeQuery;
-import database.query.WeightedAssessmentQuery;
 import gui.GuiDialog;
 import gui.GuiTools;
 

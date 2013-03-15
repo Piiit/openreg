@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import log.Log;
 
 /**
- * Returns an iterable ArrayList of Rows that can be easily accessed.
+ * Returns an ArrayList of Rows that can be easily accessed iteratively.
  */
 public class DatabaseTools {
 	
