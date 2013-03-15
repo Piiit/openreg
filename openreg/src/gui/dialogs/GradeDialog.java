@@ -1,7 +1,6 @@
 package gui.dialogs;
 
 import java.util.ArrayList;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -15,7 +14,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
 import database.Row;
 import database.query.GradeQuery;
-import database.query.MarkTypeQuery;
 import database.query.StudentQuery;
 import gui.GuiDialog;
 import gui.GuiTools;
