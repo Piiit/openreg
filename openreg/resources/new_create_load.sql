@@ -219,7 +219,7 @@ ALTER TABLE ONLY topic ALTER COLUMN id SET DEFAULT nextval('topic_id_seq'::regcl
 INSERT INTO ability_description (id, description) VALUES (1, 'Dyskalkulie');
 INSERT INTO ability_description (id, description) VALUES (2, 'Legasthenie');
 INSERT INTO ability_description (id, description) VALUES (4, 'ADS');
-INSERT INTO ability_description (id, description) VALUES (3, 'Familiaere Probleme');
+INSERT INTO ability_description (id, description) VALUES (3, 'Familiäre Probleme');
 SELECT pg_catalog.setval('ability_description_id_seq', 6, true);
 INSERT INTO address (id, street, no, zip_code, city, country) VALUES (1, 'Boznerstr.', '14', '39100', 'Bozen', 'Italy');
 INSERT INTO address (id, street, no, zip_code, city, country) VALUES (3, 'Winkelweg', '4', '39012', 'Meran', 'Italy');
