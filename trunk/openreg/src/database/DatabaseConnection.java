@@ -30,7 +30,7 @@ public final class DatabaseConnection {
 	
 	public static String getConnectionURL() throws FileNotFoundException, IOException {
 		Properties config = new Properties();
-		config.load(new FileInputStream("resources/dbconfig.txt"));
+		config.load(new FileInputStream("dbconfig.txt"));
 		return config.getProperty("URL");
 	}
 
