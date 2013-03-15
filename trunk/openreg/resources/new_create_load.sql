@@ -4,6 +4,21 @@ SET standard_conforming_strings = on;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
 
+DROP TABLE IF EXISTS address CASCADE;
+DROP TABLE IF EXISTS class CASCADE;
+DROP TABLE IF EXISTS teacher CASCADE;
+DROP TABLE IF EXISTS ability_description CASCADE;
+DROP TABLE IF EXISTS student CASCADE;
+DROP TABLE IF EXISTS course CASCADE;
+DROP TABLE IF EXISTS teacher_class_course CASCADE;
+DROP TABLE IF EXISTS assessment_type CASCADE;
+DROP TABLE IF EXISTS topic CASCADE;
+DROP TABLE IF EXISTS assessment CASCADE;
+DROP TABLE IF EXISTS weighted_assessment CASCADE;
+DROP TABLE IF EXISTS mark_type CASCADE;
+DROP TABLE IF EXISTS mark CASCADE;
+DROP TABLE IF EXISTS assessment_student CASCADE;
+
 CREATE TABLE ability_description (
     id bigint NOT NULL,
     description character varying NOT NULL
@@ -221,9 +236,8 @@ SELECT pg_catalog.setval('address_id_seq', 19, true);
 INSERT INTO assessment (id, assessment_type_id, topic_id, description, priority, notes) VALUES (2, 2, 15, '1. Schularbeit', 1, NULL);
 INSERT INTO assessment (id, assessment_type_id, topic_id, description, priority, notes) VALUES (6, 1, 15, 'Zehnerpotenzen', 0, NULL);
 INSERT INTO assessment (id, assessment_type_id, topic_id, description, priority, notes) VALUES (7, 3, 15, '1x1', 0, NULL);
-INSERT INTO assessment (id, assessment_type_id, topic_id, description, priority, notes) VALUES (11, 12, NULL, '(all)', 0, NULL);
 INSERT INTO assessment (id, assessment_type_id, topic_id, description, priority, notes) VALUES (3, 1, 15, 'Zeichne Diagramme', 0, NULL);
-INSERT INTO assessment (id, assessment_type_id, topic_id, description, priority, notes) VALUES (1, 1, 15, 'Erstelle ein Koordinatensysteme', 0, NULL);
+INSERT INTO assessment (id, assessment_type_id, topic_id, description, priority, notes) VALUES (1, 1, 15, 'Erstelle ein Koordinatensystem', 0, NULL);
 INSERT INTO assessment (id, assessment_type_id, topic_id, description, priority, notes) VALUES (14, 6, 7, 'Talk about The Queen', 0, NULL);
 INSERT INTO assessment (id, assessment_type_id, topic_id, description, priority, notes) VALUES (9, 1, 5, 'Wann begann der 2. Weltkrieg?', 0, NULL);
 INSERT INTO assessment (id, assessment_type_id, topic_id, description, priority, notes) VALUES (5, 1, 15, 'Römische Zahlen', 0, NULL);
@@ -255,7 +269,6 @@ INSERT INTO assessment_type (id, description) VALUES (7, 'Zeugnisnote');
 INSERT INTO assessment_type (id, description) VALUES (3, 'Mündliche Prüfung');
 INSERT INTO assessment_type (id, description) VALUES (9, 'Fähigkeit');
 INSERT INTO assessment_type (id, description) VALUES (13, 'Hausaufgabe');
-INSERT INTO assessment_type (id, description) VALUES (12, '_ROOT_');
 SELECT pg_catalog.setval('assessment_type_id_seq', 13, true);
 INSERT INTO class (id, level, stream, notes) VALUES (1, '1', 'A', NULL);
 INSERT INTO class (id, level, stream, notes) VALUES (2, '1', 'B', NULL);
@@ -301,7 +314,7 @@ INSERT INTO mark_type (id, description) VALUES (1, 'German System');
 INSERT INTO mark_type (id, description) VALUES (2, 'Italian System');
 INSERT INTO mark_type (id, description) VALUES (3, 'Roman System');
 INSERT INTO mark_type (id, description) VALUES (4, '+~- Style');
-INSERT INTO mark_type (id, description) VALUES (8, 'New Style');
+INSERT INTO mark_type (id, description) VALUES (8, 'Clint Eastwood Style');
 SELECT pg_catalog.setval('mark_type_id_seq', 8, true);
 INSERT INTO student (id, name, surname, birthday, address_id, class_id, phonenumber, enrolment_year, ability_description_id, picture, notes) VALUES (1, 'Andi', 'Latte', '1995-06-07', 1, 1, '3334567897', 2012, NULL, NULL, NULL);
 INSERT INTO student (id, name, surname, birthday, address_id, class_id, phonenumber, enrolment_year, ability_description_id, picture, notes) VALUES (2, 'Luis ', 'Amplatz', '1996-03-15', 3, 2, '123345678', 2012, 1, NULL, NULL);
@@ -313,7 +326,7 @@ INSERT INTO student (id, name, surname, birthday, address_id, class_id, phonenum
 INSERT INTO student (id, name, surname, birthday, address_id, class_id, phonenumber, enrolment_year, ability_description_id, picture, notes) VALUES (10, 'Lilli', 'Putana', '1995-04-12', 12, 1, '423543523', 2012, NULL, NULL, NULL);
 INSERT INTO student (id, name, surname, birthday, address_id, class_id, phonenumber, enrolment_year, ability_description_id, picture, notes) VALUES (11, 'Franz', 'Hofbauer', '1995-04-22', 2, 1, '12345678', 2012, NULL, NULL, NULL);
 INSERT INTO student (id, name, surname, birthday, address_id, class_id, phonenumber, enrolment_year, ability_description_id, picture, notes) VALUES (8, 'Ruth', 'Schen', '1995-01-09', 4, 1, '34557453686', 2012, NULL, NULL, NULL);
-INSERT INTO student (id, name, surname, birthday, address_id, class_id, phonenumber, enrolment_year, ability_description_id, picture, notes) VALUES (7, 'Gitta', 'StÃ¤be', '1995-11-11', 5, 2, '5615134626', 2012, NULL, NULL, NULL);
+INSERT INTO student (id, name, surname, birthday, address_id, class_id, phonenumber, enrolment_year, ability_description_id, picture, notes) VALUES (7, 'Gitta', 'Stäbe', '1995-11-11', 5, 2, '5615134626', 2012, NULL, NULL, NULL);
 SELECT pg_catalog.setval('student_id_seq', 16, true);
 INSERT INTO teacher (id, name, surname, login, password, birthday, address_id, phone_number, picture, notes) VALUES (1, 'Hons', 'Gun Taylor', 'hons', 'yui888', '1991-04-22', 2, '7654332', NULL, NULL);
 INSERT INTO teacher (id, name, surname, login, password, birthday, address_id, phone_number, picture, notes) VALUES (2, 'Patrizio', 'Albero', 'palbero', '12.45-+~.1', '1992-05-17', 1, '1234567', NULL, NULL);
@@ -351,11 +364,6 @@ INSERT INTO weighted_assessment (main_assessment_id, sub_assessment_id, weight) 
 INSERT INTO weighted_assessment (main_assessment_id, sub_assessment_id, weight) VALUES (2, 3, 7);
 INSERT INTO weighted_assessment (main_assessment_id, sub_assessment_id, weight) VALUES (2, 5, 15);
 INSERT INTO weighted_assessment (main_assessment_id, sub_assessment_id, weight) VALUES (2, 6, 6);
-INSERT INTO weighted_assessment (main_assessment_id, sub_assessment_id, weight) VALUES (11, 10, 100);
-INSERT INTO weighted_assessment (main_assessment_id, sub_assessment_id, weight) VALUES (11, 13, 100);
-INSERT INTO weighted_assessment (main_assessment_id, sub_assessment_id, weight) VALUES (5, 5, 1);
-INSERT INTO weighted_assessment (main_assessment_id, sub_assessment_id, weight) VALUES (5, 8, 1);
-INSERT INTO weighted_assessment (main_assessment_id, sub_assessment_id, weight) VALUES (5, 9, 1);
 INSERT INTO weighted_assessment (main_assessment_id, sub_assessment_id, weight) VALUES (3, 9, 1);
 ALTER TABLE ONLY ability_description
     ADD CONSTRAINT ability_description_pkey PRIMARY KEY (id);
