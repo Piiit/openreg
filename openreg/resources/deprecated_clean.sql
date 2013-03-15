@@ -1,4 +1,3 @@
-﻿
 /*
 Peter Moser peter.moser@stud-inf.unibz.it
 Valentin Huber valentin.huber@stud-inf.unibz.it
