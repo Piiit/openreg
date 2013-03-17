@@ -26,10 +26,12 @@ public class Openreg {
 			DatabaseConnection.setup();
 		} catch (Exception e) {
 			Log.warn("Can't connect to default database, trying to connect to testing db!");
+			e.printStackTrace();
 			try {
 				DatabaseConnection.setup(DatabaseConnection.getConnectionURL());
 			} catch (Exception e2) {
 				Log.error("Unable to connect to specified databases!");
+				e2.printStackTrace();
 				System.exit(1);
 			}
 		}
