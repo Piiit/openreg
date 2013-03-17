@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="openreg">
+    <property environment="env"/>
+    <property name="ECLIPSE_HOME" value="../../../../../Applications/eclipse"/>
+    <property name="junit.output.dir" value="junit"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.7"/>
+    <property name="source" value="1.7"/>
+    <path id="JUnit 4.libraryclasspath">
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.junit_4.10.0.v4_10_0_v20120426-0900/junit.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.hamcrest.core_1.1.0.v20090501071000.jar"/>
+    </path>
+    <path id="openreg.classpath">
+        <pathelement location="bin"/>
+        <pathelement location="lib/postgresql-9.2-1002.jdbc4.jar"/>
+        <pathelement location="lib/swt-4.2.1-cocoa-macosx-x86_64.jar"/>
+        <path refid="JUnit 4.libraryclasspath"/>
+        <pathelement location="swing2swt.jar"/>
+    </path>
+    <target name="init">
+        <mkdir dir="bin"/>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="bin"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src"/>
+            <classpath refid="openreg.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+        <copy todir="${ant.library.dir}">
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </copy>
+        <unzip dest="${ant.library.dir}">
+            <patternset includes="jdtCompilerAdapter.jar"/>
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </unzip>
+    </target>
+    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+        <antcall target="build"/>
+    </target>
+    <target name="ClassTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="testing.data.ClassTest" todir="${junit.output.dir}"/>
+            <classpath refid="openreg.classpath"/>
+        </junit>
+    </target>
+    <target name="DatabaseToolsTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="testing.database.DatabaseToolsTest" todir="${junit.output.dir}"/>
+            <classpath refid="openreg.classpath"/>
+        </junit>
+    </target>
+    <target name="GuiModuleTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="testing.gui.GuiModuleTest" todir="${junit.output.dir}"/>
+            <classpath refid="openreg.classpath"/>
+        </junit>
+    </target>
+    <target name="GuiModuleTest.testGetGroups">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="testing.gui.GuiModuleTest" todir="${junit.output.dir}"/>
+            <classpath refid="openreg.classpath"/>
+        </junit>
+    </target>
+    <target name="Openreg">
+        <java classname="openreg.Openreg" failonerror="true" fork="yes">
+            <env key="OPENREG_DEBUG" value="true"/>
+            <env key="OPENREG_CONNECTION" value="pemoser"/>
+            <classpath refid="openreg.classpath"/>
+        </java>
+    </target>
+    <target name="RowTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="testing.database.RowTest" todir="${junit.output.dir}"/>
+            <classpath refid="openreg.classpath"/>
+        </junit>
+    </target>
+    <target name="SimpleDateTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="testing.data.SimpleDateTest" todir="${junit.output.dir}"/>
+            <classpath refid="openreg.classpath"/>
+        </junit>
+    </target>
+    <target name="StudentQueryTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="testing.database.StudentQueryTest" todir="${junit.output.dir}"/>
+            <classpath refid="openreg.classpath"/>
+        </junit>
+    </target>
+    <target name="StudentTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="testing.data.StudentTest" todir="${junit.output.dir}"/>
+            <classpath refid="openreg.classpath"/>
+        </junit>
+    </target>
+    <target name="testing.data">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="testing.data.SimpleDateTest" todir="${junit.output.dir}"/>
+            <classpath refid="openreg.classpath"/>
+        </junit>
+    </target>
+    <target name="testing">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <classpath refid="openreg.classpath"/>
+        </junit>
+    </target>
+    <target name="junitreport">
+        <junitreport todir="${junit.output.dir}">
+            <fileset dir="${junit.output.dir}">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${junit.output.dir}"/>
+        </junitreport>
+    </target>
+</project>

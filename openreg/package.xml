@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="build" name="Create Runnable Jar for Project openreg with Jar-in-Jar Loader">
+	<target name="build">
+		<ant antfile="build.xml" target="build" />
+
+		<fileset dir="lib" id="extern.libs">
+			<include name="*.jar" />
+		</fileset>
+
+		<pathconvert pathsep=" " property="files.extern.libs" refid="extern.libs" />
+		<pathconvert pathsep=" " property="filesWithoutPath.extern.libs" refid="extern.libs">
+			<flattenmapper />
+		</pathconvert>
+
+		<echo message="Adding ${files.extern.libs} ..." />
+
+		<jar destfile="openreg.jar" duplicate="preserve">
+			<manifest>
+				<attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader" />
+				<attribute name="Rsrc-Main-Class" value="openreg.Openreg" />
+				<attribute name="Class-Path" value="." />
+				<attribute name="Rsrc-Class-Path" value="./ ${filesWithoutPath.extern.libs}" />
+			</manifest>
+
+			<zipfileset src="jar-in-jar-loader.zip" />
+
+			<fileset dir="bin" />
+			<zipfileset refid="extern.libs" />
+
+			<zipfileset dir="lib/" includes="swt-4.2.1-cocoa-macosx-x86_64.jar" />
+			<zipfileset dir="lib/" includes="swt-4.2.1-cocoa-macosx.jar" />
+			<zipfileset dir="lib/" includes="swt-4.2.1-gtk-linux-x86_64.jar" />
+			<zipfileset dir="lib/" includes="swt-4.2.1-gtk-linux-x86.jar" />
+			<zipfileset dir="lib/" includes="swt-4.2.1-win32-win32-x86_64.jar" />
+			<zipfileset dir="lib/" includes="swt-4.2.1-win32-win32-x86.jar" />
+			<zipfileset dir="lib/" includes="postgresql-9.2-1002.jdbc4.jar" />
+			<zipfileset dir="lib/" includes="swing2swt.jar" />
+
+		</jar>
+	</target>
+</project>
