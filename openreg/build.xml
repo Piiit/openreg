@@ -17,9 +17,8 @@
     <path id="openreg.classpath">
         <pathelement location="bin"/>
         <pathelement location="lib/postgresql-9.2-1002.jdbc4.jar"/>
-        <pathelement location="lib/swt-4.2.1-cocoa-macosx-x86_64.jar"/>
         <path refid="JUnit 4.libraryclasspath"/>
-        <pathelement location="swing2swt.jar"/>
+        <pathelement location="lib/swing2swt.jar"/>
     </path>
     <target name="init">
         <mkdir dir="bin"/>
