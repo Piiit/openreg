@@ -32,11 +32,13 @@ public class SWTTools {
 				architecturePart = "-x86";
 
 			URL swtFileUrl = new URL("rsrc:" + "swt-4.2.1" + osPart + architecturePart + ".jar");
-			Log.info("Loading SWT library: " + swtFileUrl.toString());
-			URLClassLoader c = (URLClassLoader) Openreg.class.getClassLoader();
+			Log.info("Trying to load SWT library: " + swtFileUrl.toString());
+			
+			URLClassLoader c = (URLClassLoader) ClassLoader.getSystemClassLoader();
 			Method m = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
+			System.out.println(m.getName());
 			m.setAccessible(true);
-			m.invoke(c, swtFileUrl);
+			m.invoke(c, new Object[]{swtFileUrl});
 			
 		} catch (MalformedURLException e) {
 			// This fails only within Eclipse, not when executed with java -jar
